@@ -9,6 +9,7 @@ export async function generateMetadata({
 }: {
   params: { lang: string };
 }): Promise<Metadata> {
+
   const { getTranslations } = await import("next-intl/server");
   const t = await getTranslations({ locale: params.lang });
   return {
@@ -19,13 +20,13 @@ export async function generateMetadata({
 
 export default function LandingPage({ params }: { params: { lang: string } }) {
   unstable_setRequestLocale(params.lang);
-  
+
   const t = useTranslations("Home");
 
   return (
     <main className="flex flex-col gap-6 items-start p-8">
       <h1 className="text-3xl font-bold bg-primary">{t("main_title")}</h1>
-      <p className="text-muted-foreground">{t("description")}</p>
+      <p className="text-muted-foreground font-mono">{t("description")}</p>
       <a
         className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground h-10 px-4 text-sm"
         href="#"
