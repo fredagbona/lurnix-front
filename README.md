@@ -1,36 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Lurnix Frontend
 
-## Getting Started
+Next.js 14 App Router project with:
+- Internationalization (next-intl v3) with `/[lang]` routing (`en`, `fr`)
+- TailwindCSS + shadcn/ui setup, lucide-react icons
+- Brand design tokens (light/dark) + accent gradient
+- Theme system (next-themes) with toggle
+- Fonts: Inter (sans) + Poppins (display) via `next/font`
+- ESLint + Prettier + Husky pre-commit (lint-staged)
 
-First, run the development server:
+### Requirements
+- Node 18+ (recommended 18.18+)
+- pnpm
 
+### Install & run
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
+# http://localhost:3000 → redirects to /en
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Scripts
+```bash
+pnpm lint        # ESLint (next/core-web-vitals)
+pnpm format      # Prettier write
+pnpm build       # Next build
+pnpm start       # Next start
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Internationalization (next-intl)
+- Routing config: `src/i18n/routing.ts` (locales: `en`, `fr`; `localePrefix: "always"`)
+- Request config: `src/i18n/request.ts` (loads `src/locales/{locale}.json`)
+- Middleware: `middleware.ts` (root) + `src/middleware.ts`
+- App structure: `src/app/[lang]/layout.tsx`, `src/app/[lang]/(landing)/page.tsx`
+- Root redirect: `src/app/page.tsx` → `/${defaultLocale}`
+- Docs: next-intl App Router `https://next-intl.dev/docs/getting-started/app-router`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Usage example:
+```tsx
+import {useTranslations} from 'next-intl';
+const t = useTranslations('Home');
+return <h1>{t('main_title')}</h1>;
+```
 
-## Learn More
+### Theming (light/dark)
+- Provider: `src/components/theme-provider.tsx` (next-themes, attribute="class")
+- Toggle: `src/components/theme-toggle.tsx` (shadcn Button + lucide icons)
+- Integrated in `src/app/[lang]/layout.tsx` and used on landing page
 
-To learn more about Next.js, take a look at the following resources:
+### Design system
+- Global tokens in `src/app/globals.css` (HSL CSS variables) for:
+  - `primary`, `success`, `warning`, `info`, `destructive`
+  - neutrals: `background`, `foreground`, `border`, `muted`, etc.
+  - charts: `--chart-1..4`
+  - gradient utility: `.bg-accent-gradient`
+- Tailwind mapping in `tailwind.config.ts` (colors, container, radius, animations)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Examples:
+```tsx
+<button className="bg-primary text-primary-foreground">Primary</button>
+<div className="bg-accent-gradient h-10 w-full" />
+<p className="text-muted">Muted text</p>
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Fonts
+- `src/app/layout.tsx` loads Inter (`--font-inter`) and Poppins (`--font-poppins`)
+- Tailwind families in `tailwind.config.ts`:
+  - `font-sans` → Inter
+  - `font-display` → Poppins
+  - `font-mono` → Geist Mono
 
-## Deploy on Vercel
+### shadcn/ui
+- Installed primitives and `src/components/ui/button.tsx`
+- Utilities: `src/lib/utils.ts` (`cn`)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Linting & formatting
+- ESLint config: `.eslintrc.json` extends `next/core-web-vitals` + `plugin:prettier/recommended`
+- Prettier config: `.prettierrc`
+- Ignores: `.eslintignore`, `.prettierignore`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Husky (pre-commit)
+- package.json:
+  - `"prepare": "husky"`
+  - `lint-staged`:
+    - `*.{js,jsx,ts,tsx}` → `eslint --fix` then `prettier --write`
+    - `*.{json,css,md}` → `prettier --write`
+- Initialize hook:
+```bash
+pnpm exec husky init && cat > .husky/pre-commit << 'EOF'
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+pnpm exec lint-staged
+EOF
+chmod +x .husky/pre-commit
+```
+
+### Project structure (key paths)
+```
+src/
+  app/
+    [lang]/
+      (landing)/page.tsx
+      layout.tsx
+    layout.tsx
+    page.tsx
+  components/
+    theme-provider.tsx
+    theme-toggle.tsx
+    ui/button.tsx
+  i18n/
+    routing.ts
+    request.ts
+  locales/
+    en.json
+    fr.json
+middleware.ts
+tailwind.config.ts
+```
