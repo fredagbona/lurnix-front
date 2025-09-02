@@ -3,6 +3,7 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { locales } from "@/i18n/routing";
 import type { ReactNode } from "react";
+import { ThemeProvider } from "@/components/theme-provider";
 
 function Providers({ children }: { children: ReactNode }) {
   return children;
@@ -23,7 +24,9 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={lang} messages={messages} timeZone="UTC">
-      <Providers>{children}</Providers>
+      <ThemeProvider>
+        <Providers>{children}</Providers>
+      </ThemeProvider>
     </NextIntlClientProvider>
   );
 }

@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { unstable_setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export const dynamic = "force-static";
 
@@ -25,7 +26,10 @@ export default function LandingPage({ params }: { params: { lang: string } }) {
 
   return (
     <main className="flex flex-col gap-6 items-start p-8">
-      <h1 className="text-3xl font-bold bg-primary">{t("main_title")}</h1>
+      <div className="w-full flex justify-end">
+        <ThemeToggle />
+      </div>
+      <h1 className="text-3xl font-bold">{t("main_title")}</h1>
       <p className="text-muted-foreground font-mono">{t("description")}</p>
       <a
         className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground h-10 px-4 text-sm"
