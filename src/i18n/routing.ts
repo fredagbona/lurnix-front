@@ -10,8 +10,7 @@ export const routing = defineRouting({
 export const locales = routing.locales as ReadonlyArray<"en" | "fr">;
 export const defaultLocale = routing.defaultLocale as "en" | "fr";
 
-export const { Link, redirect, usePathname, useRouter } =
-  createSharedPathnamesNavigation({
-    locales: routing.locales,
-    localePrefix: routing.localePrefix,
-  });
+export const { Link, redirect, usePathname, useRouter } = createSharedPathnamesNavigation({
+  locales: routing.locales,
+  localePrefix: routing.localePrefix,
+});

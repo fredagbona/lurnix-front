@@ -10,7 +10,6 @@ export async function generateMetadata({
 }: {
   params: { lang: string };
 }): Promise<Metadata> {
-
   const { getTranslations } = await import("next-intl/server");
   const t = await getTranslations({ locale: params.lang });
   return {
@@ -40,5 +39,3 @@ export default function LandingPage({ params }: { params: { lang: string } }) {
     </main>
   );
 }
-
-
