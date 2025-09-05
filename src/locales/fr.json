@@ -3,11 +3,38 @@
     "home": {
       "title": "La plateforme tout-en-un",
       "description": "Créez et vendez vos produits numériques en toute simplicité."
+    },
+    "login": {
+      "title": "Se connecter à Lurnix",
+      "description": "Accédez à votre compte pour continuer"
     }
   },
   "Home": {
     "main_title": "La plateforme tout-en-un",
     "description": "Créez et vendez vos produits numériques en toute simplicité.",
     "cta_button": "Rejoindre gratuitement"
+  },
+  "Auth": {
+    "login": {
+      "title": "Se connecter à Lurnix",
+      "email_placeholder": "Email ou numéro de mobile",
+      "password_placeholder": "Mot de passe",
+      "forgot_password": "Mot de passe oublié ?",
+      "forgot_email": "Email oublié ?",
+      "next_button": "Suivant",
+      "sign_in_button": "Se connecter",
+      "sign_up_button": "S'inscrire",
+      "or_separator": "ou",
+      "no_account": "Vous n'avez pas de compte ?",
+      "have_account": "Vous avez déjà un compte ?"
+    },
+    "register": {
+      "title": "Créer votre compte",
+      "email_placeholder": "Adresse email",
+      "password_placeholder": "Mot de passe",
+      "confirm_password_placeholder": "Confirmer le mot de passe",
+      "create_account_button": "Créer un compte",
+      "terms_text": "En créant un compte, vous acceptez nos Conditions d'utilisation et notre Politique de confidentialité"
+    }
   }
 }
