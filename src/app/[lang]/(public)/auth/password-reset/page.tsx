@@ -5,20 +5,16 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { validateEmail } from "@/validations";
+import { usePasswordReset } from "@/hooks";
 
 export default function PasswordResetPage() {
   const t = useTranslations("Auth.login");
   const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState("");
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) return "Email is required";
-    if (!emailRegex.test(email)) return "Please enter a valid email address";
-    return null;
-  };
+  const passwordResetMutation = usePasswordReset();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,13 +26,20 @@ export default function PasswordResetPage() {
     }
 
     setError("");
-    setIsLoading(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    setIsLoading(false);
-    setIsSubmitted(true);
+    // Use TanStack Query mutation
+    passwordResetMutation.mutate(
+      { email },
+      {
+        onSuccess: () => {
+          setIsSubmitted(true);
+        },
+        onError: (error) => {
+          console.error("Password reset failed:", error);
+          setError("Failed to send reset email. Please try again.");
+        },
+      },
+    );
   };
 
   if (isSubmitted) {
@@ -137,10 +140,10 @@ export default function PasswordResetPage() {
 
             <Button
               type="submit"
-              disabled={isLoading || !email}
+              disabled={passwordResetMutation.isPending || !email}
               className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-colors"
             >
-              {isLoading ? (
+              {passwordResetMutation.isPending ? (
                 <div className="flex items-center">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                   Sending...

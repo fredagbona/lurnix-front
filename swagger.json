@@ -1,0 +1,2867 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Lurnix API Documentation",
+    "version": "1.0.0",
+    "description": "\n        # Lurnix Backend API\n        \n        This is the comprehensive API documentation for the Lurnix AI-powered learning platform backend.\n        \n        ## Authentication\n        \n        Most endpoints require authentication using JWT tokens. Include the token in the Authorization header:\n        `Authorization: Bearer <your-jwt-token>`\n        \n        ## Rate Limiting\n        \n        API endpoints are rate-limited to prevent abuse:\n        - Authentication endpoints: 5 requests per 15 minutes\n        - Registration: 3 requests per hour\n        - Password reset: 3 requests per hour\n        - General endpoints: 100 requests per 15 minutes\n        \n        ## Error Handling\n        \n        All API responses follow a consistent format:\n        ```json\n        {\n          \"success\": boolean,\n          \"data\": object,      // Present on success\n          \"error\": {           // Present on error\n            \"code\": \"string\",\n            \"message\": \"string\",\n            \"details\": object  // Optional\n          },\n          \"timestamp\": \"ISO 8601 string\"\n        }\n        ```\n        \n        ## Status Codes\n        \n        - `200` - Success\n        - `201` - Created\n        - `400` - Bad Request / Validation Error\n        - `401` - Unauthorized\n        - `403` - Forbidden\n        - `404` - Not Found\n        - `409` - Conflict (duplicate resource)\n        - `429` - Too Many Requests (rate limited)\n        - `500` - Internal Server Error\n      ",
+    "contact": {
+      "name": "Lurnix API Support",
+      "email": "support@lurnix.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5050",
+      "description": "Development Server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Enter your JWT token in the format: Bearer <token>"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique user identifier"
+          },
+          "username": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30,
+            "description": "Unique username"
+          },
+          "fullname": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 100,
+            "description": "User's full name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email address"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Whether the user account is active"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Account creation timestamp"
+          }
+        },
+        "required": ["id", "username", "fullname", "email", "isActive", "createdAt"]
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "$ref": "#/components/schemas/User"
+              },
+              "token": {
+                "type": "string",
+                "description": "JWT authentication token"
+              }
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Error code"
+              },
+              "message": {
+                "type": "string",
+                "description": "Human-readable error message"
+              },
+              "details": {
+                "type": "object",
+                "description": "Additional error details (optional)"
+              }
+            },
+            "required": ["code", "message"]
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ValidationError": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "example": "VALIDATION_ERROR"
+              },
+              "message": {
+                "type": "string",
+                "example": "Invalid input data"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "field": {
+                      "type": "string",
+                      "description": "Field that failed validation"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Validation error message"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Validation error code"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Authentication required",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "success": false,
+              "error": {
+                "code": "UNAUTHORIZED",
+                "message": "Authentication required"
+              },
+              "timestamp": "2024-01-01T00:00:00.000Z"
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Validation error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ValidationError"
+            }
+          }
+        }
+      },
+      "RateLimitError": {
+        "description": "Rate limit exceeded",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "success": false,
+              "error": {
+                "code": "RATE_LIMIT_EXCEEDED",
+                "message": "Too many requests, please try again later"
+              },
+              "timestamp": "2024-01-01T00:00:00.000Z"
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "success": false,
+              "error": {
+                "code": "INTERNAL_ERROR",
+                "message": "An internal error occurred"
+              },
+              "timestamp": "2024-01-01T00:00:00.000Z"
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "User authentication and authorization endpoints"
+    },
+    {
+      "name": "User Management",
+      "description": "User profile and account management endpoints"
+    },
+    {
+      "name": "Admin",
+      "description": "Administrative endpoints (requires admin privileges)"
+    },
+    {
+      "name": "Subscriptions",
+      "description": "Subscription plan management"
+    }
+  ],
+  "paths": {
+    "/api/admin/auth/register": {
+      "post": {
+        "summary": "Register a new admin (super_admin only)",
+        "tags": ["Admin Auth"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "email", "password"],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password"
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": ["super_admin", "manager", "support"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Admin registered successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Insufficient permissions"
+          }
+        }
+      }
+    },
+    "/api/admin/auth/login": {
+      "post": {
+        "summary": "Admin login",
+        "tags": ["Admin Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Admin logged in successfully"
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    },
+    "/api/admin/auth/profile": {
+      "get": {
+        "summary": "Get current admin profile",
+        "tags": ["Admin Auth"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Admin profile retrieved successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    },
+    "/api/admin/auth/change-password": {
+      "post": {
+        "summary": "Change admin password",
+        "tags": ["Admin Auth"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["currentPassword", "newPassword"],
+                "properties": {
+                  "currentPassword": {
+                    "type": "string",
+                    "format": "password"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed successfully"
+          },
+          "400": {
+            "description": "Invalid input or current password is incorrect"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    },
+    "/api/admin/auth/forgot-password": {
+      "post": {
+        "summary": "Request password reset for admin",
+        "tags": ["Admin Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset email sent if email exists"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/api/admin/auth/reset-password": {
+      "post": {
+        "summary": "Reset admin password using token",
+        "tags": ["Admin Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["token", "newPassword"],
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "format": "password",
+                    "minLength": 8
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successful"
+          },
+          "400": {
+            "description": "Invalid or expired token"
+          }
+        }
+      }
+    },
+    "/api/admin/stats": {
+      "get": {
+        "summary": "Get user statistics",
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User statistics retrieved successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    },
+    "/api/admin/users": {
+      "get": {
+        "summary": "Get all users with pagination",
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users retrieved successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    },
+    "/api/admin/users/{userId}": {
+      "get": {
+        "summary": "Get user by ID",
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User retrieved successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/api/admin/users/{userId}/restore": {
+      "post": {
+        "summary": "Restore soft-deleted user",
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User restored successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/api/admin/users/{userId}/hard-delete": {
+      "delete": {
+        "summary": "Permanently delete user (DANGEROUS)",
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User permanently deleted"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/api/admin/users/{userId}/reset-token": {
+      "get": {
+        "summary": "Get password reset token info for user",
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reset token info retrieved successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Cancel password reset for user",
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password reset cancelled successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/api/admin/maintenance/cleanup": {
+      "post": {
+        "summary": "Run cleanup tasks manually",
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cleanup tasks completed successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    },
+    "/api/admin/maintenance/cleanup-tokens": {
+      "post": {
+        "summary": "Clean up expired reset tokens",
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expired tokens cleaned up successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    },
+    "/api/admin/health": {
+      "get": {
+        "summary": "System health check",
+        "tags": ["Admin"],
+        "responses": {
+          "200": {
+            "description": "System is healthy"
+          },
+          "503": {
+            "description": "System health check failed"
+          }
+        }
+      }
+    },
+    "/api/admin/errors/stats": {
+      "get": {
+        "summary": "Get error statistics",
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Error statistics retrieved successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    },
+    "/api/admin/errors/reset": {
+      "post": {
+        "summary": "Reset error statistics",
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Error statistics reset successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    },
+    "/api/admin/email/status": {
+      "get": {
+        "summary": "Get email service status",
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email service status retrieved successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    },
+    "/api/admin/email/templates": {
+      "get": {
+        "summary": "Get available email templates",
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email templates retrieved successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    },
+    "/api/admin/email/test": {
+      "post": {
+        "summary": "Send test email",
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["to"],
+                "properties": {
+                  "to": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "template": {
+                    "type": "string"
+                  },
+                  "templateData": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Test email sent successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    },
+    "/api/admin/email/test-connectivity": {
+      "get": {
+        "summary": "Test email service connectivity",
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email connectivity test completed"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    },
+    "/api/ai/roadmap/seven-day": {
+      "post": {
+        "summary": "Generate a 7-day roadmap for learning basics",
+        "description": "Generates a personalized 7-day roadmap based on user profile and preferences",
+        "tags": ["AI", "Roadmap"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["learningStyle", "objectives", "passions", "problemSolving"],
+                "properties": {
+                  "learningStyle": {
+                    "type": "object",
+                    "properties": {
+                      "primary": {
+                        "type": "string"
+                      },
+                      "secondary": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "objectives": {
+                    "type": "object",
+                    "properties": {
+                      "topGoal": {
+                        "type": "string"
+                      },
+                      "priorityRank": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "passions": {
+                    "type": "object",
+                    "properties": {
+                      "ranked": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "problemSolving": {
+                    "type": "object",
+                    "properties": {
+                      "debugStyle": {
+                        "type": "string"
+                      },
+                      "collaboration": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "timeCommitmentMinsPerDay": {
+                    "type": "number"
+                  },
+                  "priorExperience": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Roadmap generated successfully"
+          },
+          "400": {
+            "description": "Invalid request parameters"
+          },
+          "401": {
+            "description": "Unauthorized - User not authenticated"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/ai/roadmap/thirty-day": {
+      "post": {
+        "summary": "Generate a 30-day roadmap for specific projects",
+        "description": "Generates a personalized 30-day roadmap with projects based on user profile and preferences",
+        "tags": ["AI", "Roadmap"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["learningStyle", "objectives", "passions", "problemSolving"],
+                "properties": {
+                  "learningStyle": {
+                    "type": "object",
+                    "properties": {
+                      "primary": {
+                        "type": "string"
+                      },
+                      "secondary": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "objectives": {
+                    "type": "object",
+                    "properties": {
+                      "topGoal": {
+                        "type": "string"
+                      },
+                      "priorityRank": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "passions": {
+                    "type": "object",
+                    "properties": {
+                      "ranked": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "problemSolving": {
+                    "type": "object",
+                    "properties": {
+                      "debugStyle": {
+                        "type": "string"
+                      },
+                      "collaboration": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "timeCommitmentMinsPerDay": {
+                    "type": "number"
+                  },
+                  "priorExperience": {
+                    "type": "string"
+                  },
+                  "projectThemes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Roadmap generated successfully"
+          },
+          "400": {
+            "description": "Invalid request parameters"
+          },
+          "401": {
+            "description": "Unauthorized - User not authenticated"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/ai/roadmap": {
+      "post": {
+        "summary": "Generate a personalized learning roadmap",
+        "description": "Generates a personalized learning roadmap based on user profile and preferences",
+        "tags": ["AI"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["learningGoal", "profileType"],
+                "properties": {
+                  "learningGoal": {
+                    "type": "string",
+                    "description": "The user's learning goal",
+                    "example": "Learn web development with React and Node.js"
+                  },
+                  "targetStack": {
+                    "type": "string",
+                    "description": "The technology stack the user wants to learn",
+                    "example": "MERN (MongoDB, Express, React, Node.js)"
+                  },
+                  "profileType": {
+                    "type": "string",
+                    "description": "The user's learning profile type",
+                    "enum": [
+                      "visual_learner",
+                      "practical_builder",
+                      "analytical_thinker",
+                      "social_collaborator",
+                      "creative_explorer",
+                      "structured_planner",
+                      "independent_researcher",
+                      "goal_oriented_achiever"
+                    ],
+                    "example": "practical_builder"
+                  },
+                  "timeCommitmentHoursPerWeek": {
+                    "type": "number",
+                    "description": "The number of hours per week the user can commit to learning",
+                    "example": 10
+                  },
+                  "priorExperience": {
+                    "type": "string",
+                    "description": "The user's prior experience in the field",
+                    "example": "Basic HTML and CSS knowledge"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Roadmap generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "userId": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "learningGoal": {
+                          "type": "string"
+                        },
+                        "targetStack": {
+                          "type": "string"
+                        },
+                        "milestones": {
+                          "type": "array",
+                          "items": {
+                            "type": "object"
+                          }
+                        },
+                        "estimatedTotalHours": {
+                          "type": "number"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters"
+          },
+          "401": {
+            "description": "Unauthorized - User not authenticated"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/ai/profile": {
+      "post": {
+        "summary": "Generate a learner profile",
+        "description": "Generates a learner profile based on quiz answers",
+        "tags": ["AI"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["answers"],
+                "properties": {
+                  "answers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["questionId", "selectedOptionIds"],
+                      "properties": {
+                        "questionId": {
+                          "type": "string",
+                          "description": "ID of the quiz question"
+                        },
+                        "selectedOptionIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "IDs of the selected options"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "profileType": {
+                          "type": "string",
+                          "enum": [
+                            "visual_learner",
+                            "practical_builder",
+                            "analytical_thinker",
+                            "social_collaborator",
+                            "creative_explorer",
+                            "structured_planner",
+                            "independent_researcher",
+                            "goal_oriented_achiever"
+                          ]
+                        },
+                        "strengths": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "challenges": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "recommendedApproaches": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters"
+          },
+          "401": {
+            "description": "Unauthorized - User not authenticated"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "fullname", "email", "password"],
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 30
+                  },
+                  "fullname": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 100
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "409": {
+            "description": "Email or username already exists"
+          },
+          "429": {
+            "description": "Too many registration attempts"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Login user",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful"
+          },
+          "401": {
+            "description": "Invalid credentials or account deactivated"
+          },
+          "429": {
+            "description": "Too many login attempts"
+          }
+        }
+      }
+    },
+    "/api/auth/forgot-password": {
+      "post": {
+        "summary": "Request password reset",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset email sent (if account exists)"
+          },
+          "429": {
+            "description": "Too many password reset requests"
+          }
+        }
+      }
+    },
+    "/api/auth/reset-password": {
+      "post": {
+        "summary": "Reset password using token",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["token", "newPassword"],
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "minLength": 8
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully"
+          },
+          "400": {
+            "description": "Invalid or expired token"
+          }
+        }
+      }
+    },
+    "/api/auth/refresh-token": {
+      "post": {
+        "summary": "Refresh JWT token",
+        "tags": ["Authentication"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token refreshed successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    },
+    "/api/auth/verify-email/{token}": {
+      "get": {
+        "summary": "Verify email address using token",
+        "tags": ["Authentication"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email verified successfully"
+          },
+          "400": {
+            "description": "Invalid or expired verification token"
+          }
+        }
+      }
+    },
+    "/api/auth/resend-verification": {
+      "post": {
+        "summary": "Resend verification email",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verification email sent (if account exists and is not verified)"
+          },
+          "429": {
+            "description": "Too many verification email requests"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Basic health check",
+        "tags": ["Health"],
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "uptime": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health/detailed": {
+      "get": {
+        "summary": "Detailed health check with all services",
+        "tags": ["Health"],
+        "responses": {
+          "200": {
+            "description": "All services are healthy"
+          },
+          "503": {
+            "description": "One or more services are unhealthy"
+          }
+        }
+      }
+    },
+    "/health/metrics": {
+      "get": {
+        "summary": "System metrics and performance data",
+        "tags": ["Health"],
+        "responses": {
+          "200": {
+            "description": "System metrics retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/quiz": {
+      "get": {
+        "summary": "Get active quiz questions",
+        "tags": ["Quiz"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "version",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Optional quiz version"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quiz questions retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/quiz/submit": {
+      "post": {
+        "summary": "Submit quiz answers",
+        "description": "Submit user answers to the quiz to generate a personalized profile",
+        "tags": ["Quiz"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuizSubmission"
+              },
+              "example": {
+                "version": 1,
+                "answers": {
+                  "learning_instinct": "visual",
+                  "remember_concepts": "hands_on",
+                  "complex_problem": "sequential",
+                  "code_samples": "hands_on",
+                  "lecture_preference": "active",
+                  "debugging_approach": "experimental",
+                  "learning_sequence": "sequential",
+                  "learning_reason": "career_switch",
+                  "important_outcome": "fundamentals",
+                  "priorities": ["job_readiness", "projects", "enjoyment", "certifications"],
+                  "timeline": "months",
+                  "learning_depth": "deep",
+                  "tech_areas": ["web", "mobile", "data"],
+                  "project_motivation": "visual",
+                  "self_description": "builder",
+                  "preferred_stack": "frontend",
+                  "specific_stack": "React",
+                  "job_title": "student",
+                  "learning_goal": "Get a job as a frontend developer",
+                  "bug_first_action": "research",
+                  "challenge_approach": "research_first",
+                  "project_preference": "checklist",
+                  "community_engagement": "sometimes"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quiz submitted successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "data": {
+                    "quizResultId": "550e8400-e29b-41d4-a716-446655440000",
+                    "profile": {
+                      "style": "visual",
+                      "visual": 0.6,
+                      "reading": 0.2,
+                      "handsOn": 0.2,
+                      "level": "beginner",
+                      "timePerDay": 60,
+                      "goal": "career_change",
+                      "preferredStack": ["react"]
+                    }
+                  },
+                  "timestamp": "2025-09-06T18:30:43.857Z"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/quiz/results/{id}": {
+      "get": {
+        "summary": "Get a specific quiz result",
+        "tags": ["Quiz"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Quiz result ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quiz result retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/quiz/results": {
+      "get": {
+        "summary": "Get all quiz results for the authenticated user",
+        "tags": ["Quiz"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quiz results retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/quiz/admin/questions": {
+      "post": {
+        "summary": "Create a new quiz question (admin only)",
+        "description": "Create a new quiz question with options and assign it to a section",
+        "tags": ["Quiz", "Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateQuizQuestion"
+              },
+              "example": {
+                "version": 1,
+                "key": "new_question_key",
+                "title": "What is your preferred learning method?",
+                "description": "Select the option that best describes your learning style",
+                "type": "single",
+                "weightCategory": "learning_style",
+                "sortOrder": 8,
+                "isActive": true,
+                "sectionId": "550e8400-e29b-41d4-a716-446655440000",
+                "options": [
+                  {
+                    "label": "Reading documentation",
+                    "value": "reading",
+                    "weights": {
+                      "visual": 1,
+                      "reading": 3,
+                      "handsOn": 1
+                    }
+                  },
+                  {
+                    "label": "Watching video tutorials",
+                    "value": "visual",
+                    "weights": {
+                      "visual": 3,
+                      "reading": 1,
+                      "handsOn": 1
+                    }
+                  },
+                  {
+                    "label": "Hands-on practice",
+                    "value": "hands_on",
+                    "weights": {
+                      "visual": 1,
+                      "reading": 1,
+                      "handsOn": 3
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Quiz question created successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "key": "new_question_key",
+                    "title": "What is your preferred learning method?",
+                    "description": "Select the option that best describes your learning style",
+                    "type": "single",
+                    "weightCategory": "learning_style",
+                    "sortOrder": 8,
+                    "isActive": true,
+                    "sectionId": "550e8400-e29b-41d4-a716-446655440000",
+                    "createdAt": "2025-09-06T18:30:43.857Z",
+                    "updatedAt": "2025-09-06T18:30:43.857Z",
+                    "options": [
+                      {
+                        "id": "550e8400-e29b-41d4-a716-446655440001",
+                        "label": "Reading documentation",
+                        "value": "reading",
+                        "weights": {
+                          "visual": 1,
+                          "reading": 3,
+                          "handsOn": 1
+                        }
+                      },
+                      {
+                        "id": "550e8400-e29b-41d4-a716-446655440002",
+                        "label": "Watching video tutorials",
+                        "value": "visual",
+                        "weights": {
+                          "visual": 3,
+                          "reading": 1,
+                          "handsOn": 1
+                        }
+                      },
+                      {
+                        "id": "550e8400-e29b-41d4-a716-446655440003",
+                        "label": "Hands-on practice",
+                        "value": "hands_on",
+                        "weights": {
+                          "visual": 1,
+                          "reading": 1,
+                          "handsOn": 3
+                        }
+                      }
+                    ]
+                  },
+                  "timestamp": "2025-09-06T18:30:43.857Z"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/quiz/admin/questions/{id}": {
+      "put": {
+        "summary": "Update a quiz question (admin only)",
+        "description": "Update an existing quiz question's properties, options, or section assignment",
+        "tags": ["Quiz", "Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Quiz question ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateQuizQuestion"
+              },
+              "example": {
+                "title": "Updated question title",
+                "description": "Updated description text",
+                "type": "single",
+                "weightCategory": "learning_style",
+                "sortOrder": 3,
+                "isActive": true,
+                "sectionId": "550e8400-e29b-41d4-a716-446655440000",
+                "options": [
+                  {
+                    "label": "Option 1",
+                    "value": "option1",
+                    "weights": {
+                      "visual": 1,
+                      "reading": 3,
+                      "handsOn": 1
+                    }
+                  },
+                  {
+                    "label": "Option 2",
+                    "value": "option2",
+                    "weights": {
+                      "visual": 3,
+                      "reading": 1,
+                      "handsOn": 1
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quiz question updated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "key": "existing_question_key",
+                    "title": "Updated question title",
+                    "description": "Updated description text",
+                    "type": "single",
+                    "weightCategory": "learning_style",
+                    "sortOrder": 3,
+                    "isActive": true,
+                    "sectionId": "550e8400-e29b-41d4-a716-446655440000",
+                    "createdAt": "2025-09-06T18:30:43.857Z",
+                    "updatedAt": "2025-09-06T18:30:43.857Z",
+                    "options": [
+                      {
+                        "id": "550e8400-e29b-41d4-a716-446655440001",
+                        "label": "Option 1",
+                        "value": "option1",
+                        "weights": {
+                          "visual": 1,
+                          "reading": 3,
+                          "handsOn": 1
+                        }
+                      },
+                      {
+                        "id": "550e8400-e29b-41d4-a716-446655440002",
+                        "label": "Option 2",
+                        "value": "option2",
+                        "weights": {
+                          "visual": 3,
+                          "reading": 1,
+                          "handsOn": 1
+                        }
+                      }
+                    ]
+                  },
+                  "timestamp": "2025-09-06T18:30:43.857Z"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a quiz question (admin only)",
+        "description": "Permanently delete a quiz question and all its options",
+        "tags": ["Quiz", "Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Quiz question ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quiz question deleted successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Quiz question deleted successfully",
+                  "timestamp": "2025-09-06T19:20:15.123Z"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/quiz/admin/sections": {
+      "get": {
+        "summary": "Get all quiz sections (admin only)",
+        "tags": ["Quiz", "Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "version",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Optional quiz version"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quiz sections retrieved successfully"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new quiz section (admin only)",
+        "description": "Create a new section to group related quiz questions",
+        "tags": ["Quiz", "Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateQuizSection"
+              },
+              "example": {
+                "version": 1,
+                "title": "Technical Background",
+                "description": "Questions about your technical experience and skills",
+                "sortOrder": 5,
+                "isActive": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Quiz section created successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "version": 1,
+                    "title": "Technical Background",
+                    "description": "Questions about your technical experience and skills",
+                    "sortOrder": 5,
+                    "isActive": true,
+                    "createdAt": "2025-09-06T18:30:43.857Z",
+                    "updatedAt": "2025-09-06T18:30:43.857Z"
+                  },
+                  "timestamp": "2025-09-06T18:30:43.857Z"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/quiz/admin/sections/{id}": {
+      "put": {
+        "summary": "Update a quiz section (admin only)",
+        "description": "Update an existing quiz section's properties",
+        "tags": ["Quiz", "Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Quiz section ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateQuizSection"
+              },
+              "example": {
+                "title": "Updated Section Title",
+                "description": "Updated section description text",
+                "sortOrder": 2,
+                "isActive": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quiz section updated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "version": 1,
+                    "title": "Updated Section Title",
+                    "description": "Updated section description text",
+                    "sortOrder": 2,
+                    "isActive": true,
+                    "createdAt": "2025-09-06T18:30:43.857Z",
+                    "updatedAt": "2025-09-06T19:15:22.123Z",
+                    "questions": [
+                      {
+                        "id": "550e8400-e29b-41d4-a716-446655440001",
+                        "key": "question_key_1",
+                        "title": "Question 1",
+                        "type": "single",
+                        "sortOrder": 1,
+                        "options": ["..."]
+                      },
+                      {
+                        "id": "550e8400-e29b-41d4-a716-446655440002",
+                        "key": "question_key_2",
+                        "title": "Question 2",
+                        "type": "multi",
+                        "sortOrder": 2,
+                        "options": ["..."]
+                      }
+                    ]
+                  },
+                  "timestamp": "2025-09-06T19:15:22.123Z"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a quiz section (admin only)",
+        "description": "Permanently delete a quiz section. Questions in this section will be unassigned from the section but not deleted.",
+        "tags": ["Quiz", "Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Quiz section ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quiz section deleted successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Quiz section deleted successfully",
+                  "timestamp": "2025-09-06T19:25:33.456Z"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/roadmaps": {
+      "post": {
+        "summary": "Generate a new roadmap",
+        "tags": ["Roadmaps"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoadmapGeneration"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Roadmap generated successfully"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all roadmaps for the authenticated user",
+        "tags": ["Roadmaps"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Roadmaps retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/roadmaps/{id}": {
+      "get": {
+        "summary": "Get a specific roadmap",
+        "tags": ["Roadmaps"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Roadmap ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Roadmap retrieved successfully"
+          }
+        }
+      }
+    },
+    "/api/roadmaps/{id}/progress": {
+      "patch": {
+        "summary": "Update progress for a roadmap",
+        "tags": ["Roadmaps"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Roadmap ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProgressUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Progress updated successfully"
+          }
+        }
+      }
+    },
+    "/api/subscriptions": {
+      "get": {
+        "summary": "Get all subscription plans",
+        "tags": ["Subscriptions"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "regionCode",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by region code (e.g., 'US', 'FR')"
+          },
+          {
+            "in": "query",
+            "name": "isActive",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Filter by active status"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of subscription plans"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new subscription plan",
+        "tags": ["Subscriptions"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "code",
+                  "name",
+                  "price",
+                  "currency",
+                  "regionCode",
+                  "interval",
+                  "features"
+                ],
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "number"
+                  },
+                  "currency": {
+                    "type": "string"
+                  },
+                  "regionCode": {
+                    "type": "string"
+                  },
+                  "interval": {
+                    "type": "string",
+                    "enum": ["monthly", "yearly"]
+                  },
+                  "features": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "isActive": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Subscription plan created successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/api/subscriptions/user-region": {
+      "get": {
+        "summary": "Get subscription plans based on user's region",
+        "tags": ["Subscriptions"],
+        "description": "Returns subscription plans based on the user's detected region from request headers, query params, or IP",
+        "responses": {
+          "200": {
+            "description": "List of subscription plans for the user's region"
+          }
+        }
+      }
+    },
+    "/api/subscriptions/regions": {
+      "get": {
+        "summary": "Get all available regions with subscription plans",
+        "tags": ["Subscriptions"],
+        "description": "Returns a list of all regions that have active subscription plans",
+        "responses": {
+          "200": {
+            "description": "List of available regions with their currency codes"
+          }
+        }
+      }
+    },
+    "/api/subscriptions/{id}": {
+      "get": {
+        "summary": "Get subscription plan by ID",
+        "tags": ["Subscriptions"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Subscription plan ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription plan details"
+          },
+          "404": {
+            "description": "Subscription plan not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a subscription plan",
+        "tags": ["Subscriptions"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Subscription plan ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "number"
+                  },
+                  "currency": {
+                    "type": "string"
+                  },
+                  "regionCode": {
+                    "type": "string"
+                  },
+                  "interval": {
+                    "type": "string",
+                    "enum": ["monthly", "yearly"]
+                  },
+                  "features": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "isActive": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Subscription plan updated successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "Subscription plan not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a subscription plan",
+        "tags": ["Subscriptions"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Subscription plan ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription plan deleted successfully"
+          },
+          "400": {
+            "description": "Cannot delete plan with active subscribers"
+          },
+          "404": {
+            "description": "Subscription plan not found"
+          }
+        }
+      }
+    },
+    "/api/subscriptions/region/{regionCode}": {
+      "get": {
+        "summary": "Get subscription plans by region code",
+        "tags": ["Subscriptions"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "regionCode",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Region code (e.g., 'US', 'FR')"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of subscription plans for the region"
+          }
+        }
+      }
+    },
+    "/api/subscriptions/user/subscribe": {
+      "post": {
+        "summary": "Subscribe a user to a plan",
+        "tags": ["Subscriptions"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["userId", "subscriptionId", "endDate"],
+                "properties": {
+                  "userId": {
+                    "type": "string"
+                  },
+                  "subscriptionId": {
+                    "type": "string"
+                  },
+                  "endDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User subscribed successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "User or subscription plan not found"
+          }
+        }
+      }
+    },
+    "/api/subscriptions/user/{userId}/cancel": {
+      "post": {
+        "summary": "Cancel a user's subscription",
+        "tags": ["Subscriptions"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription canceled successfully"
+          },
+          "400": {
+            "description": "User does not have an active subscription"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/api/subscriptions/user/{userId}": {
+      "get": {
+        "summary": "Get a user's subscription details",
+        "tags": ["Subscriptions"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User subscription details"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/api/users/profile": {
+      "get": {
+        "summary": "Get user profile",
+        "tags": ["User Management"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profile retrieved successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update user profile",
+        "tags": ["User Management"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 30
+                  },
+                  "fullname": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 100
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile updated successfully"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "409": {
+            "description": "Email or username already exists"
+          }
+        }
+      }
+    },
+    "/api/users/password": {
+      "put": {
+        "summary": "Change password",
+        "tags": ["User Management"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["currentPassword", "newPassword"],
+                "properties": {
+                  "currentPassword": {
+                    "type": "string"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "minLength": 8
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed successfully"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Invalid current password or authentication required"
+          }
+        }
+      }
+    },
+    "/api/users/account": {
+      "delete": {
+        "summary": "Delete user account (soft delete)",
+        "tags": ["User Management"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["password"],
+                "properties": {
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Account deleted successfully"
+          },
+          "401": {
+            "description": "Invalid password or authentication required"
+          }
+        }
+      }
+    },
+    "/api/users/account-status": {
+      "get": {
+        "summary": "Get account status",
+        "tags": ["User Management"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Account status retrieved successfully"
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    }
+  }
+}

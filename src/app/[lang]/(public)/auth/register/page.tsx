@@ -2,63 +2,32 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { validateUsername, validateFullname, validateEmail, validatePassword } from "@/validations";
+import { useRegister } from "@/hooks";
+import Image from "next/image";
 
 export default function RegisterPage() {
   const t = useTranslations("Auth.register");
+  const router = useRouter();
   const [formData, setFormData] = useState({
     username: "",
     fullname: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{
     username?: string;
     fullname?: string;
     email?: string;
     password?: string;
-    confirmPassword?: string;
   }>({});
 
-  const validateUsername = (username: string) => {
-    if (!username) return "Username is required";
-    if (username.length < 3) return "Username must be at least 3 characters";
-    if (!/^[a-zA-Z0-9_]+$/.test(username))
-      return "Username can only contain letters, numbers, and underscores";
-    return null;
-  };
-
-  const validateFullname = (fullname: string) => {
-    if (!fullname) return "Full name is required";
-    if (fullname.length < 2) return "Full name must be at least 2 characters";
-    return null;
-  };
-
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) return "Email is required";
-    if (!emailRegex.test(email)) return "Please enter a valid email address";
-    return null;
-  };
-
-  const validatePassword = (password: string) => {
-    if (!password) return "Password is required";
-    if (password.length < 8) return "Password must be at least 8 characters";
-    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-      return "Password must contain at least one uppercase letter, one lowercase letter, and one number";
-    }
-    return null;
-  };
-
-  const validateConfirmPassword = (confirmPassword: string, password: string) => {
-    if (!confirmPassword) return "Please confirm your password";
-    if (confirmPassword !== password) return "Passwords do not match";
-    return null;
-  };
+  const registerMutation = useRegister();
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -78,16 +47,11 @@ export default function RegisterPage() {
     const fullnameError = validateFullname(formData.fullname);
     const emailError = validateEmail(formData.email);
     const passwordError = validatePassword(formData.password);
-    const confirmPasswordError = validateConfirmPassword(
-      formData.confirmPassword,
-      formData.password,
-    );
 
     if (usernameError) newErrors.username = usernameError;
     if (fullnameError) newErrors.fullname = fullnameError;
     if (emailError) newErrors.email = emailError;
     if (passwordError) newErrors.password = passwordError;
-    if (confirmPasswordError) newErrors.confirmPassword = confirmPasswordError;
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -95,14 +59,17 @@ export default function RegisterPage() {
     }
 
     setErrors({});
-    setIsLoading(true);
 
-    // Simulate API call for registration
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    setIsLoading(false);
-    // Handle registration logic here
-    console.log("Registration data:", formData);
+    // Use TanStack Query mutation
+    registerMutation.mutate(formData, {
+      onSuccess: () => {
+        router.push("/auth/login");
+      },
+      onError: (error) => {
+        // Handle registration error
+        console.error("Registration failed:", error);
+      },
+    });
   };
 
   return (
@@ -110,8 +77,8 @@ export default function RegisterPage() {
       <div className="max-w-md w-full space-y-8">
         {/* Logo */}
         <div className="text-center">
-          <div className="mx-auto h-12 w-12 bg-primary rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xl">L</span>
+          <div className="mx-auto h-12 w-12 flex items-center justify-center">
+            <Image src="/assets/logo/lurnix-favicon.svg" alt="Lurnix" width={40} height={40} />
           </div>
           <h2 className="mt-6 text-3xl font-bold text-gray-900">{t("title")}</h2>
         </div>
@@ -187,44 +154,56 @@ export default function RegisterPage() {
 
             {/* Password */}
             <div>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                required
-                placeholder={t("password_placeholder")}
-                value={formData.password}
-                onChange={(e) => handleInputChange("password", e.target.value)}
-                className={`w-full ${errors.password ? "border-red-500 focus-visible:ring-red-500" : ""}`}
-                aria-invalid={!!errors.password}
-                aria-describedby={errors.password ? "password-error" : undefined}
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  required
+                  placeholder={t("password_placeholder")}
+                  value={formData.password}
+                  onChange={(e) => handleInputChange("password", e.target.value)}
+                  className={`w-full pr-10 ${errors.password ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                  aria-invalid={!!errors.password}
+                  aria-describedby={errors.password ? "password-error" : undefined}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
+                      />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
+                    </svg>
+                  )}
+                </button>
+              </div>
               {errors.password && (
                 <p id="password-error" className="mt-1 text-sm text-red-600" role="alert">
                   {errors.password}
-                </p>
-              )}
-            </div>
-
-            {/* Confirm Password */}
-            <div>
-              <Input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                autoComplete="new-password"
-                required
-                placeholder={t("confirm_password_placeholder")}
-                value={formData.confirmPassword}
-                onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
-                className={`w-full ${errors.confirmPassword ? "border-red-500 focus-visible:ring-red-500" : ""}`}
-                aria-invalid={!!errors.confirmPassword}
-                aria-describedby={errors.confirmPassword ? "confirm-password-error" : undefined}
-              />
-              {errors.confirmPassword && (
-                <p id="confirm-password-error" className="mt-1 text-sm text-red-600" role="alert">
-                  {errors.confirmPassword}
                 </p>
               )}
             </div>
@@ -237,10 +216,10 @@ export default function RegisterPage() {
             {/* Submit Button */}
             <Button
               type="submit"
-              disabled={isLoading}
+              disabled={registerMutation.isPending}
               className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-colors"
             >
-              {isLoading ? (
+              {registerMutation.isPending ? (
                 <div className="flex items-center">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                   Creating Account...
@@ -266,7 +245,7 @@ export default function RegisterPage() {
           {/* Sign In Link */}
           <div className="mt-6 text-center">
             <Link
-              href="/login"
+              href="/auth/login"
               className="text-sm text-primary hover:text-primary/80 transition-colors"
             >
               Already have an account? Sign in

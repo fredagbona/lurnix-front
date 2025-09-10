@@ -14,10 +14,30 @@
     "description": "Créez et vendez vos produits numériques en toute simplicité.",
     "cta_button": "Rejoindre gratuitement"
   },
+  "Dashboard": {
+    "nav": {
+      "dashboard": "Tableau de bord",
+      "courses": "Cours",
+      "resources": "Ressources",
+      "community": "Communauté",
+      "settings": "Paramètres",
+      "search": "Rechercher un cours ou une communauté"
+    },
+    "page": {
+      "enrollment": "Inscriptions",
+      "total_lessons": "Total des leçons",
+      "certificate": "Certificat",
+      "view_details": "Voir les détails",
+      "learning_tracking": "Suivi d'apprentissage",
+      "this_year": "Cette année",
+      "continue_learning": "Continuer l'apprentissage",
+      "start_assessment": "Commencer l'évaluation"
+    }
+  },
   "Auth": {
     "login": {
       "title": "Se connecter à Lurnix",
-      "email_placeholder": "Email ou numéro de mobile",
+      "email_placeholder": "Email",
       "password_placeholder": "Mot de passe",
       "forgot_password": "Mot de passe oublié ?",
       "forgot_email": "Email oublié ?",
@@ -35,6 +55,71 @@
       "confirm_password_placeholder": "Confirmer le mot de passe",
       "create_account_button": "Créer un compte",
       "terms_text": "En créant un compte, vous acceptez nos Conditions d'utilisation et notre Politique de confidentialité"
+    },
+    "verifyEmail": {
+      "title": "Vérifiez votre email",
+      "loading": "Vérification en cours...",
+      "success": "Email vérifié !",
+      "error": "Erreur de vérification",
+      "success_message": "Votre adresse email a été vérifiée avec succès. Vous pouvez maintenant vous connecter.",
+      "error_message": "Une erreur est survenue lors de la vérification de votre email.",
+      "retry_button": "Réessayer",
+      "sign_in_button": "Se connecter",
+      "back_to_login": "Retour à la connexion"
+    },
+    "resendVerifyEmail": {
+      "title": "Renvoyer l'email de vérification",
+      "subtitle": "Entrez votre adresse email pour recevoir un nouveau lien.",
+      "email": "Email",
+      "submit": "Renvoyer",
+      "loading": "Envoi...",
+      "success": "Un nouvel email de vérification a été envoyé si l'adresse existe.",
+      "error": "Une erreur est survenue. Veuillez réessayer plus tard."
+    },
+    "forgotPassword": {
+      "title": "Mot de passe oublié",
+      "subtitle": "Entrez votre email pour recevoir un lien de réinitialisation.",
+      "email": "Email",
+      "submit": "Envoyer",
+      "loading": "Envoi...",
+      "success": "Si l'adresse existe, un email de réinitialisation a été envoyé.",
+      "error": "Une erreur est survenue. Veuillez réessayer plus tard."
+    }
+  },
+  "Settings": {
+    "title": "Paramètres",
+    "tabs": {
+      "profile": "Profil",
+      "password": "Mot de passe",
+      "account": "Compte"
+    },
+    "profile": {
+      "title": "Modifier le profil",
+      "username": "Nom d'utilisateur",
+      "fullname": "Nom complet",
+      "email": "Email",
+      "submit": "Mettre à jour le profil",
+      "loading": "Mise à jour...",
+      "success": "Profil mis à jour avec succès !",
+      "error": "Échec de la mise à jour du profil. Veuillez réessayer."
+    },
+    "password": {
+      "title": "Changer le mot de passe",
+      "current": "Mot de passe actuel",
+      "new": "Nouveau mot de passe",
+      "submit": "Mettre à jour le mot de passe",
+      "loading": "Mise à jour...",
+      "success": "Mot de passe mis à jour avec succès !",
+      "error": "Échec de la mise à jour du mot de passe. Veuillez réessayer."
+    },
+    "account": {
+      "title": "Supprimer le compte",
+      "warning": "Cette action ne peut pas être annulée. Toutes vos données seront définitivement supprimées.",
+      "password": "Confirmer le mot de passe",
+      "submit": "Supprimer le compte",
+      "loading": "Suppression...",
+      "success": "Compte supprimé avec succès !",
+      "error": "Échec de la suppression du compte. Veuillez réessayer."
     }
   }
 }

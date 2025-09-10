@@ -14,10 +14,30 @@
     "description": "Create and sell your digital products with ease.",
     "cta_button": "Join for Free"
   },
+  "Dashboard": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "courses": "Courses",
+      "resources": "Resources",
+      "community": "Community",
+      "settings": "Settings",
+      "search": "Search course or community"
+    },
+    "page": {
+      "enrollment": "Enrollment",
+      "total_lessons": "Total Lesson",
+      "certificate": "Certificate",
+      "view_details": "View details",
+      "learning_tracking": "Learning Tracking",
+      "this_year": "This Year",
+      "continue_learning": "Continue Learning",
+      "start_assessment": "Start assessment"
+    }
+  },
   "Auth": {
     "login": {
       "title": "Sign in to Lurnix",
-      "email_placeholder": "Email or mobile number",
+      "email_placeholder": "Email",
       "password_placeholder": "Password",
       "forgot_password": "Forgot password?",
       "forgot_email": "Forgot email?",
@@ -35,6 +55,71 @@
       "confirm_password_placeholder": "Confirm password",
       "create_account_button": "Create Account",
       "terms_text": "By creating an account, you agree to our Terms of Service and Privacy Policy"
+    },
+    "verifyEmail": {
+      "title": "Verify your email",
+      "loading": "Verifying...",
+      "success": "Email verified!",
+      "error": "Verification error",
+      "success_message": "Your email has been successfully verified. You can now sign in.",
+      "error_message": "An error occurred while verifying your email.",
+      "retry_button": "Try again",
+      "sign_in_button": "Sign In",
+      "back_to_login": "Back to login"
+    },
+    "resendVerifyEmail": {
+      "title": "Resend verification email",
+      "subtitle": "Enter your email address to receive a new link.",
+      "email": "Email",
+      "submit": "Resend",
+      "loading": "Sending...",
+      "success": "If the address exists, a new verification email has been sent.",
+      "error": "An error occurred. Please try again later."
+    },
+    "forgotPassword": {
+      "title": "Forgot password",
+      "subtitle": "Enter your email to receive a password reset link.",
+      "email": "Email",
+      "submit": "Send",
+      "loading": "Sending...",
+      "success": "If the address exists, a password reset email has been sent.",
+      "error": "An error occurred. Please try again later."
+    }
+  },
+  "Settings": {
+    "title": "Settings",
+    "tabs": {
+      "profile": "Profile",
+      "password": "Password",
+      "account": "Account"
+    },
+    "profile": {
+      "title": "Update Profile",
+      "username": "Username",
+      "fullname": "Full Name",
+      "email": "Email",
+      "submit": "Update Profile",
+      "loading": "Updating...",
+      "success": "Profile updated successfully!",
+      "error": "Failed to update profile. Please try again."
+    },
+    "password": {
+      "title": "Change Password",
+      "current": "Current Password",
+      "new": "New Password",
+      "submit": "Update Password",
+      "loading": "Updating...",
+      "success": "Password updated successfully!",
+      "error": "Failed to update password. Please try again."
+    },
+    "account": {
+      "title": "Delete Account",
+      "warning": "This action cannot be undone. All your data will be permanently deleted.",
+      "password": "Confirm Password",
+      "submit": "Delete Account",
+      "loading": "Deleting...",
+      "success": "Account deleted successfully!",
+      "error": "Failed to delete account. Please try again."
     }
   }
 }
