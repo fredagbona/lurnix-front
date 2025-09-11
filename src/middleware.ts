@@ -21,6 +21,14 @@ export default function middleware(req: NextRequest) {
   const first = segments[0];
   const locale = routing.locales.includes(first as any) ? first : routing.defaultLocale;
 
+  // Redirect root and bare-locale paths to auth/register
+  if (segments.length === 0) {
+    return NextResponse.redirect(new URL(`/${routing.defaultLocale}/auth/register`, req.url));
+  }
+  if (segments.length === 1 && routing.locales.includes(first as any)) {
+    return NextResponse.redirect(new URL(`/${first}/auth/register`, req.url));
+  }
+
   const withoutLocale = routing.locales.includes(first as any)
     ? "/" + segments.slice(1).join("/")
     : pathname;

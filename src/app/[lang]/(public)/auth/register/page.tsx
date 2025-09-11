@@ -210,7 +210,27 @@ export default function RegisterPage() {
 
             {/* Terms */}
             <div className="text-sm text-gray-600">
-              <p>{t("terms_text")}</p>
+              <p>
+                {t("terms_text_prefix", { default: "By creating an account, you agree to our" })}{" "}
+                <a
+                  href="https://lurnix.tech/terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-gray-800"
+                >
+                  {t("terms_link", { default: "Terms of Service" })}
+                </a>{" "}
+                {t("terms_text_middle", { default: "and" })}{" "}
+                <a
+                  href="https://lurnix.tech/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-gray-800"
+                >
+                  {t("privacy_link", { default: "Privacy Policy" })}
+                </a>
+                {"."}
+              </p>
             </div>
 
             {/* Submit Button */}
@@ -248,7 +268,7 @@ export default function RegisterPage() {
               href="/auth/login"
               className="text-sm text-primary hover:text-primary/80 transition-colors"
             >
-              Already have an account? Sign in
+              {t("have_account_cta")} {t("have_account_link")}
             </Link>
           </div>
         </div>

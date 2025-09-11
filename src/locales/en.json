@@ -62,7 +62,13 @@
       "password_placeholder": "Password",
       "confirm_password_placeholder": "Confirm password",
       "create_account_button": "Create Account",
-      "terms_text": "By creating an account, you agree to our Terms of Service and Privacy Policy"
+      "terms_text": "By creating an account, you agree to our Terms of Service and Privacy Policy",
+      "terms_text_prefix": "By creating an account, you agree to our",
+      "terms_link": "Terms of Service",
+      "terms_text_middle": "and",
+      "privacy_link": "Privacy Policy",
+      "have_account_cta": "Already have an account?",
+      "have_account_link": "Sign in"
     },
     "verifyEmail": {
       "title": "Verify your email",
