@@ -92,12 +92,18 @@
     },
     "forgotPassword": {
       "title": "Mot de passe oublié",
+      "form_title": "Réinitialisez votre mot de passe",
       "subtitle": "Entrez votre email pour recevoir un lien de réinitialisation.",
       "email": "Email",
-      "submit": "Envoyer",
+      "email_placeholder": "Email",
+      "submit": "Envoyer le lien de réinitialisation",
       "loading": "Envoi...",
       "success": "Si l'adresse existe, un email de réinitialisation a été envoyé.",
-      "error": "Une erreur est survenue. Veuillez réessayer plus tard."
+      "error": "Une erreur est survenue. Veuillez réessayer plus tard.",
+      "email_sent_title": "Vérifiez votre email",
+      "email_sent_message": "Nous avons envoyé un lien de réinitialisation à {email}",
+      "back_to_sign_in": "Retour à la connexion",
+      "try_different_email": "Essayer un autre email"
     }
   },
   "Settings": {

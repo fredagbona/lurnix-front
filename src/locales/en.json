@@ -92,12 +92,18 @@
     },
     "forgotPassword": {
       "title": "Forgot password",
+      "form_title": "Reset your password",
       "subtitle": "Enter your email to receive a password reset link.",
       "email": "Email",
-      "submit": "Send",
+      "email_placeholder": "Email",
+      "submit": "Send reset link",
       "loading": "Sending...",
       "success": "If the address exists, a password reset email has been sent.",
-      "error": "An error occurred. Please try again later."
+      "error": "An error occurred. Please try again later.",
+      "email_sent_title": "Check your email",
+      "email_sent_message": "We've sent a password reset link to {email}",
+      "back_to_sign_in": "Back to Sign In",
+      "try_different_email": "Try a different email"
     }
   },
   "Settings": {
