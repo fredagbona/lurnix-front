@@ -154,7 +154,7 @@ export function ResetPasswordPage() {
           {/* Back to Login */}
           <div className="mt-6 text-center">
             <Link
-              href="/login"
+              href="/auth/login"
               className="text-sm text-primary hover:text-primary/80 transition-colors"
             >
               {t("back_to_sign_in")}
