@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/ui/password-input";
@@ -41,6 +41,28 @@ export default function SettingsPage() {
     type: "success" | "error";
     text: string;
   } | null>(null);
+
+  // Prefill profile form with current user data
+  useEffect(() => {
+    let isCancelled = false;
+    const loadProfile = async () => {
+      try {
+        const user = await userService.getProfile();
+        if (isCancelled) return;
+        setProfileData({
+          username: user.username ?? "",
+          fullname: user.fullname ?? "",
+          email: user.email ?? "",
+        });
+      } catch (error) {
+        // Silently ignore prefill errors; form remains editable
+      }
+    };
+    loadProfile();
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
 
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

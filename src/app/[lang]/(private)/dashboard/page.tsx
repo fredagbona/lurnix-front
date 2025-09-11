@@ -16,8 +16,8 @@ export default function DashboardPage() {
       {/* Onboarding Section */}
       {!hasCompletedProfileTest && (
         <div className="rounded-xl border border-border bg-card p-6">
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex md:flex-row flex-col md:items-center justify-between">
+            <div className="md:mb-0 mb-4">
               <h2 className="text-lg font-semibold">
                 {t("onboarding.title", { default: "Complete Your Profile" })}
               </h2>
