@@ -51,7 +51,7 @@ export function LoginPage() {
       {
         onSuccess: () => {
           // Redirect to locale-aware /home after successful login
-          router.replace("/home");
+          router.replace("/dashboard");
         },
         onError: (error) => {
           // Handle login error

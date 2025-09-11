@@ -9,7 +9,11 @@ import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 
-export default function Header() {
+type HeaderProps = {
+  onMenuClick?: () => void;
+};
+
+export default function Header({ onMenuClick }: HeaderProps) {
   const t = useTranslations("Dashboard.nav");
   const router = useRouter();
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -53,6 +57,7 @@ export default function Header() {
         <div className="flex items-center gap-3">
           <button
             type="button"
+            onClick={onMenuClick}
             className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-md border border-input hover:bg-accent"
             aria-label="Open navigation"
           >

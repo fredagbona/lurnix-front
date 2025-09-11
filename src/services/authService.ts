@@ -26,7 +26,13 @@ export const authService = {
 
   // Déconnexion
   async logout(): Promise<void> {
-    await apiClient.post("/auth/logout");
+    try {
+      await apiClient.post("/auth/logout");
+    } catch (error) {
+      // Ignorer les erreurs côté serveur pour garantir la déconnexion côté client
+    } finally {
+      authCookies.clearToken();
+    }
   },
 
   // Récupérer l'utilisateur actuel
