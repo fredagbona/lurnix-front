@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { userService } from "@/services/user";
+import { PasswordInput } from "@/components/ui/password-input";
+import { userService } from "@/services";
 import { UpdateProfileData, UpdatePasswordData } from "@/models";
 
 export default function SettingsPage() {
@@ -171,34 +172,20 @@ export default function SettingsPage() {
       {activeTab === "password" && (
         <form onSubmit={handlePasswordSubmit} className="space-y-4 max-w-md">
           <h2 className="text-lg font-medium">{t("password.title")}</h2>
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="currentPassword">
-              {t("password.current")}
-            </label>
-            <input
-              id="currentPassword"
-              type="password"
-              required
-              value={passwordData.currentPassword}
-              onChange={(e) =>
-                setPasswordData({ ...passwordData, currentPassword: e.target.value })
-              }
-              className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm outline-none ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="newPassword">
-              {t("password.new")}
-            </label>
-            <input
-              id="newPassword"
-              type="password"
-              required
-              value={passwordData.newPassword}
-              onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-              className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm outline-none ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            />
-          </div>
+          <PasswordInput
+            id="currentPassword"
+            label={t("password.current")}
+            value={passwordData.currentPassword}
+            onChange={(value) => setPasswordData({ ...passwordData, currentPassword: value })}
+            required
+          />
+          <PasswordInput
+            id="newPassword"
+            label={t("password.new")}
+            value={passwordData.newPassword}
+            onChange={(value) => setPasswordData({ ...passwordData, newPassword: value })}
+            required
+          />
           <Button type="submit" disabled={passwordLoading}>
             {passwordLoading ? t("password.loading") : t("password.submit")}
           </Button>
@@ -217,19 +204,13 @@ export default function SettingsPage() {
         <form onSubmit={handleDeleteAccount} className="space-y-4 max-w-md">
           <h2 className="text-lg font-medium text-destructive">{t("account.title")}</h2>
           <p className="text-sm text-muted-foreground">{t("account.warning")}</p>
-          <div>
-            <label className="block text-sm font-medium mb-1" htmlFor="deletePassword">
-              {t("account.password")}
-            </label>
-            <input
-              id="deletePassword"
-              type="password"
-              required
-              value={deletePassword}
-              onChange={(e) => setDeletePassword(e.target.value)}
-              className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm outline-none ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            />
-          </div>
+          <PasswordInput
+            id="deletePassword"
+            label={t("account.password")}
+            value={deletePassword}
+            onChange={setDeletePassword}
+            required
+          />
           <Button type="submit" disabled={deleteLoading} variant="destructive">
             {deleteLoading ? t("account.loading") : t("account.submit")}
           </Button>

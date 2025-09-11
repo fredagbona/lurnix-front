@@ -31,7 +31,15 @@
       "learning_tracking": "Suivi d'apprentissage",
       "this_year": "Cette année",
       "continue_learning": "Continuer l'apprentissage",
-      "start_assessment": "Commencer l'évaluation"
+      "start_assessment": "Commencer l'évaluation",
+      "onboarding": {
+        "title": "Complétez votre profil",
+        "subtitle": "Passez notre test de profil pour obtenir des recommandations personnalisées",
+        "start_test": "Commencer le test de profil",
+        "profile_test": "Compléter le test de profil",
+        "personalized_roadmap": "Obtenir un parcours d'apprentissage personnalisé",
+        "start_learning": "Commencer votre parcours d'apprentissage"
+      }
     }
   },
   "Auth": {
@@ -121,5 +129,19 @@
       "success": "Compte supprimé avec succès !",
       "error": "Échec de la suppression du compte. Veuillez réessayer."
     }
+  },
+  "ProfileTest": {
+    "title": "Test de profil",
+    "subtitle": "Aidez-nous à comprendre votre style d'apprentissage et vos préférences",
+    "section_progress": "Section {current} sur {total}",
+    "question_progress": "Question {current} sur {total}",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "submit": "Soumettre le test",
+    "submitting": "Soumission...",
+    "loading": "Chargement du quiz...",
+    "error": "Échec du chargement des questions du quiz",
+    "submit_error": "Échec de la soumission du quiz. Veuillez réessayer.",
+    "try_again": "Réessayer"
   }
 }

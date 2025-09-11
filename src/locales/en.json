@@ -31,7 +31,15 @@
       "learning_tracking": "Learning Tracking",
       "this_year": "This Year",
       "continue_learning": "Continue Learning",
-      "start_assessment": "Start assessment"
+      "start_assessment": "Start assessment",
+      "onboarding": {
+        "title": "Complete Your Profile",
+        "subtitle": "Take our profile test to get personalized recommendations",
+        "start_test": "Start Profile Test",
+        "profile_test": "Complete Profile Test",
+        "personalized_roadmap": "Get Personalized Learning Roadmap",
+        "start_learning": "Start Your Learning Journey"
+      }
     }
   },
   "Auth": {
@@ -121,5 +129,19 @@
       "success": "Account deleted successfully!",
       "error": "Failed to delete account. Please try again."
     }
+  },
+  "ProfileTest": {
+    "title": "Profile Test",
+    "subtitle": "Help us understand your learning style and preferences",
+    "section_progress": "Section {current} of {total}",
+    "question_progress": "Question {current} of {total}",
+    "previous": "Previous",
+    "next": "Next",
+    "submit": "Submit Test",
+    "submitting": "Submitting...",
+    "loading": "Loading quiz...",
+    "error": "Failed to load quiz questions",
+    "submit_error": "Failed to submit quiz. Please try again.",
+    "try_again": "Try Again"
   }
 }

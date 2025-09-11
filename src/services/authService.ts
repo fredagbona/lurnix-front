@@ -1,6 +1,6 @@
 import { apiClient } from "./api";
 import { authCookies } from "@/lib/cookies-client";
-import type {
+import {
   LoginCredentials,
   RegisterData,
   AuthResponse,
