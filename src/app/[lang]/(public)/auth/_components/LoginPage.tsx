@@ -114,11 +114,7 @@ export function LoginPage() {
                 </Link>
               </div>
 
-              <Button
-                type="submit"
-                disabled={!email}
-                className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-colors"
-              >
+              <Button type="submit" disabled={!email} className="w-full h-12 font-semibold">
                 {t("next_button")}
               </Button>
             </form>
@@ -226,11 +222,11 @@ export function LoginPage() {
               <Button
                 type="submit"
                 disabled={loginMutation.isPending || !password}
-                className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-colors"
+                className="w-full h-12 font-semibold"
               >
                 {loginMutation.isPending ? (
                   <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground mr-2"></div>
                     Signing in...
                   </div>
                 ) : (
@@ -257,10 +253,7 @@ export function LoginPage() {
               {/* Sign Up Button */}
               <div className="mt-6">
                 <Link href="/auth/register">
-                  <Button
-                    variant="outline"
-                    className="w-full h-12 border-primary text-primary hover:bg-primary hover:text-white font-semibold rounded-lg transition-colors"
-                  >
+                  <Button variant="outline" className="w-full h-12 font-semibold">
                     {t("sign_up_button")}
                   </Button>
                 </Link>

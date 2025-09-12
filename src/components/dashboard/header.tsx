@@ -3,9 +3,17 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { userService, authService } from "@/services";
+import { userService } from "@/services";
+import { useLogout } from "@/hooks";
 import { UserProfile } from "@/models";
-import { Modal } from "@/components/ui/modal";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 
@@ -19,7 +27,8 @@ export default function Header({ onMenuClick }: HeaderProps) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const [logoutLoading, setLogoutLoading] = useState(false);
+
+  const logoutMutation = useLogout();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -36,19 +45,19 @@ export default function Header({ onMenuClick }: HeaderProps) {
     fetchProfile();
   }, []);
 
-  const handleLogout = async () => {
-    setLogoutLoading(true);
-    try {
-      await authService.logout();
-      router.push("/login");
-    } catch (error) {
-      console.error("Logout error:", error);
-      // Even if logout fails, redirect to login
-      router.push("/login");
-    } finally {
-      setLogoutLoading(false);
-      setShowLogoutModal(false);
-    }
+  const handleLogout = () => {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        setShowLogoutModal(false);
+        router.push("/auth/login");
+      },
+      onError: (error) => {
+        console.error("Logout error:", error);
+        // Even if logout fails, redirect to login
+        setShowLogoutModal(false);
+        router.push("/auth/login");
+      },
+    });
   };
 
   return (
@@ -81,6 +90,39 @@ export default function Header({ onMenuClick }: HeaderProps) {
           </button>
         </div>
       </div>
+
+      {/* Logout Confirmation Dialog */}
+      <Dialog open={showLogoutModal} onOpenChange={setShowLogoutModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Déconnexion</DialogTitle>
+            <DialogDescription>Êtes-vous sûr de vouloir vous déconnecter ?</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowLogoutModal(false)}
+              disabled={logoutMutation.isPending}
+            >
+              Annuler
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleLogout}
+              disabled={logoutMutation.isPending}
+            >
+              {logoutMutation.isPending ? (
+                <div className="flex items-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Déconnexion...
+                </div>
+              ) : (
+                "Se déconnecter"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </header>
   );
 }
