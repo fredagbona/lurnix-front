@@ -190,7 +190,7 @@ export default function DashboardPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="rounded-xl border border-border bg-card p-4">
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">
@@ -326,7 +326,7 @@ export default function DashboardPage() {
             {t("start_assessment", { default: "Start assessment" })}
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
