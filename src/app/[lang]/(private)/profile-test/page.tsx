@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Loader } from "@/components/ui/loader";
 import { quizService } from "@/services";
-import type { QuizResponse, QuizSection, QuizQuestion, QuizSubmission } from "@/models";
+import type { QuizResponse, QuizSubmission } from "@/models";
 import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
 
 export default function ProfileTestPage() {
@@ -78,7 +79,28 @@ export default function ProfileTestPage() {
     setError(null);
 
     try {
-      const submission: QuizSubmission = { responses };
+      // Build answers object using question keys as required by API
+      const answers: Record<string, string | string[] | number> = {};
+
+      for (const section of quizData.data.sections) {
+        for (const question of section.questions) {
+          const value = responses[question.id];
+          if (value === undefined) continue;
+          // If an array of numbers sneaks in, keep it as is or coerce if single
+          // API accepts string | string[] | number. We pass numbers only when not an array
+          if (Array.isArray(value)) {
+            answers[question.key] = value as string[];
+          } else {
+            answers[question.key] = value as string | number;
+          }
+        }
+      }
+
+      const submission: QuizSubmission = {
+        version: quizData.data.version,
+        answers,
+      };
+
       await quizService.submitQuiz(submission);
       router.push("/dashboard?onboarding=completed");
     } catch (err) {
@@ -91,7 +113,16 @@ export default function ProfileTestPage() {
 
   const isLastQuestion =
     currentSectionIndex === totalSections - 1 && currentQuestionIndex === totalQuestions - 1;
-  const canProceed = currentQuestion && responses[currentQuestion.id] !== undefined;
+  // Questions spécifiques qui nécessitent une saisie de texte
+  const isTextInputQuestion =
+    !!currentQuestion &&
+    currentSectionIndex === 2 && // Section 3
+    (currentQuestionIndex === 4 || currentQuestionIndex === 6); // Question 5 et 7 (0-based index)
+
+  const canProceed =
+    currentQuestion &&
+    responses[currentQuestion.id] !== undefined &&
+    (isTextInputQuestion ? (responses[currentQuestion.id] as string)?.trim() !== "" : true);
 
   if (loading) {
     return <Loader message={t("loading", { default: "Loading quiz..." })} />;
@@ -166,62 +197,74 @@ export default function ProfileTestPage() {
             )}
           </div>
 
-          {/* Question Options */}
+          {/* Question Input */}
           <div className="space-y-3">
-            {currentQuestion.options.map((option) => {
-              const isSelected =
-                responses[currentQuestion.id] === option.value ||
-                (Array.isArray(responses[currentQuestion.id]) &&
-                  (responses[currentQuestion.id] as string[]).includes(option.value));
+            {isTextInputQuestion ? (
+              <Input
+                type="text"
+                placeholder="Enter your answer..."
+                value={(responses[currentQuestion.id] as string) || ""}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  handleResponse(currentQuestion.id, e.target.value)
+                }
+                className="w-full"
+              />
+            ) : currentQuestion.options ? (
+              currentQuestion.options.map((option) => {
+                const isSelected =
+                  responses[currentQuestion.id] === option.value ||
+                  (Array.isArray(responses[currentQuestion.id]) &&
+                    (responses[currentQuestion.id] as string[]).includes(option.value));
 
-              return (
-                <button
-                  key={option.id}
-                  onClick={() => {
-                    if (currentQuestion.type === "multi") {
-                      const currentValues = Array.isArray(responses[currentQuestion.id])
-                        ? (responses[currentQuestion.id] as string[])
-                        : [];
-                      const newValues = currentValues.includes(option.value)
-                        ? currentValues.filter((v) => v !== option.value)
-                        : [...currentValues, option.value];
-                      handleResponse(currentQuestion.id, newValues);
-                    } else {
-                      handleResponse(currentQuestion.id, option.value);
-                    }
-                  }}
-                  className={`w-full text-left p-4 rounded-lg border transition-colors ${
-                    isSelected
-                      ? "border-primary bg-primary/5 text-primary"
-                      : "border-border hover:border-primary/50 hover:bg-muted/50"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    {currentQuestion.type === "multi" && (
-                      <div
-                        className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                          isSelected ? "border-primary bg-primary" : "border-muted-foreground"
-                        }`}
-                      >
-                        {isSelected && <CheckCircle className="w-3 h-3 text-white" />}
-                      </div>
-                    )}
-                    {currentQuestion.type === "single" && (
-                      <div
-                        className={`w-4 h-4 rounded-full border-2 ${
-                          isSelected ? "border-primary bg-primary" : "border-muted-foreground"
-                        }`}
-                      >
-                        {isSelected && (
-                          <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5" />
-                        )}
-                      </div>
-                    )}
-                    <span className="font-medium">{option.label}</span>
-                  </div>
-                </button>
-              );
-            })}
+                return (
+                  <button
+                    key={option.id}
+                    onClick={() => {
+                      if (currentQuestion.type === "multi") {
+                        const currentValues = Array.isArray(responses[currentQuestion.id])
+                          ? (responses[currentQuestion.id] as string[])
+                          : [];
+                        const newValues = currentValues.includes(option.value)
+                          ? currentValues.filter((v) => v !== option.value)
+                          : [...currentValues, option.value];
+                        handleResponse(currentQuestion.id, newValues);
+                      } else {
+                        handleResponse(currentQuestion.id, option.value);
+                      }
+                    }}
+                    className={`w-full text-left p-4 rounded-lg border transition-colors ${
+                      isSelected
+                        ? "border-primary bg-primary/5 text-primary"
+                        : "border-border hover:border-primary/50 hover:bg-muted/50"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      {currentQuestion.type === "multi" && (
+                        <div
+                          className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                            isSelected ? "border-primary bg-primary" : "border-muted-foreground"
+                          }`}
+                        >
+                          {isSelected && <CheckCircle className="w-3 h-3 text-white" />}
+                        </div>
+                      )}
+                      {currentQuestion.type === "single" && (
+                        <div
+                          className={`w-4 h-4 rounded-full border-2 ${
+                            isSelected ? "border-primary bg-primary" : "border-muted-foreground"
+                          }`}
+                        >
+                          {isSelected && (
+                            <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5" />
+                          )}
+                        </div>
+                      )}
+                      <span className="font-medium flex-1">{option.label}</span>
+                    </div>
+                  </button>
+                );
+              })
+            ) : null}
           </div>
         </div>
       )}

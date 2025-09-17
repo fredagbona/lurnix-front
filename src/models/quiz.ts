@@ -10,9 +10,10 @@ export interface QuizQuestion {
   key: string;
   title: string;
   description: string;
-  type: "single" | "multi" | "rank";
+  type: "single" | "multi" | "rank" | "text" | "textarea";
   sortOrder: number;
-  options: QuizOption[];
+  options?: QuizOption[]; // Optional for text input questions
+  placeholder?: string; // For text input questions
 }
 
 export interface QuizSection {
@@ -33,8 +34,9 @@ export interface QuizResponse {
 }
 
 export interface QuizSubmission {
-  responses: {
-    [questionId: string]: string | string[] | number[];
+  version: number;
+  answers: {
+    [questionKey: string]: string | string[] | number;
   };
 }
 

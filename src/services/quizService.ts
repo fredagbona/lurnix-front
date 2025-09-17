@@ -11,4 +11,9 @@ export const quizService = {
   async submitQuiz(submission: QuizSubmission): Promise<QuizSubmissionResponse> {
     return await apiClient.post<QuizSubmissionResponse>("/quiz/submit", submission);
   },
+
+  // Get AI roadmap profile (computed + inputs)
+  async getRoadmapProfile(): Promise<any> {
+    return await apiClient.get<any>("/ai/roadmap/profile");
+  },
 };
