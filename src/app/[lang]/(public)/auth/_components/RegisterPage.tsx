@@ -94,7 +94,7 @@ export function RegisterPage() {
                 type="text"
                 autoComplete="username"
                 required
-                placeholder="Username"
+                placeholder="exempleDev"
                 value={formData.username}
                 onChange={(e) => handleInputChange("username", e.target.value)}
                 className={`w-full ${errors.username ? "border-red-500 focus-visible:ring-red-500" : ""}`}
