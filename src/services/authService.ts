@@ -92,8 +92,7 @@ export const authService = {
 
   // Vérifier l'email avec un token
   async verifyEmail(token: string): Promise<void> {
-    await apiClient.get(`/auth/verify-email`, {
-      params: { token },
+    await apiClient.get(`/auth/verify-email/${token}`, {
       skipAuth: true,
     });
   },

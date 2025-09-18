@@ -1,9 +1,5 @@
 {
   "meta": {
-    "home": {
-      "title": "La plateforme tout-en-un",
-      "description": "Créez et vendez vos produits numériques en toute simplicité."
-    },
     "login": {
       "title": "Se connecter à Lurnix",
       "description": "Accédez à votre compte pour continuer"
@@ -68,7 +64,12 @@
       "terms_text_middle": "et",
       "privacy_link": "la Politique de confidentialité",
       "have_account_cta": "Vous avez déjà un compte ?",
-      "have_account_link": "Se connecter"
+      "have_account_link": "Se connecter",
+      "success_title": "Compte créé !",
+      "success_message": "Nous avons envoyé un lien de vérification à votre adresse email. Veuillez vérifier votre email et cliquer sur le lien pour vérifier votre compte avant de vous connecter.",
+      "go_to_login": "Aller à la connexion",
+      "didnt_receive_email": "Vous n'avez pas reçu l'email ? Vérifiez votre dossier spam ou",
+      "try_again": "réessayez"
     },
     "verifyEmail": {
       "title": "Vérifiez votre email",
