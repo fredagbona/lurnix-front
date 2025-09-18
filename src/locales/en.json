@@ -64,7 +64,12 @@
       "terms_text_middle": "and",
       "privacy_link": "Privacy Policy",
       "have_account_cta": "Already have an account?",
-      "have_account_link": "Sign in"
+      "have_account_link": "Sign in",
+      "success_title": "Account Created!",
+      "success_message": "We've sent a verification link to your email address. Please check your email and click the link to verify your account before signing in.",
+      "go_to_login": "Go to Sign In",
+      "didnt_receive_email": "Didn't receive the email? Check your spam folder or",
+      "try_again": "try again"
     },
     "verifyEmail": {
       "title": "Verify your email",
