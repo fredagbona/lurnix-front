@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +14,8 @@ import Image from "next/image";
 export function RegisterPage() {
   const t = useTranslations("Auth.register");
   const router = useRouter();
+  const params = useParams();
+  const lang = params.lang as string;
   const [formData, setFormData] = useState({
     username: "",
     fullname: "",
@@ -20,6 +23,7 @@ export function RegisterPage() {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [errors, setErrors] = useState<{
     username?: string;
     fullname?: string;
@@ -63,7 +67,7 @@ export function RegisterPage() {
     // Use TanStack Query mutation
     registerMutation.mutate(formData, {
       onSuccess: () => {
-        router.push("/auth/login");
+        setRegistrationSuccess(true);
       },
       onError: (error) => {
         // Handle registration error
@@ -71,6 +75,75 @@ export function RegisterPage() {
       },
     });
   };
+
+  // Success screen after registration
+  if (registrationSuccess) {
+    return (
+      <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          {/* Logo */}
+          <div className="text-center">
+            <div className="mx-auto h-12 w-12 flex items-center justify-center">
+              <Image src="/assets/logo/lurnix-favicon.svg" alt="Lurnix" width={40} height={40} />
+            </div>
+          </div>
+
+          {/* Success Message */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center">
+            <div className="mb-6">
+              <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto">
+                <svg
+                  className="w-8 h-8 text-green-600 dark:text-green-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              {t("success_title", { default: "Account Created!" })}
+            </h2>
+
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              {t("success_message", {
+                default:
+                  "We've sent a verification link to your email address. Please check your email and click the link to verify your account before signing in.",
+              })}
+            </p>
+
+            <div className="space-y-3">
+              <Button
+                onClick={() => router.push(`/${lang}/auth/login`)}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                {t("go_to_login", { default: "Go to Sign In" })}
+              </Button>
+
+              <p className="text-sm text-gray-500">
+                {t("didnt_receive_email", {
+                  default: "Didn't receive the email? Check your spam folder or",
+                })}{" "}
+                <button
+                  onClick={() => setRegistrationSuccess(false)}
+                  className="text-blue-600 hover:text-blue-700 underline"
+                >
+                  {t("try_again", { default: "try again" })}
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -94,7 +167,7 @@ export function RegisterPage() {
                 type="text"
                 autoComplete="username"
                 required
-                placeholder="Username"
+                placeholder="exempleDev"
                 value={formData.username}
                 onChange={(e) => handleInputChange("username", e.target.value)}
                 className={`w-full ${errors.username ? "border-red-500 focus-visible:ring-red-500" : ""}`}
