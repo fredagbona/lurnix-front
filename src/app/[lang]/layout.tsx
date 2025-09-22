@@ -4,9 +4,15 @@ import { notFound } from "next/navigation";
 import { locales } from "@/i18n/routing";
 import type { ReactNode } from "react";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { Toaster } from "sonner";
 
 function Providers({ children }: { children: ReactNode }) {
-  return <QueryProvider>{children}</QueryProvider>;
+  return (
+    <QueryProvider>
+      {children}
+      <Toaster position="top-right" />
+    </QueryProvider>
+  );
 }
 
 export default async function LocaleLayout({

@@ -22,7 +22,7 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
     () => [
       { href: "/dashboard", label: t("dashboard", { default: "Dashboard" }), icon: Home },
       { href: "/roadmap", label: t("roadmap", { default: "Roadmap" }), icon: BookOpen },
-      { href: "/resources", label: t("resources", { default: "Resources" }), icon: FolderOpen },
+      // { href: "/resources", label: t("resources", { default: "Resources" }), icon: FolderOpen },
       {
         href: "/settings",
         label: t("settings", { default: "Settings" }),

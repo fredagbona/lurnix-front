@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { validateUsername, validateFullname, validateEmail, validatePassword } from "@/validations";
 import { useRegister } from "@/hooks";
 import Image from "next/image";
+import { toast } from "sonner";
 
 export function RegisterPage() {
   const t = useTranslations("Auth.register");
@@ -68,10 +69,36 @@ export function RegisterPage() {
     registerMutation.mutate(formData, {
       onSuccess: () => {
         setRegistrationSuccess(true);
+        toast.success("Compte créé avec succès !");
       },
-      onError: (error) => {
-        // Handle registration error
+      onError: (error: any) => {
         console.error("Registration failed:", error);
+
+        // Check if it's a validation error with details
+        if (error.code === "VALIDATION_ERROR" && error.details) {
+          const newErrors: typeof errors = {};
+
+          // Process field-specific errors
+          if (Array.isArray(error.details)) {
+            error.details.forEach((detail: any) => {
+              if (detail.field && detail.message) {
+                newErrors[detail.field as keyof typeof errors] = detail.message;
+              }
+            });
+          }
+
+          setErrors(newErrors);
+
+          // Show toast with the specific error message
+          if (error.details.length > 0 && error.details[0].message) {
+            toast.error(error.details[0].message);
+          } else {
+            toast.error(error.message || "Erreur de validation");
+          }
+        } else {
+          // Handle other types of errors with toast
+          toast.error(error.message || "Une erreur s'est produite lors de l'inscription");
+        }
       },
     });
   };
@@ -87,8 +114,6 @@ export function RegisterPage() {
               <Image src="/assets/logo/lurnix-favicon.svg" alt="Lurnix" width={40} height={40} />
             </div>
           </div>
-
-          {/* Success Message */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center">
             <div className="mb-6">
               <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto">

@@ -59,9 +59,13 @@ export const apiClient = {
         const err = error as AxiosError<any>;
         const status = err.response?.status ?? 0;
         const data = err.response?.data ?? {};
-        const message = data?.message || err.message || `HTTP ${status}`;
-        const code = data?.code as string | undefined;
-        const details = (data?.details || data) as Record<string, any> | undefined;
+
+        // Handle the specific API error format with nested error object
+        const errorData = data?.error || data;
+        const message = errorData?.message || err.message || `HTTP ${status}`;
+        const code = errorData?.code as string | undefined;
+        const details = errorData?.details as any[] | undefined;
+
         throw new ApiError(message, status, code, details);
       }
       throw new ApiError("Network error or server unavailable", 0, "NETWORK_ERROR");
