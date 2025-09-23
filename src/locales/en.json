@@ -112,6 +112,7 @@
     "tabs": {
       "profile": "Profile",
       "password": "Password",
+      "language": "Language",
       "account": "Account"
     },
     "profile": {
@@ -132,6 +133,14 @@
       "loading": "Updating...",
       "success": "Password updated successfully!",
       "error": "Failed to update password. Please try again."
+    },
+    "language": {
+      "title": "Change Language",
+      "select": "Select your language",
+      "submit": "Update Language",
+      "loading": "Updating...",
+      "success": "Language updated successfully!",
+      "error": "Failed to update language. Please try again."
     },
     "account": {
       "title": "Delete Account",

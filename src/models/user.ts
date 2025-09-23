@@ -32,3 +32,7 @@ export interface UpdatePasswordData {
 export interface DeleteAccountData {
   password: string;
 }
+
+export interface UpdateLanguageData {
+  language: string;
+}

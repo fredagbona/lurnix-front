@@ -112,6 +112,7 @@
     "tabs": {
       "profile": "Profil",
       "password": "Mot de passe",
+      "language": "Langue",
       "account": "Compte"
     },
     "profile": {
@@ -132,6 +133,14 @@
       "loading": "Mise à jour...",
       "success": "Mot de passe mis à jour avec succès !",
       "error": "Échec de la mise à jour du mot de passe. Veuillez réessayer."
+    },
+    "language": {
+      "title": "Changer la langue",
+      "select": "Sélectionnez votre langue",
+      "submit": "Mettre à jour la langue",
+      "loading": "Mise à jour...",
+      "success": "Langue mise à jour avec succès !",
+      "error": "Échec de la mise à jour de la langue. Veuillez réessayer."
     },
     "account": {
       "title": "Supprimer le compte",
