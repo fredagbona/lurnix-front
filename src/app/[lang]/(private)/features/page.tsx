@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { ChevronUp, Star, Wrench, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -64,9 +65,18 @@ export default function FeaturesPage() {
           return feature;
         }),
       );
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to vote:", error);
-      // TODO: Afficher une notification d'erreur à l'utilisateur
+
+      // Gérer les erreurs avec toast
+      if (error.response?.data?.error?.message) {
+        toast.error(error.response.data.error.message);
+      } else if (error.response?.data?.error) {
+        // Fallback si pas de message
+        toast.error("Failed to vote on this feature");
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
     }
   };
 
@@ -77,17 +87,19 @@ export default function FeaturesPage() {
   return (
     <div className="mx-auto">
       <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("title")}</h1>
-            <p className="text-gray-600">{t("subtitle")}</p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div className="flex-1">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{t("title")}</h1>
+            <p className="text-gray-600 text-sm sm:text-base">{t("subtitle")}</p>
           </div>
-          <SubmitIdea categories={categories} onFeatureSubmitted={handleFeatureSubmitted} />
+          <div className="flex-shrink-0">
+            <SubmitIdea categories={categories} onFeatureSubmitted={handleFeatureSubmitted} />
+          </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
           <Select value={selectedCategory} onValueChange={setSelectedCategory} disabled={loading}>
-            <SelectTrigger className="w-48">
+            <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
@@ -117,10 +129,10 @@ export default function FeaturesPage() {
           </div>
         ) : (
           filteredFeatures.map((feature) => (
-            <Card key={feature.id} className="">
-              <CardContent className="p-6">
-                <div className="flex gap-4">
-                  <div className="flex flex-col items-center gap-2">
+            <Card key={feature.id} className="hover:shadow-md transition-shadow">
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex flex-row sm:flex-col items-center gap-2 sm:gap-2 flex-shrink-0">
                     <button
                       onClick={() => handleVote(feature.id)}
                       className={`p-2 rounded-lg border-2 transition-colors ${
@@ -135,20 +147,28 @@ export default function FeaturesPage() {
                       {feature.votesCount}
                     </span>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                    <p className="text-gray-600 mb-4 line-clamp-2">{feature.excerpt}</p>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-gray-600 mb-4 line-clamp-2 text-sm sm:text-base">
+                      {feature.excerpt}
+                    </p>
 
-                    <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
-                      <span>{new Date(feature.createdAt).toLocaleDateString()}</span>
-                      <span>•</span>
-                      <span className="text-blue-600">{t(`categories.${feature.category}`)}</span>
-                      <div className="flex gap-2">
-                        {feature.tags?.map((tag, index) => (
-                          <span key={index} className="text-blue-600">
-                            #{tag}
-                          </span>
-                        )) || []}
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500 mb-3">
+                      <div className="flex items-center gap-2">
+                        <span>{new Date(feature.createdAt).toLocaleDateString()}</span>
+                        <span className="hidden sm:inline">•</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-blue-600">{t(`categories.${feature.category}`)}</span>
+                        <div className="flex gap-2 flex-wrap">
+                          {feature.tags?.map((tag, index) => (
+                            <span key={index} className="text-blue-600">
+                              #{tag}
+                            </span>
+                          )) || []}
+                        </div>
                       </div>
                     </div>
 
@@ -161,7 +181,7 @@ export default function FeaturesPage() {
                               : feature.status === "closed"
                                 ? "bg-red-100 text-red-800 border-red-200"
                                 : "bg-gray-100 text-gray-800 border-gray-200"
-                          } border`}
+                          } border text-xs`}
                         >
                           {feature.status === "open" ? (
                             <Star className="h-3 w-3 mr-1" />

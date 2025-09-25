@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Plus } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -48,6 +48,10 @@ export default function SubmitIdea({ categories, onFeatureSubmitted }: SubmitIde
     try {
       const response = await featuresService.submitFeature(formData);
       onFeatureSubmitted(response.data);
+
+      // Afficher message de succès
+      toast.success("Feature request submitted successfully!");
+
       // Réinitialiser le formulaire
       setFormData({
         title: "",
@@ -57,9 +61,19 @@ export default function SubmitIdea({ categories, onFeatureSubmitted }: SubmitIde
       });
       setTagInput("");
       setIsModalOpen(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to submit feature:", error);
-      // TODO: Afficher une notification d'erreur
+
+      // Gérer les erreurs avec toast
+      if (error.response?.data?.error?.message) {
+        // Structure: { success: false, error: { code: "...", message: "..." } }
+        toast.error(error.response.data.error.message);
+      } else if (error.response?.data?.error) {
+        // Fallback si pas de message
+        toast.error("An error occurred while submitting the feature");
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -89,7 +103,7 @@ export default function SubmitIdea({ categories, onFeatureSubmitted }: SubmitIde
           {t("submitIdea")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl mx-4 sm:mx-0">
         <DialogHeader>
           <DialogTitle>{t("submitIdea")}</DialogTitle>
         </DialogHeader>
@@ -147,7 +161,7 @@ export default function SubmitIdea({ categories, onFeatureSubmitted }: SubmitIde
             <label htmlFor="tags" className="block text-sm font-medium mb-2">
               Tags
             </label>
-            <div className="flex gap-2 mb-2">
+            <div className="flex flex-col sm:flex-row gap-2 mb-2">
               <Input
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
@@ -158,8 +172,14 @@ export default function SubmitIdea({ categories, onFeatureSubmitted }: SubmitIde
                     handleAddTag();
                   }
                 }}
+                className="flex-1"
               />
-              <Button type="button" onClick={handleAddTag} variant="outline">
+              <Button
+                type="button"
+                onClick={handleAddTag}
+                variant="outline"
+                className="w-full sm:w-auto"
+              >
                 Add
               </Button>
             </div>
@@ -181,11 +201,16 @@ export default function SubmitIdea({ categories, onFeatureSubmitted }: SubmitIde
             )}
           </div>
 
-          <div className="flex justify-end gap-2 pt-4">
-            <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
+          <div className="flex flex-col sm:flex-row justify-end gap-2 pt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsModalOpen(false)}
+              className="w-full sm:w-auto"
+            >
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
               {isSubmitting ? "Submitting..." : "Submit Feature"}
             </Button>
           </div>
