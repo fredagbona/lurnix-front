@@ -125,7 +125,7 @@ export default function FeaturesPage() {
                       onClick={() => handleVote(feature.id)}
                       className={`p-2 rounded-lg border-2 transition-colors ${
                         feature.userVoted
-                          ? "border-pink-500 bg-pink-50 text-pink-600"
+                          ? "border-primary bg-primary/10 text-primary"
                           : "border-gray-200 hover:border-gray-300 text-gray-400 hover:text-gray-600"
                       }`}
                     >

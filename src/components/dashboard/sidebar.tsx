@@ -33,7 +33,6 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
         label: t("subscription", { default: "Subscription" }),
         icon: CreditCard,
       },
-      // Plans page merged into subscription; link removed
     ],
     [t],
   );

@@ -85,8 +85,7 @@ export default function SubmitIdea({ categories, onFeatureSubmitted }: SubmitIde
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-pink-600 hover:bg-pink-700 text-white">
-          <Plus className="h-4 w-4 mr-2" />
+        <Button className="bg-primary hover:bg-primary/80 text-white py-2.5">
           {t("submitIdea")}
         </Button>
       </DialogTrigger>
