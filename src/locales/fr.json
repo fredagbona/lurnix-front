@@ -30,6 +30,7 @@
       "dashboard": "Tableau de bord",
       "courses": "Cours",
       "roadmap": "Feuille de route",
+      "features": "Fonctionnalités",
       "resources": "Ressources",
       "community": "Communauté",
       "settings": "Paramètres",
@@ -53,6 +54,26 @@
         "personalized_roadmap": "Obtenir un parcours d'apprentissage personnalisé",
         "start_learning": "Commencer votre parcours d'apprentissage"
       }
+    }
+  },
+  "Features": {
+    "title": "Demandes de fonctionnalités",
+    "subtitle": "Idées pour améliorer Lurnix",
+    "submitIdea": "Soumettre une idée",
+    "trending": "Tendances",
+    "newest": "Plus récent",
+    "mostVoted": "Plus voté",
+    "filter": "Filtrer",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "categories": {
+      "Roadmaps": "Feuilles de route",
+      "AI_Mentor": "Mentor IA",
+      "Community": "Communauté",
+      "Integrations": "Intégrations",
+      "Payments": "Paiements",
+      "UX": "Expérience utilisateur",
+      "Other": "Autre"
     }
   },
   "Auth": {

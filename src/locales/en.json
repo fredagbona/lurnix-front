@@ -30,6 +30,7 @@
       "dashboard": "Dashboard",
       "courses": "Courses",
       "roadmap": "Roadmap",
+      "features": "Features",
       "resources": "Resources",
       "community": "Community",
       "settings": "Settings",
@@ -53,6 +54,26 @@
         "personalized_roadmap": "Get Personalized Learning Roadmap",
         "start_learning": "Start Your Learning Journey"
       }
+    }
+  },
+  "Features": {
+    "title": "Feature requests",
+    "subtitle": "Ideas to help improve Lurnix",
+    "submitIdea": "Submit Idea",
+    "trending": "Trending",
+    "newest": "Newest",
+    "mostVoted": "Most Voted",
+    "filter": "Filter",
+    "previous": "Previous",
+    "next": "Next",
+    "categories": {
+      "Roadmaps": "Roadmaps",
+      "AI_Mentor": "AI Mentor",
+      "Community": "Community",
+      "Integrations": "Integrations",
+      "Payments": "Payments",
+      "UX": "UX",
+      "Other": "Other"
     }
   },
   "Auth": {
