@@ -129,7 +129,7 @@ export default function FeaturesPage() {
           </div>
         ) : (
           filteredFeatures.map((feature) => (
-            <Card key={feature.id} className="hover:shadow-md transition-shadow">
+            <Card key={feature.id}>
               <CardContent className="p-4 sm:p-6">
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex flex-row sm:flex-col items-center gap-2 sm:gap-2 flex-shrink-0">
