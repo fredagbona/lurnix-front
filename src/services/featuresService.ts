@@ -1,5 +1,11 @@
 import { apiClient } from "./api";
-import type { FeatureCategoriesResponse, FeaturesResponse, VoteResponse } from "@/models";
+import type {
+  FeatureCategoriesResponse,
+  FeaturesResponse,
+  VoteResponse,
+  SubmitFeatureRequest,
+  SubmitFeatureResponse,
+} from "@/models";
 
 export const featuresService = {
   /**
@@ -21,5 +27,12 @@ export const featuresService = {
    */
   async toggleVote(featureId: string): Promise<VoteResponse> {
     return apiClient.post<VoteResponse>(`/features/${featureId}/votes`);
+  },
+
+  /**
+   * Soumet une nouvelle feature
+   */
+  async submitFeature(data: SubmitFeatureRequest): Promise<SubmitFeatureResponse> {
+    return apiClient.post<SubmitFeatureResponse>("/features", data);
   },
 };

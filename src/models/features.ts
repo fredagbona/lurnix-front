@@ -19,7 +19,7 @@ export interface FeatureRequest {
   userVoted: boolean;
   createdAt: string;
   updatedAt: string;
-  tags: string[];
+  tags?: string[];
   mergedIntoId: string | null;
 }
 
@@ -37,5 +37,18 @@ export interface VoteResponse {
     votesCount: number;
     userVoted: boolean;
   };
+  timestamp: string;
+}
+
+export interface SubmitFeatureRequest {
+  title: string;
+  description: string;
+  category: string;
+  tags: string[];
+}
+
+export interface SubmitFeatureResponse {
+  success: boolean;
+  data: FeatureRequest;
   timestamp: string;
 }

@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { ChevronUp, MessageCircle, Plus, Filter, Star, Wrench, Clock } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ChevronUp, Star, Wrench, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -14,15 +13,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { featuresService } from "@/services";
+import SubmitIdea from "@/components/SubmitIdea";
 import type { FeatureCategory, FeatureRequest } from "@/models";
 
 export default function FeaturesPage() {
   const t = useTranslations("Features");
   const [features, setFeatures] = useState<FeatureRequest[]>([]);
-  const [sortBy, setSortBy] = useState("trending");
   const [categories, setCategories] = useState<FeatureCategory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [loading, setLoading] = useState(true);
+
+  const filteredFeatures = features.filter((feature) => {
+    if (selectedCategory === "all") return true;
+    return feature.category === selectedCategory;
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,27 +70,21 @@ export default function FeaturesPage() {
     }
   };
 
-  const handleSubmitIdea = () => {
-    // TODO: Implement submit idea modal
-    console.log("Submit idea clicked");
+  const handleFeatureSubmitted = (newFeature: FeatureRequest) => {
+    setFeatures((prev) => [newFeature, ...prev]);
   };
 
   return (
     <div className="mx-auto">
-      {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("title")}</h1>
             <p className="text-gray-600">{t("subtitle")}</p>
           </div>
-          <Button onClick={handleSubmitIdea} className="bg-pink-600 hover:bg-pink-700 text-white">
-            <Plus className="h-4 w-4 mr-2" />
-            {t("submitIdea")}
-          </Button>
+          <SubmitIdea categories={categories} onFeatureSubmitted={handleFeatureSubmitted} />
         </div>
 
-        {/* Filters */}
         <div className="flex items-center gap-4">
           <Select value={selectedCategory} onValueChange={setSelectedCategory} disabled={loading}>
             <SelectTrigger className="w-48">
@@ -109,13 +107,17 @@ export default function FeaturesPage() {
           <div className="flex justify-center py-8">
             <div className="text-gray-500">Loading features...</div>
           </div>
-        ) : features.length === 0 ? (
+        ) : filteredFeatures.length === 0 ? (
           <div className="flex justify-center py-8">
-            <div className="text-gray-500">No features found.</div>
+            <div className="text-gray-500">
+              {selectedCategory === "all"
+                ? "No features found."
+                : `No features found in ${t(`categories.${selectedCategory}`)} category.`}
+            </div>
           </div>
         ) : (
-          features.map((feature) => (
-            <Card key={feature.id} className="hover:shadow-md transition-shadow">
+          filteredFeatures.map((feature) => (
+            <Card key={feature.id} className="">
               <CardContent className="p-6">
                 <div className="flex gap-4">
                   <div className="flex flex-col items-center gap-2">
@@ -142,11 +144,11 @@ export default function FeaturesPage() {
                       <span>•</span>
                       <span className="text-blue-600">{t(`categories.${feature.category}`)}</span>
                       <div className="flex gap-2">
-                        {feature.tags.map((tag, index) => (
+                        {feature.tags?.map((tag, index) => (
                           <span key={index} className="text-blue-600">
                             #{tag}
                           </span>
-                        ))}
+                        )) || []}
                       </div>
                     </div>
 
