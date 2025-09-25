@@ -5,6 +5,21 @@
       "description": "Access your account to continue"
     }
   },
+  "Subscription": {
+    "error": {
+      "title": "An error occurred",
+      "subtitle": "Unable to load subscription data right now."
+    },
+    "current": {
+      "title": "Your current subscription",
+      "statusLabel": "Status",
+      "planLabel": "Plan",
+      "cycleLabel": "Billing cycle",
+      "unavailable": "—",
+      "renewsOn": "Renews on",
+      "none": "No active subscription."
+    }
+  },
   "Home": {
     "main_title": "The All-in-One Platform",
     "description": "Create and sell your digital products with ease.",
@@ -17,7 +32,9 @@
       "roadmap": "Roadmap",
       "resources": "Resources",
       "community": "Community",
-      "settings": "Settings"
+      "settings": "Settings",
+      "subscription": "Subscription",
+      "plans": "Plans"
     },
     "page": {
       "enrollment": "Enrollment",

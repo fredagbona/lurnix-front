@@ -5,6 +5,21 @@
       "description": "Accédez à votre compte pour continuer"
     }
   },
+  "Subscription": {
+    "error": {
+      "title": "Une erreur s&apos;est produite",
+      "subtitle": "Impossible de charger les données d&apos;abonnement pour le moment."
+    },
+    "current": {
+      "title": "Votre abonnement actuel",
+      "statusLabel": "Statut",
+      "planLabel": "Plan",
+      "cycleLabel": "Cycle de facturation",
+      "unavailable": "—",
+      "renewsOn": "Renouvellement le",
+      "none": "Aucun abonnement actif."
+    }
+  },
   "Home": {
     "main_title": "La plateforme tout-en-un",
     "description": "Créez et vendez vos produits numériques en toute simplicité.",
@@ -17,7 +32,9 @@
       "roadmap": "Feuille de route",
       "resources": "Ressources",
       "community": "Communauté",
-      "settings": "Paramètres"
+      "settings": "Paramètres",
+      "subscription": "Abonnement",
+      "plans": "Plans"
     },
     "page": {
       "enrollment": "Inscriptions",
