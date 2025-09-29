@@ -5,6 +5,21 @@
       "description": "Accédez à votre compte pour continuer"
     }
   },
+  "Subscription": {
+    "error": {
+      "title": "Une erreur s&apos;est produite",
+      "subtitle": "Impossible de charger les données d&apos;abonnement pour le moment."
+    },
+    "current": {
+      "title": "Votre abonnement actuel",
+      "statusLabel": "Statut",
+      "planLabel": "Plan",
+      "cycleLabel": "Cycle de facturation",
+      "unavailable": "—",
+      "renewsOn": "Renouvellement le",
+      "none": "Aucun abonnement actif."
+    }
+  },
   "Home": {
     "main_title": "La plateforme tout-en-un",
     "description": "Créez et vendez vos produits numériques en toute simplicité.",
@@ -15,9 +30,12 @@
       "dashboard": "Tableau de bord",
       "courses": "Cours",
       "roadmap": "Feuille de route",
+      "features": "Fonctionnalités",
       "resources": "Ressources",
       "community": "Communauté",
-      "settings": "Paramètres"
+      "settings": "Paramètres",
+      "subscription": "Abonnement",
+      "plans": "Plans"
     },
     "page": {
       "enrollment": "Inscriptions",
@@ -36,6 +54,26 @@
         "personalized_roadmap": "Obtenir un parcours d'apprentissage personnalisé",
         "start_learning": "Commencer votre parcours d'apprentissage"
       }
+    }
+  },
+  "Features": {
+    "title": "Demandes de fonctionnalités",
+    "subtitle": "Idées pour améliorer Lurnix",
+    "submitIdea": "Soumettre une idée",
+    "trending": "Tendances",
+    "newest": "Plus récent",
+    "mostVoted": "Plus voté",
+    "filter": "Filtrer",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "categories": {
+      "Roadmaps": "Feuilles de route",
+      "AI_Mentor": "Mentor IA",
+      "Community": "Communauté",
+      "Integrations": "Intégrations",
+      "Payments": "Paiements",
+      "UX": "Expérience utilisateur",
+      "Other": "Autre"
     }
   },
   "Auth": {
@@ -112,6 +150,7 @@
     "tabs": {
       "profile": "Profil",
       "password": "Mot de passe",
+      "language": "Langue",
       "account": "Compte"
     },
     "profile": {
@@ -132,6 +171,14 @@
       "loading": "Mise à jour...",
       "success": "Mot de passe mis à jour avec succès !",
       "error": "Échec de la mise à jour du mot de passe. Veuillez réessayer."
+    },
+    "language": {
+      "title": "Changer la langue",
+      "select": "Sélectionnez votre langue",
+      "submit": "Mettre à jour la langue",
+      "loading": "Mise à jour...",
+      "success": "Langue mise à jour avec succès !",
+      "error": "Échec de la mise à jour de la langue. Veuillez réessayer."
     },
     "account": {
       "title": "Supprimer le compte",

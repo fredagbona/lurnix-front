@@ -5,6 +5,7 @@ import type {
   UpdateProfileData,
   UpdatePasswordData,
   DeleteAccountData,
+  UpdateLanguageData,
 } from "@/models/user";
 
 // Service utilisateur
@@ -28,5 +29,10 @@ export const userService = {
   // Supprimer le compte
   async deleteAccount(data: DeleteAccountData): Promise<void> {
     await apiClient.delete("/users/account", { data });
+  },
+
+  // Mettre à jour la langue du profil
+  async updateLanguage(data: UpdateLanguageData): Promise<void> {
+    await apiClient.patch("/users/language", data);
   },
 };

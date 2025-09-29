@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Home, BookOpen, FolderOpen, Users, Settings, Globe } from "lucide-react";
+import { Home, BookOpen, Settings, CreditCard, Zap } from "lucide-react";
 
 type SidebarProps = {
   mobileOpen?: boolean;
@@ -22,11 +22,16 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
     () => [
       { href: "/dashboard", label: t("dashboard", { default: "Dashboard" }), icon: Home },
       { href: "/roadmap", label: t("roadmap", { default: "Roadmap" }), icon: BookOpen },
-      // { href: "/resources", label: t("resources", { default: "Resources" }), icon: FolderOpen },
+      { href: "/features", label: t("features", { default: "Features" }), icon: Zap },
       {
         href: "/settings",
         label: t("settings", { default: "Settings" }),
         icon: Settings,
+      },
+      {
+        href: "/subscription",
+        label: t("subscription", { default: "Subscription" }),
+        icon: CreditCard,
       },
     ],
     [t],
