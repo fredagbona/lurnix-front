@@ -35,9 +35,12 @@ export function ResetPasswordPage() {
         onSuccess: () => {
           setIsSubmitted(true);
         },
-        onError: (error) => {
+        onError: (error: any) => {
           console.error("Password reset failed:", error);
-          setError("Failed to send reset email. Please try again.");
+          const errorMessage =
+            error?.response?.data?.error?.message ||
+            "Failed to send reset email. Please try again.";
+          setError(errorMessage);
         },
       },
     );

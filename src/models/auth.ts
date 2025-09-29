@@ -42,7 +42,7 @@ export interface PasswordResetRequest {
 
 export interface PasswordResetConfirm {
   token: string;
-  password: string;
+  newPassword: string;
 }
 
 // Types pour les erreurs d'API

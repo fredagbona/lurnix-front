@@ -143,6 +143,22 @@
       "email_sent_message": "Nous avons envoyé un lien de réinitialisation à {email}",
       "back_to_sign_in": "Retour à la connexion",
       "try_different_email": "Essayer un autre email"
+    },
+    "resetPassword": {
+      "title": "Réinitialisez votre mot de passe",
+      "subtitle": "Entrez votre nouveau mot de passe ci-dessous",
+      "new_password_label": "Nouveau mot de passe",
+      "new_password_placeholder": "Entrez votre nouveau mot de passe",
+      "confirm_password_label": "Confirmer le nouveau mot de passe",
+      "confirm_password_placeholder": "Confirmez votre nouveau mot de passe",
+      "submit": "Mettre à jour le mot de passe",
+      "loading": "Mise à jour du mot de passe...",
+      "success_title": "Mot de passe réinitialisé avec succès",
+      "success_message": "Votre mot de passe a été mis à jour avec succès. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.",
+      "sign_in_button": "Se connecter",
+      "back_to_sign_in": "Retour à la connexion",
+      "password_mismatch": "Les mots de passe ne correspondent pas.",
+      "invalid_token": "Token de réinitialisation invalide ou manquant."
     }
   },
   "Settings": {

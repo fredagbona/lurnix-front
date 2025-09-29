@@ -17,7 +17,7 @@ export function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [step, setStep] = useState<"email" | "password">("email");
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string; login?: string }>({});
 
   const loginMutation = useLogin();
 
@@ -53,9 +53,12 @@ export function LoginPage() {
           // Redirect to locale-aware /home after successful login
           router.replace("/dashboard");
         },
-        onError: (error) => {
+        onError: (error: any) => {
           // Handle login error
           console.error("Login failed:", error);
+          const errorMessage =
+            error?.response?.data?.error?.message || "Login failed. Please try again.";
+          setErrors({ login: errorMessage });
         },
       },
     );
@@ -64,6 +67,7 @@ export function LoginPage() {
   const handleBackToEmail = () => {
     setStep("email");
     setPassword("");
+    setErrors({});
   };
 
   return (
@@ -155,6 +159,7 @@ export function LoginPage() {
                     onChange={(e) => {
                       setPassword(e.target.value);
                       if (errors.password) setErrors({ ...errors, password: undefined });
+                      if (errors.login) setErrors({ ...errors, login: undefined });
                     }}
                     className={`w-full pr-10 ${errors.password ? "border-red-500 focus-visible:ring-red-500" : ""}`}
                     aria-invalid={!!errors.password}
@@ -209,6 +214,14 @@ export function LoginPage() {
                   </p>
                 )}
               </div>
+
+              {errors.login && (
+                <div className="bg-red-50 border border-red-200 rounded-md p-3">
+                  <p className="text-sm text-red-600" role="alert">
+                    {errors.login}
+                  </p>
+                </div>
+              )}
 
               <div className="flex items-center justify-between">
                 <Link
