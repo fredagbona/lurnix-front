@@ -143,6 +143,22 @@
       "email_sent_message": "We've sent a password reset link to {email}",
       "back_to_sign_in": "Back to Sign In",
       "try_different_email": "Try a different email"
+    },
+    "resetPassword": {
+      "title": "Reset Your Password",
+      "subtitle": "Enter your new password below",
+      "new_password_label": "New Password",
+      "new_password_placeholder": "Enter your new password",
+      "confirm_password_label": "Confirm New Password",
+      "confirm_password_placeholder": "Confirm your new password",
+      "submit": "Update Password",
+      "loading": "Updating Password...",
+      "success_title": "Password Reset Successful",
+      "success_message": "Your password has been successfully updated. You can now sign in with your new password.",
+      "sign_in_button": "Sign In",
+      "back_to_sign_in": "Back to Sign In",
+      "password_mismatch": "Passwords do not match.",
+      "invalid_token": "Invalid or missing reset token."
     }
   },
   "Settings": {

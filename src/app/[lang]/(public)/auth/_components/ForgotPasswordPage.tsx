@@ -26,7 +26,10 @@ export function ForgotPasswordPage() {
         }),
       );
     } catch (err: any) {
-      setError(t("error", { default: "Une erreur est survenue. Veuillez réessayer plus tard." }));
+      const errorMessage =
+        err?.response?.data?.error?.message ||
+        t("error", { default: "Une erreur est survenue. Veuillez réessayer plus tard." });
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

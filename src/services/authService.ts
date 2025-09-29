@@ -50,22 +50,12 @@ export const authService = {
 
   // Demander une réinitialisation de mot de passe
   async requestPasswordReset(data: PasswordResetRequest): Promise<void> {
-    // TODO: Remplacer par l'appel API réel
-    // return apiClient.post("/auth/password-reset", data);
-
-    // Simulation temporaire
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log(`Password reset email sent to: ${data.email}`);
+    await apiClient.post("/auth/forgot-password", data, { skipAuth: true });
   },
 
   // Confirmer la réinitialisation de mot de passe
   async confirmPasswordReset(data: PasswordResetConfirm): Promise<void> {
-    // TODO: Remplacer par l'appel API réel
-    // return apiClient.post("/auth/password-reset/confirm", data);
-
-    // Simulation temporaire
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log("Password reset confirmed");
+    await apiClient.post("/auth/reset-password", data, { skipAuth: true });
   },
 
   // Vérifier si l'email est disponible
