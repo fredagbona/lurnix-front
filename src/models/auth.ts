@@ -26,10 +26,6 @@ export interface RegisterData {
   password: string;
 }
 
-export interface UpdateLanguageData {
-  language: string;
-}
-
 // OAuth Types
 export type OAuthProvider = "google" | "github";
 

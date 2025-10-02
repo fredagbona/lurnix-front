@@ -103,7 +103,11 @@ export const authService = {
   // OAuth Methods
 
   // Initiate OAuth flow - returns the URL to redirect to
-  getOAuthUrl(provider: OAuthProvider, redirectPath: string = "/dashboard", locale: string = "en"): string {
+  getOAuthUrl(
+    provider: OAuthProvider,
+    redirectPath: string = "/dashboard",
+    locale: string = "en",
+  ): string {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://api.lurnix.tech/api";
     return `${baseUrl}/auth/${provider}?redirect=${encodeURIComponent(redirectPath)}&locale=${locale}`;
   },
@@ -111,18 +115,13 @@ export const authService = {
   // Get linked OAuth accounts
   async getLinkedAccounts(): Promise<LinkedAccountsResponse["data"]> {
     const response = await apiClient.get<LinkedAccountsResponse>("/auth/linked-accounts");
-    console.log("API Response:", response);
-    console.log("Response data:", response.data);
     // The API returns { success, data: { providers, hasPassword }, timestamp }
-    // We need to return just the data.data part
-    return response.data.data || response.data;
+    // apiClient already extracts response.data, so we need response.data.data
+    return (response.data as any).data || response.data;
   },
 
   // Unlink an OAuth provider
-  async unlinkProvider(
-    provider: OAuthProvider,
-    data?: UnlinkProviderRequest,
-  ): Promise<void> {
+  async unlinkProvider(provider: OAuthProvider, data?: UnlinkProviderRequest): Promise<void> {
     await apiClient.post(`/auth/unlink/${provider}`, data);
   },
 };

@@ -41,8 +41,8 @@ export function LinkedAccounts() {
   const isProviderConnected = (provider: string): boolean => {
     // Handle both array of strings and array of objects
     if (providers.length === 0) return false;
-    
-    if (typeof providers[0] === 'string') {
+
+    if (typeof providers[0] === "string") {
       return (providers as unknown as string[]).includes(provider);
     }
     return (providers as unknown as any[]).some((p: any) => p.provider === provider);
@@ -50,7 +50,7 @@ export function LinkedAccounts() {
 
   const getProviderEmail = (provider: string) => {
     // Handle both array of strings and array of objects
-    if (providers.length === 0 || typeof providers[0] === 'string') {
+    if (providers.length === 0 || typeof providers[0] === "string") {
       return undefined; // String array doesn't have email info
     }
     const account = (providers as any[]).find((p: any) => p.provider === provider);
@@ -87,9 +87,7 @@ export function LinkedAccounts() {
         },
         onError: (error: any) => {
           console.error("Unlink error:", error);
-          toast.error(
-            error.message || t("unlink_error", { default: "Failed to unlink provider" }),
-          );
+          toast.error(error.message || t("unlink_error", { default: "Failed to unlink provider" }));
         },
       },
     );
@@ -274,12 +272,13 @@ export function LinkedAccounts() {
       </div>
 
       {/* Unlink Confirmation Dialog */}
-      <Dialog open={unlinkDialog.open} onOpenChange={(open) => setUnlinkDialog({ open, provider: null })}>
+      <Dialog
+        open={unlinkDialog.open}
+        onOpenChange={(open) => setUnlinkDialog({ open, provider: null })}
+      >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>
-              {t("unlink_confirm_title", { default: "Unlink Provider" })}
-            </DialogTitle>
+            <DialogTitle>{t("unlink_confirm_title", { default: "Unlink Provider" })}</DialogTitle>
             <DialogDescription>
               {t("unlink_confirm_message", {
                 default: "Are you sure you want to unlink {provider}?",

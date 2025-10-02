@@ -29,12 +29,7 @@ export function OAuthButton({
   };
 
   return (
-    <Button
-      type="button"
-      variant="outline"
-      onClick={handleOAuthLogin}
-      className={className}
-    >
+    <Button type="button" variant="outline" onClick={handleOAuthLogin} className={className}>
       {children}
     </Button>
   );

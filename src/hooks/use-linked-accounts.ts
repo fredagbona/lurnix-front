@@ -22,13 +22,8 @@ export const useUnlinkProvider = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
-      provider,
-      data,
-    }: {
-      provider: OAuthProvider;
-      data?: UnlinkProviderRequest;
-    }) => authService.unlinkProvider(provider, data),
+    mutationFn: ({ provider, data }: { provider: OAuthProvider; data?: UnlinkProviderRequest }) =>
+      authService.unlinkProvider(provider, data),
     onSuccess: () => {
       // Invalidate linked accounts query to refetch
       queryClient.invalidateQueries({ queryKey: linkedAccountsKeys.all });

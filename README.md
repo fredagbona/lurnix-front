@@ -137,6 +137,7 @@ NEXT_PUBLIC_FRONTEND_URL=http://localhost:3000
 #### Linked Accounts
 
 Users can manage linked OAuth providers in Settings → Linked Accounts:
+
 - View connected providers (Email, Google, GitHub)
 - Link additional OAuth providers
 - Unlink providers (requires password if account has one)
