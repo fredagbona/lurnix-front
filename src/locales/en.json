@@ -77,6 +77,31 @@
     }
   },
   "Auth": {
+    "oauth": {
+      "continue_with_google": "Continue with Google",
+      "continue_with_github": "Continue with GitHub",
+      "or_separator": "Or continue with email"
+    },
+    "success": {
+      "title": "Authentication Successful",
+      "welcome_new_user": "Welcome to Lurnix!",
+      "redirecting": "Redirecting you to dashboard...",
+      "error_title": "Authentication Error",
+      "back_to_login": "Back to Login"
+    },
+    "error": {
+      "title": "Authentication Failed",
+      "oauth_failed": "OAuth authentication failed. Please try again.",
+      "invalid_state": "Invalid authentication state. Please try again.",
+      "access_denied": "Access was denied. You need to grant permissions to continue.",
+      "server_error": "A server error occurred. Please try again later.",
+      "unknown_error": "An unexpected error occurred during authentication.",
+      "error_occurred": "Something went wrong",
+      "retry": "Try Again",
+      "create_account": "Create an Account",
+      "need_help": "Need help?",
+      "contact_support": "Contact Support"
+    },
     "login": {
       "title": "Sign in to Lurnix",
       "email_placeholder": "Email",
@@ -88,7 +113,12 @@
       "sign_up_button": "Sign Up",
       "or_separator": "or",
       "no_account": "Don't have an account?",
-      "have_account": "Already have an account?"
+      "have_account": "Already have an account?",
+      "oauth": {
+        "continue_with_google": "Continue with Google",
+        "continue_with_github": "Continue with GitHub",
+        "or_separator": "Or continue with email"
+      }
     },
     "register": {
       "title": "Create your account",
@@ -107,7 +137,12 @@
       "success_message": "We've sent a verification link to your email address. Please check your email and click the link to verify your account before signing in.",
       "go_to_login": "Go to Sign In",
       "didnt_receive_email": "Didn't receive the email? Check your spam folder or",
-      "try_again": "try again"
+      "try_again": "try again",
+      "oauth": {
+        "continue_with_google": "Continue with Google",
+        "continue_with_github": "Continue with GitHub",
+        "or_separator": "Or register with email"
+      }
     },
     "verifyEmail": {
       "title": "Verify your email",
@@ -167,7 +202,32 @@
       "profile": "Profile",
       "password": "Password",
       "language": "Language",
+      "linked_accounts": "Linked Accounts",
       "account": "Account"
+    },
+    "linked_accounts": {
+      "title": "Linked Accounts",
+      "description": "Manage your connected authentication providers",
+      "loading": "Loading linked accounts...",
+      "providers": {
+        "email": "Email & Password",
+        "google": "Google",
+        "github": "GitHub"
+      },
+      "status": {
+        "connected": "Connected",
+        "not_connected": "Not connected"
+      },
+      "connect": "Connect",
+      "unlink": "Unlink",
+      "unlink_confirm_title": "Unlink Provider",
+      "unlink_confirm_message": "Are you sure you want to unlink {provider}?",
+      "password_required": "Enter your password to unlink this provider",
+      "cancel": "Cancel",
+      "confirm": "Unlink",
+      "unlinking": "Unlinking...",
+      "unlink_success": "{provider} unlinked successfully",
+      "unlink_error": "Failed to unlink provider"
     },
     "profile": {
       "title": "Update Profile",
