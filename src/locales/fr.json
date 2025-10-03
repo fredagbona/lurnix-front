@@ -77,6 +77,31 @@
     }
   },
   "Auth": {
+    "oauth": {
+      "continue_with_google": "Continuer avec Google",
+      "continue_with_github": "Continuer avec GitHub",
+      "or_separator": "Ou continuer avec email"
+    },
+    "success": {
+      "title": "Authentification réussie",
+      "welcome_new_user": "Bienvenue sur Lurnix !",
+      "redirecting": "Redirection vers le tableau de bord...",
+      "error_title": "Erreur d'authentification",
+      "back_to_login": "Retour à la connexion"
+    },
+    "error": {
+      "title": "Échec de l'authentification",
+      "oauth_failed": "L'authentification OAuth a échoué. Veuillez réessayer.",
+      "invalid_state": "État d'authentification invalide. Veuillez réessayer.",
+      "access_denied": "L'accès a été refusé. Vous devez accorder les permissions pour continuer.",
+      "server_error": "Une erreur serveur s'est produite. Veuillez réessayer plus tard.",
+      "unknown_error": "Une erreur inattendue s'est produite lors de l'authentification.",
+      "error_occurred": "Une erreur s'est produite",
+      "retry": "Réessayer",
+      "create_account": "Créer un compte",
+      "need_help": "Besoin d'aide ?",
+      "contact_support": "Contacter le support"
+    },
     "login": {
       "title": "Se connecter à Lurnix",
       "email_placeholder": "Email",
@@ -88,7 +113,12 @@
       "sign_up_button": "S'inscrire",
       "or_separator": "ou",
       "no_account": "Vous n'avez pas de compte ?",
-      "have_account": "Vous avez déjà un compte ?"
+      "have_account": "Vous avez déjà un compte ?",
+      "oauth": {
+        "continue_with_google": "Continuer avec Google",
+        "continue_with_github": "Continuer avec GitHub",
+        "or_separator": "Ou continuer avec email"
+      }
     },
     "register": {
       "title": "Créer votre compte",
@@ -107,7 +137,12 @@
       "success_message": "Nous avons envoyé un lien de vérification à votre adresse email. Veuillez vérifier votre email et cliquer sur le lien pour vérifier votre compte avant de vous connecter.",
       "go_to_login": "Aller à la connexion",
       "didnt_receive_email": "Vous n'avez pas reçu l'email ? Vérifiez votre dossier spam ou",
-      "try_again": "réessayez"
+      "try_again": "réessayez",
+      "oauth": {
+        "continue_with_google": "Continuer avec Google",
+        "continue_with_github": "Continuer avec GitHub",
+        "or_separator": "Ou s'inscrire avec email"
+      }
     },
     "verifyEmail": {
       "title": "Vérifiez votre email",
@@ -167,7 +202,32 @@
       "profile": "Profil",
       "password": "Mot de passe",
       "language": "Langue",
+      "linked_accounts": "Comptes liés",
       "account": "Compte"
+    },
+    "linked_accounts": {
+      "title": "Comptes liés",
+      "description": "Gérez vos fournisseurs d'authentification connectés",
+      "loading": "Chargement des comptes liés...",
+      "providers": {
+        "email": "Email & Mot de passe",
+        "google": "Google",
+        "github": "GitHub"
+      },
+      "status": {
+        "connected": "Connecté",
+        "not_connected": "Non connecté"
+      },
+      "connect": "Connecter",
+      "unlink": "Dissocier",
+      "unlink_confirm_title": "Dissocier le fournisseur",
+      "unlink_confirm_message": "Êtes-vous sûr de vouloir dissocier {provider} ?",
+      "password_required": "Entrez votre mot de passe pour dissocier ce fournisseur",
+      "cancel": "Annuler",
+      "confirm": "Dissocier",
+      "unlinking": "Dissociation...",
+      "unlink_success": "{provider} dissocié avec succès",
+      "unlink_error": "Échec de la dissociation du fournisseur"
     },
     "profile": {
       "title": "Modifier le profil",

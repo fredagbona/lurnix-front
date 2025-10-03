@@ -15,6 +15,20 @@ const protectedPrefixes = [
   "/settings",
 ];
 
+// Routes publiques qui ne nécessitent pas d'authentification
+const publicPrefixes = [
+  "/auth/login",
+  "/auth/register",
+  "/auth/success", // OAuth callback success
+  "/auth/error", // OAuth callback error
+  "/auth/verify-email",
+  "/auth/resend-verify-email",
+  "/auth/forgot-password",
+  "/auth/password-reset",
+  "/auth/reset-password",
+  "/auth/_confirm-password-reset",
+];
+
 export default function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const segments = pathname.split("/").filter(Boolean);
@@ -32,6 +46,21 @@ export default function middleware(req: NextRequest) {
   const withoutLocale = routing.locales.includes(first as any)
     ? "/" + segments.slice(1).join("/")
     : pathname;
+
+  // Check if route is public (OAuth callbacks, auth pages, etc.)
+  const isPublic = publicPrefixes.some((p) => withoutLocale.startsWith(p));
+
+  // Debug logging for OAuth routes
+  if (withoutLocale.includes("/auth/success") || withoutLocale.includes("/auth/error")) {
+    console.log("[Middleware] OAuth callback route:", pathname);
+    console.log("[Middleware] Is public:", isPublic);
+    console.log("[Middleware] Query params:", req.nextUrl.searchParams.toString());
+  }
+
+  // Skip protection for public routes
+  if (isPublic) {
+    return i18nMiddleware(req);
+  }
 
   const isProtected = protectedPrefixes.some((p) => withoutLocale.startsWith(p));
 
