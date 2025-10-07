@@ -8,6 +8,10 @@ export interface User {
   createdAt: string;
   updatedAt?: string;
   avatar?: string;
+  // OAuth fields
+  googleId?: string;
+  githubId?: string;
+  providers?: string[]; // e.g., ['email', 'google', 'github']
 }
 
 export interface LoginCredentials {
@@ -20,6 +24,28 @@ export interface RegisterData {
   fullname: string;
   email: string;
   password: string;
+}
+
+// OAuth Types
+export type OAuthProvider = "google" | "github";
+
+export interface LinkedAccount {
+  provider: string;
+  email?: string;
+  connectedAt?: string;
+}
+
+export interface LinkedAccountsResponse {
+  success: boolean;
+  data: {
+    providers: LinkedAccount[];
+    hasPassword: boolean;
+  };
+  timestamp: string;
+}
+
+export interface UnlinkProviderRequest {
+  password?: string;
 }
 
 export interface AuthResponse {

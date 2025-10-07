@@ -17,6 +17,10 @@ Next.js 14 App Router project with:
 ### Install & run
 
 ```bash
+# Copy environment variables
+cp .env.example .env.local
+# Edit .env.local with your configuration
+
 pnpm install
 pnpm dev
 # http://localhost:3000 → redirects to /en
@@ -109,26 +113,68 @@ EOF
 chmod +x .husky/pre-commit
 ```
 
+### OAuth Authentication
+
+This project supports OAuth authentication with Google and GitHub in addition to email/password authentication.
+
+#### Environment Variables
+
+Create a `.env.local` file with:
+
+```bash
+NEXT_PUBLIC_BASE_URL=http://localhost:5050/api
+NEXT_PUBLIC_FRONTEND_URL=http://localhost:3000
+```
+
+#### OAuth Flow
+
+1. **Login/Register**: Users can choose OAuth providers (Google/GitHub) or email/password
+2. **Backend Redirect**: OAuth buttons redirect to backend endpoints (`/api/auth/google` or `/api/auth/github`)
+3. **Provider Authorization**: User authorizes on Google/GitHub
+4. **Callback**: Backend processes OAuth and redirects to frontend success/error pages
+5. **Token Storage**: Frontend stores JWT token and redirects to dashboard
+
+#### Linked Accounts
+
+Users can manage linked OAuth providers in Settings → Linked Accounts:
+
+- View connected providers (Email, Google, GitHub)
+- Link additional OAuth providers
+- Unlink providers (requires password if account has one)
+
+See `OAuth2-flow.md` for detailed backend integration documentation.
+
 ### Project structure (key paths)
 
 ```
 src/
   app/
     [lang]/
-      (landing)/page.tsx
+      (public)/auth/
+        login/page.tsx
+        register/page.tsx
+        success/page.tsx      # OAuth success callback
+        error/page.tsx        # OAuth error callback
+      (private)/
+        dashboard/page.tsx
+        settings/page.tsx
       layout.tsx
     layout.tsx
     page.tsx
   components/
-    theme-provider.tsx
-    theme-toggle.tsx
-    ui/button.tsx
+    ui/
+      oauth-button.tsx        # Reusable OAuth button
+      button.tsx
+  hooks/
+    use-linked-accounts.ts    # OAuth hooks
   i18n/
     routing.ts
     request.ts
   locales/
     en.json
     fr.json
+  services/
+    authService.ts            # OAuth methods
 middleware.ts
 tailwind.config.ts
 ```

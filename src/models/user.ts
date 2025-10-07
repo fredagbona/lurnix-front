@@ -7,6 +7,11 @@ export interface UserProfile {
   isActive: boolean;
   isVerified: boolean;
   createdAt: string;
+  avatar?: string;
+  // OAuth fields
+  googleId?: string;
+  githubId?: string;
+  providers?: string[];
 }
 
 export interface ProfileResponse {

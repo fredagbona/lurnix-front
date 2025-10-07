@@ -8,6 +8,9 @@ import {
   User,
   PasswordResetRequest,
   PasswordResetConfirm,
+  OAuthProvider,
+  LinkedAccountsResponse,
+  UnlinkProviderRequest,
 } from "@/models";
 
 // Service d'authentification
@@ -95,5 +98,30 @@ export const authService = {
   // Mot de passe oublié: envoyer le lien de réinitialisation
   async forgotPassword(email: string): Promise<void> {
     await apiClient.post(`/auth/forgot-password`, { email }, { skipAuth: true });
+  },
+
+  // OAuth Methods
+
+  // Initiate OAuth flow - returns the URL to redirect to
+  getOAuthUrl(
+    provider: OAuthProvider,
+    redirectPath: string = "/dashboard",
+    locale: string = "en",
+  ): string {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://api.lurnix.tech/api";
+    return `${baseUrl}/auth/${provider}?redirect=${encodeURIComponent(redirectPath)}&locale=${locale}`;
+  },
+
+  // Get linked OAuth accounts
+  async getLinkedAccounts(): Promise<LinkedAccountsResponse["data"]> {
+    const response = await apiClient.get<LinkedAccountsResponse>("/auth/linked-accounts");
+    // The API returns { success, data: { providers, hasPassword }, timestamp }
+    // apiClient already extracts response.data, so we need response.data.data
+    return (response.data as any).data || response.data;
+  },
+
+  // Unlink an OAuth provider
+  async unlinkProvider(provider: OAuthProvider, data?: UnlinkProviderRequest): Promise<void> {
+    await apiClient.post(`/auth/unlink/${provider}`, data);
   },
 };

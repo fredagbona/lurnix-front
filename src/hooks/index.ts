@@ -1,7 +1,6 @@
 export * from "./use-auth";
-export * from "./use-password-reset";
 export * from "./use-auth-state";
-export * from "./use-verify-email";
+export * from "./use-password-reset";
 export * from "./use-roadmap-profile";
 export * from "./use-learner-profile";
 export * from "./use-objectives";
@@ -9,3 +8,5 @@ export * from "./use-sprints";
 export * from "./use-sprint-completion";
 export * from "./use-skills";
 export * from "./use-learning-quiz";
+export * from "./use-verify-email";
+export * from "./use-linked-accounts";
