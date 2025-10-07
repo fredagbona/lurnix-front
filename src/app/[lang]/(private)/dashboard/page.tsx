@@ -1,16 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Circle, ArrowRight, Gauge, Target, Heart, Wrench } from "lucide-react";
-import { useRoadmapProfile } from "@/hooks";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { CheckCircle, Circle, ArrowRight, Gauge, Target, Heart, Wrench, Plus, User, Clock, Zap, AlertCircle } from "lucide-react";
+import { useLearnerProfile } from "@/hooks";
+import { ObjectivesList, CreateObjectiveModal } from "@/components/learning";
 
 export default function DashboardPage() {
   const t = useTranslations("Dashboard.page");
-  const { data: roadmapProfile } = useRoadmapProfile();
+  const { data: learnerProfile, isLoading, error } = useLearnerProfile();
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const hasCompletedProfileTest = !!roadmapProfile?.data;
+  const hasCompletedProfileTest = !!learnerProfile?.data;
 
   return (
     <div className="space-y-6">
@@ -66,129 +71,164 @@ export default function DashboardPage() {
           </div>
         </div>
       )}
-      {hasCompletedProfileTest && (
+      {/* Learner Profile Section */}
+      {hasCompletedProfileTest && learnerProfile?.data?.rawSnapshot && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Learning Profile */}
-          <section className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-            <div className="mb-5 flex items-center gap-2">
-              <Gauge className="h-4 w-4 text-primary" />
-              <h3 className="text-lg font-semibold">Learning Profile</h3>
-            </div>
-            <dl className="grid grid-cols-2 gap-y-3 text-sm gap-2">
-              <div className="col-span-1 flex items-center justify-between">
-                <dt className="text-muted-foreground">Style</dt>
-                <dd className="font-medium">{roadmapProfile.data.computedProfile.style}</dd>
+          {/* Learning Profile Card */}
+          <Card className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <User className="h-5 w-5 text-primary" />
+                <h2 className="text-xl font-semibold">Learning Profile</h2>
               </div>
-              <div className="col-span-1 flex items-center justify-between">
-                <dt className="text-muted-foreground">Level</dt>
-                <dd className="font-medium">{roadmapProfile.data.computedProfile.level}</dd>
-              </div>
-              <div className="col-span-2 flex items-center justify-between">
-                <dt className="text-muted-foreground">Time / day</dt>
-                <dd className="font-medium">
-                  {roadmapProfile.data.computedProfile.timePerDay} mins
-                </dd>
-              </div>
-            </dl>
-            <div className="mt-4 space-y-3">
-              {(
-                [
-                  ["Visual", Math.round(roadmapProfile.data.computedProfile.visual * 100)],
-                  ["Reading", Math.round(roadmapProfile.data.computedProfile.reading * 100)],
-                  ["Hands-on", Math.round(roadmapProfile.data.computedProfile.handsOn * 100)],
-                ] as [string, number][]
-              ).map(([label, value]) => (
-                <div key={label} className="space-y-1">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground">{label}</span>
-                    <span className="font-medium">{value}%</span>
-                  </div>
-                  <div className="h-2 w-full rounded-full bg-muted">
-                    <div className="h-2 rounded-full bg-primary" style={{ width: `${value}%` }} />
-                  </div>
-                </div>
-              ))}
+              <Link href="/profile-test">
+                <Button variant="outline" size="sm">
+                  Retake Test
+                </Button>
+              </Link>
             </div>
-            <div className="mt-4 text-sm">
-              <span className="text-muted-foreground">Preferred stack: </span>
-              <span className="font-medium">
-                {roadmapProfile.data.computedProfile.preferredStack.join(", ")}
-              </span>
-            </div>
-          </section>
 
-          {/* Roadmap Inputs */}
-          <section className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-            <div className="mb-5 flex items-center gap-2">
-              <Target className="h-4 w-4 text-primary" />
-              <h3 className="text-lg font-semibold">Roadmap Inputs</h3>
-            </div>
-            <div className="space-y-6 text-sm">
+            <div className="space-y-4">
+              {/* Profile Type */}
               <div>
-                <div className="mb-2 flex items-center gap-2 font-medium">
-                  <Target className="h-4 w-4" />
-                  Objectives
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <span className="text-muted-foreground">Top goal:</span>{" "}
-                    {roadmapProfile.data.roadmapInput.objectives.topGoal}
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">Horizon:</span>{" "}
-                    {roadmapProfile.data.roadmapInput.objectives.timeHorizon}
-                  </div>
-                  <div className="col-span-2">
-                    <span className="text-muted-foreground">Priority:</span>{" "}
-                    {roadmapProfile.data.roadmapInput.objectives.priorityRank.join(", ")}
-                  </div>
-                </div>
+                <p className="text-sm text-muted-foreground mb-2">Profile Type</p>
+                <Badge className="text-base px-3 py-1">
+                  {learnerProfile.data.rawSnapshot.profileRecommendation?.key.replace(/_/g, ' ')}
+                </Badge>
               </div>
-              <div>
-                <div className="mb-2 flex items-center gap-2 font-medium">
-                  <Heart className="h-4 w-4" />
-                  Passions
+
+              {/* Basic Info */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Level</p>
+                  <p className="font-medium capitalize">{learnerProfile.data.rawSnapshot.level}</p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Areas:</span>{" "}
-                  {roadmapProfile.data.roadmapInput.passions.ranked.join(", ")}
-                </div>
-                {roadmapProfile.data.roadmapInput.passions.notes && (
-                  <div className="text-muted-foreground">
-                    Notes: {roadmapProfile.data.roadmapInput.passions.notes}
-                  </div>
-                )}
-              </div>
-              <div>
-                <div className="mb-2 flex items-center gap-2 font-medium">
-                  <Wrench className="h-4 w-4" />
-                  Problem solving
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <span className="text-muted-foreground">Debug style:</span>{" "}
-                    {roadmapProfile.data.roadmapInput.problemSolving.debugStyle}
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">Collaboration:</span>{" "}
-                    {roadmapProfile.data.roadmapInput.problemSolving.collaboration}
-                  </div>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <span className="text-muted-foreground">Experience:</span>{" "}
-                  {roadmapProfile.data.roadmapInput.priorExperience}
+                  <p className="text-sm text-muted-foreground">Style</p>
+                  <p className="font-medium capitalize">{learnerProfile.data.rawSnapshot.style}</p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Time commitment:</span>{" "}
-                  {roadmapProfile.data.roadmapInput.timeCommitmentMinsPerDay} mins/day
+                  <p className="text-sm text-muted-foreground">Time / day</p>
+                  <p className="font-medium">{learnerProfile.data.rawSnapshot.timePerDay} mins</p>
                 </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Resilience</p>
+                  <p className="font-medium capitalize">{learnerProfile.data.rawSnapshot.resilience?.replace(/_/g, ' ')}</p>
+                </div>
+              </div>
+
+              {/* Learning Preferences */}
+              <div className="space-y-3">
+                <p className="text-sm font-medium">Learning Preferences</p>
+                {[
+                  ["Visual", Math.round(learnerProfile.data.rawSnapshot.visual * 100)],
+                  ["Reading", Math.round(learnerProfile.data.rawSnapshot.reading * 100)],
+                  ["Hands-on", Math.round(learnerProfile.data.rawSnapshot.handsOn * 100)],
+                ].map(([label, value]) => (
+                  <div key={label as string} className="space-y-1">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-muted-foreground">{label}</span>
+                      <span className="font-medium">{value}%</span>
+                    </div>
+                    <div className="h-2 w-full rounded-full bg-muted">
+                      <div className="h-2 rounded-full bg-primary" style={{ width: `${value}%` }} />
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          </section>
+          </Card>
+
+          {/* Tech Interests & Traits */}
+          <Card className="p-6">
+            <div className="flex items-center gap-2 mb-6">
+              <Zap className="h-5 w-5 text-primary" />
+              <h2 className="text-xl font-semibold">Interests & Traits</h2>
+            </div>
+
+            <div className="space-y-6">
+              {/* Tech Affinity */}
+              <div>
+                <p className="text-sm font-medium mb-3">Tech Interests</p>
+                <div className="flex flex-wrap gap-2">
+                  {learnerProfile.data.rawSnapshot.preferredStack?.map((tech: string, index: number) => (
+                    <Badge key={index} variant="secondary" className="capitalize">
+                      {tech.replace(/_/g, ' ')}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              {/* Top Traits */}
+              <div>
+                <p className="text-sm font-medium mb-3">Top Traits</p>
+                <div className="space-y-2">
+                  {learnerProfile.data.rawSnapshot.topTraits?.slice(0, 5).map((trait: any, index: number) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <span className="text-sm capitalize">{trait.trait.replace(/_/g, ' ')}</span>
+                      <div className="flex items-center gap-2">
+                        <div className="h-2 w-24 rounded-full bg-muted">
+                          <div 
+                            className="h-2 rounded-full bg-primary" 
+                            style={{ width: `${(trait.score / 12) * 100}%` }}
+                          />
+                        </div>
+                        <span className="text-xs text-muted-foreground w-8 text-right">{trait.score}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Motivation */}
+              {learnerProfile.data.rawSnapshot.motivations && (
+                <div>
+                  <p className="text-sm font-medium mb-3">Motivation</p>
+                  <div className="flex flex-wrap gap-2">
+                    {learnerProfile.data.rawSnapshot.motivations
+                      .filter((m: any) => m.score > 0)
+                      .map((motivation: any, index: number) => (
+                        <Badge key={index} className="bg-pink-100 text-pink-700 dark:bg-pink-900/20 capitalize">
+                          {motivation.trait.replace(/_/g, ' ')}
+                        </Badge>
+                      ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Goal */}
+              {learnerProfile.data.rawSnapshot.goal && (
+                <div>
+                  <p className="text-sm font-medium mb-2">Primary Goal</p>
+                  <p className="text-sm capitalize">{learnerProfile.data.rawSnapshot.goal.replace(/_/g, ' ')}</p>
+                </div>
+              )}
+            </div>
+          </Card>
         </div>
       )}
+
+      {/* Learning Objectives Section */}
+      {hasCompletedProfileTest && (
+        <section className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-semibold">Your Learning Objectives</h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                Track your progress and manage your learning goals
+              </p>
+            </div>
+            <Button onClick={() => setShowCreateModal(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              New Objective
+            </Button>
+          </div>
+          <ObjectivesList limit={3} onCreateClick={() => setShowCreateModal(true)} />
+        </section>
+      )}
+
+      {/* Create Objective Modal */}
+      <CreateObjectiveModal open={showCreateModal} onOpenChange={setShowCreateModal} />
 
       {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="rounded-xl border border-border bg-card p-4">

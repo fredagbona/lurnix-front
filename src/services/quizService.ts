@@ -1,19 +1,56 @@
 import { apiClient } from "./api";
-import type { QuizResponse, QuizSubmission, QuizSubmissionResponse } from "@/models";
+import type {
+  QuizResponse,
+  QuizSubmission,
+  QuizSubmissionResponse,
+  LearningQuizResponse,
+  QuizSubmitResponse,
+  QuizAttemptsResponse,
+  SubmitQuizInput,
+} from "@/models/quiz";
 
+// ============================================================================
+// PROFILE QUIZ SERVICE (Existing)
+// ============================================================================
 export const quizService = {
-  // Get quiz questions
   async getQuiz(): Promise<QuizResponse> {
-    return await apiClient.get<QuizResponse>("/quiz");
+    return apiClient.get<QuizResponse>("/quiz");
   },
 
-  // Submit quiz responses
   async submitQuiz(submission: QuizSubmission): Promise<QuizSubmissionResponse> {
-    return await apiClient.post<QuizSubmissionResponse>("/quiz/submit", submission);
+    return apiClient.post<QuizSubmissionResponse>("/quiz/submit", submission);
+  },
+};
+
+// ============================================================================
+// LEARNING QUIZ SERVICE (New)
+// ============================================================================
+export const learningQuizService = {
+  /**
+   * Get a learning quiz by ID
+   */
+  async getQuiz(quizId: string): Promise<LearningQuizResponse> {
+    return apiClient.get<LearningQuizResponse>(`/quizzes/${quizId}`);
   },
 
-  // Get AI roadmap profile (computed + inputs)
-  async getRoadmapProfile(): Promise<any> {
-    return await apiClient.get<any>("/ai/roadmap/profile");
+  /**
+   * Submit quiz answers
+   */
+  async submitQuiz(quizId: string, submission: SubmitQuizInput): Promise<QuizSubmitResponse> {
+    return apiClient.post<QuizSubmitResponse>(`/quizzes/${quizId}/submit`, submission);
+  },
+
+  /**
+   * Get quiz attempts history
+   */
+  async getQuizAttempts(quizId: string): Promise<QuizAttemptsResponse> {
+    return apiClient.get<QuizAttemptsResponse>(`/quizzes/${quizId}/attempts`);
+  },
+
+  /**
+   * Get a specific quiz attempt
+   */
+  async getQuizAttempt(quizId: string, attemptId: string): Promise<any> {
+    return apiClient.get(`/quizzes/${quizId}/attempts/${attemptId}`);
   },
 };

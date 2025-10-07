@@ -29,6 +29,8 @@
     "nav": {
       "dashboard": "Tableau de bord",
       "courses": "Cours",
+      "learning": "Apprentissage",
+      "skills": "Compétences",
       "roadmap": "Feuille de route",
       "features": "Fonctionnalités",
       "resources": "Ressources",
@@ -167,6 +169,7 @@
       "profile": "Profil",
       "password": "Mot de passe",
       "language": "Langue",
+      "subscription": "Abonnement",
       "account": "Compte"
     },
     "profile": {
