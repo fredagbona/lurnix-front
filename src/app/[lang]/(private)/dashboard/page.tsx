@@ -6,7 +6,20 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Circle, ArrowRight, Gauge, Target, Heart, Wrench, Plus, User, Clock, Zap, AlertCircle } from "lucide-react";
+import {
+  CheckCircle,
+  Circle,
+  ArrowRight,
+  Gauge,
+  Target,
+  Heart,
+  Wrench,
+  Plus,
+  User,
+  Clock,
+  Zap,
+  AlertCircle,
+} from "lucide-react";
 import { useLearnerProfile } from "@/hooks";
 import { ObjectivesList, CreateObjectiveModal } from "@/components/learning";
 
@@ -93,7 +106,7 @@ export default function DashboardPage() {
               <div>
                 <p className="text-sm text-muted-foreground mb-2">Profile Type</p>
                 <Badge className="text-base px-3 py-1">
-                  {learnerProfile.data.rawSnapshot.profileRecommendation?.key.replace(/_/g, ' ')}
+                  {learnerProfile.data.rawSnapshot.profileRecommendation?.key.replace(/_/g, " ")}
                 </Badge>
               </div>
 
@@ -113,7 +126,9 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Resilience</p>
-                  <p className="font-medium capitalize">{learnerProfile.data.rawSnapshot.resilience?.replace(/_/g, ' ')}</p>
+                  <p className="font-medium capitalize">
+                    {learnerProfile.data.rawSnapshot.resilience?.replace(/_/g, " ")}
+                  </p>
                 </div>
               </div>
 
@@ -151,11 +166,13 @@ export default function DashboardPage() {
               <div>
                 <p className="text-sm font-medium mb-3">Tech Interests</p>
                 <div className="flex flex-wrap gap-2">
-                  {learnerProfile.data.rawSnapshot.preferredStack?.map((tech: string, index: number) => (
-                    <Badge key={index} variant="secondary" className="capitalize">
-                      {tech.replace(/_/g, ' ')}
-                    </Badge>
-                  ))}
+                  {learnerProfile.data.rawSnapshot.preferredStack?.map(
+                    (tech: string, index: number) => (
+                      <Badge key={index} variant="secondary" className="capitalize">
+                        {tech.replace(/_/g, " ")}
+                      </Badge>
+                    ),
+                  )}
                 </div>
               </div>
 
@@ -163,20 +180,24 @@ export default function DashboardPage() {
               <div>
                 <p className="text-sm font-medium mb-3">Top Traits</p>
                 <div className="space-y-2">
-                  {learnerProfile.data.rawSnapshot.topTraits?.slice(0, 5).map((trait: any, index: number) => (
-                    <div key={index} className="flex items-center justify-between">
-                      <span className="text-sm capitalize">{trait.trait.replace(/_/g, ' ')}</span>
-                      <div className="flex items-center gap-2">
-                        <div className="h-2 w-24 rounded-full bg-muted">
-                          <div 
-                            className="h-2 rounded-full bg-primary" 
-                            style={{ width: `${(trait.score / 12) * 100}%` }}
-                          />
+                  {learnerProfile.data.rawSnapshot.topTraits
+                    ?.slice(0, 5)
+                    .map((trait: any, index: number) => (
+                      <div key={index} className="flex items-center justify-between">
+                        <span className="text-sm capitalize">{trait.trait.replace(/_/g, " ")}</span>
+                        <div className="flex items-center gap-2">
+                          <div className="h-2 w-24 rounded-full bg-muted">
+                            <div
+                              className="h-2 rounded-full bg-primary"
+                              style={{ width: `${(trait.score / 12) * 100}%` }}
+                            />
+                          </div>
+                          <span className="text-xs text-muted-foreground w-8 text-right">
+                            {trait.score}
+                          </span>
                         </div>
-                        <span className="text-xs text-muted-foreground w-8 text-right">{trait.score}</span>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </div>
 
@@ -188,8 +209,11 @@ export default function DashboardPage() {
                     {learnerProfile.data.rawSnapshot.motivations
                       .filter((m: any) => m.score > 0)
                       .map((motivation: any, index: number) => (
-                        <Badge key={index} className="bg-pink-100 text-pink-700 dark:bg-pink-900/20 capitalize">
-                          {motivation.trait.replace(/_/g, ' ')}
+                        <Badge
+                          key={index}
+                          className="bg-pink-100 text-pink-700 dark:bg-pink-900/20 capitalize"
+                        >
+                          {motivation.trait.replace(/_/g, " ")}
                         </Badge>
                       ))}
                   </div>
@@ -200,7 +224,9 @@ export default function DashboardPage() {
               {learnerProfile.data.rawSnapshot.goal && (
                 <div>
                   <p className="text-sm font-medium mb-2">Primary Goal</p>
-                  <p className="text-sm capitalize">{learnerProfile.data.rawSnapshot.goal.replace(/_/g, ' ')}</p>
+                  <p className="text-sm capitalize">
+                    {learnerProfile.data.rawSnapshot.goal.replace(/_/g, " ")}
+                  </p>
                 </div>
               )}
             </div>

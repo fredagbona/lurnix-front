@@ -162,11 +162,7 @@ export function QuizResults({
                   <div
                     className={cn(
                       "h-full transition-all duration-300",
-                      score >= 80
-                        ? "bg-green-600"
-                        : score >= 60
-                          ? "bg-yellow-600"
-                          : "bg-red-600",
+                      score >= 80 ? "bg-green-600" : score >= 60 ? "bg-yellow-600" : "bg-red-600",
                     )}
                     style={{ width: `${score}%` }}
                   />

@@ -41,9 +41,13 @@ export default function SprintDetailsPage() {
 
   // Sync completed tasks from sprint data - MUST be before early returns
   useEffect(() => {
-    if (sprint?.progress?.completedTasks && sprint.progress.completedTasks > 0 && sprint.microTasks) {
+    if (
+      sprint?.progress?.completedTasks &&
+      sprint.progress.completedTasks > 0 &&
+      sprint.microTasks
+    ) {
       const completed = new Set<string>();
-      sprint.microTasks.slice(0, sprint.progress.completedTasks).forEach(task => {
+      sprint.microTasks.slice(0, sprint.progress.completedTasks).forEach((task) => {
         completed.add(task.id);
       });
       setCompletedTasks(completed);
@@ -138,9 +142,7 @@ export default function SprintDetailsPage() {
         </Link>
         <div className="flex-1">
           <h1 className="text-3xl font-bold tracking-tight">{sprint.title}</h1>
-          {sprint.description && (
-            <p className="text-muted-foreground mt-2">{sprint.description}</p>
-          )}
+          {sprint.description && <p className="text-muted-foreground mt-2">{sprint.description}</p>}
           <div className="flex items-center gap-4 mt-3 text-sm">
             <div className="flex items-center gap-2">
               <Gauge className={cn("h-4 w-4", difficultyInfo.color)} />
@@ -148,7 +150,9 @@ export default function SprintDetailsPage() {
             </div>
             <div className="flex items-center gap-2 text-muted-foreground">
               <Calendar className="h-4 w-4" />
-              <span>{sprint.lengthDays} {sprint.lengthDays === 1 ? "day" : "days"}</span>
+              <span>
+                {sprint.lengthDays} {sprint.lengthDays === 1 ? "day" : "days"}
+              </span>
             </div>
             <div className="flex items-center gap-2 text-muted-foreground">
               <Target className="h-4 w-4" />
@@ -169,9 +173,7 @@ export default function SprintDetailsPage() {
               <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-1">
                 Personalized for You
               </h3>
-              <p className="text-sm text-blue-700 dark:text-blue-300">
-                {sprint.adaptationNotes}
-              </p>
+              <p className="text-sm text-blue-700 dark:text-blue-300">{sprint.adaptationNotes}</p>
             </div>
           </div>
         </Card>
@@ -198,21 +200,20 @@ export default function SprintDetailsPage() {
 
       {/* Tasks */}
       <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4">Tasks ({completedCount}/{totalTasks})</h2>
+        <h2 className="text-lg font-semibold mb-4">
+          Tasks ({completedCount}/{totalTasks})
+        </h2>
         <div className="space-y-4">
           {sprint.microTasks.map((task) => (
             <div
               key={task.id}
               className={cn(
                 "border rounded-lg p-4 transition-colors",
-                completedTasks.has(task.id) && "bg-muted/50 border-primary/50"
+                completedTasks.has(task.id) && "bg-muted/50 border-primary/50",
               )}
             >
               <div className="flex items-start gap-3">
-                <button
-                  onClick={() => handleTaskToggle(task.id)}
-                  className="mt-1 flex-shrink-0"
-                >
+                <button onClick={() => handleTaskToggle(task.id)} className="mt-1 flex-shrink-0">
                   {completedTasks.has(task.id) ? (
                     <CheckCircle className="h-5 w-5 text-primary" />
                   ) : (
@@ -221,10 +222,12 @@ export default function SprintDetailsPage() {
                 </button>
                 <div className="flex-1 space-y-2">
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className={cn(
-                      "font-medium",
-                      completedTasks.has(task.id) && "line-through text-muted-foreground"
-                    )}>
+                    <h3
+                      className={cn(
+                        "font-medium",
+                        completedTasks.has(task.id) && "line-through text-muted-foreground",
+                      )}
+                    >
                       {task.title}
                     </h3>
                     <Badge variant="outline" className="text-xs">
@@ -232,11 +235,13 @@ export default function SprintDetailsPage() {
                     </Badge>
                   </div>
                   <p className="text-sm text-muted-foreground">{task.instructions}</p>
-                  
+
                   {/* Acceptance Criteria */}
                   {task.acceptanceTest && task.acceptanceTest.spec && (
                     <div className="mt-2 space-y-1">
-                      <p className="text-xs font-medium text-muted-foreground">Acceptance Criteria:</p>
+                      <p className="text-xs font-medium text-muted-foreground">
+                        Acceptance Criteria:
+                      </p>
                       <ul className="list-disc list-inside text-xs text-muted-foreground space-y-0.5">
                         {task.acceptanceTest.spec.map((criterion: string, index: number) => (
                           <li key={index}>{criterion}</li>
@@ -244,7 +249,7 @@ export default function SprintDetailsPage() {
                       </ul>
                     </div>
                   )}
-                  
+
                   {/* Resources */}
                   {task.resources && task.resources.length > 0 && (
                     <div className="mt-2 space-y-1">
@@ -283,7 +288,7 @@ export default function SprintDetailsPage() {
                   <h3 className="font-semibold mb-1">{project.title}</h3>
                   <p className="text-sm text-muted-foreground">{project.brief}</p>
                 </div>
-                
+
                 {/* Requirements */}
                 {project.requirements && project.requirements.length > 0 && (
                   <div className="space-y-1">
@@ -295,7 +300,7 @@ export default function SprintDetailsPage() {
                     </ul>
                   </div>
                 )}
-                
+
                 {/* Acceptance Criteria */}
                 {project.acceptanceCriteria && project.acceptanceCriteria.length > 0 && (
                   <div className="space-y-1">
@@ -307,7 +312,7 @@ export default function SprintDetailsPage() {
                     </ul>
                   </div>
                 )}
-                
+
                 {/* Deliverables */}
                 {project.deliverables && project.deliverables.length > 0 && (
                   <div className="space-y-1">
@@ -316,13 +321,15 @@ export default function SprintDetailsPage() {
                       {project.deliverables.map((deliverable: any, index: number) => (
                         <li key={index}>
                           <span className="font-medium">{deliverable.title}</span>
-                          <span className="text-xs text-muted-foreground ml-2">({deliverable.type})</span>
+                          <span className="text-xs text-muted-foreground ml-2">
+                            ({deliverable.type})
+                          </span>
                         </li>
                       ))}
                     </ul>
                   </div>
                 )}
-                
+
                 {/* Evidence Rubric */}
                 {project.evidenceRubric && (
                   <div className="mt-3 p-3 bg-muted/50 rounded-lg space-y-2">
@@ -331,7 +338,9 @@ export default function SprintDetailsPage() {
                       {project.evidenceRubric.dimensions.map((dimension: any, index: number) => (
                         <div key={index} className="flex justify-between text-xs">
                           <span>{dimension.name}</span>
-                          <span className="text-muted-foreground">{(dimension.weight * 100).toFixed(0)}%</span>
+                          <span className="text-muted-foreground">
+                            {(dimension.weight * 100).toFixed(0)}%
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -357,9 +366,7 @@ export default function SprintDetailsPage() {
         </p>
         <div className="border-2 border-dashed border-border rounded-lg p-8 text-center">
           <FileText className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-          <p className="text-sm text-muted-foreground">
-            File upload functionality coming soon
-          </p>
+          <p className="text-sm text-muted-foreground">File upload functionality coming soon</p>
         </div>
       </Card>
 
@@ -391,7 +398,9 @@ export default function SprintDetailsPage() {
           {isCompleting ? (
             <div className="flex items-center">
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-              {completionResult?.nextSprintGenerated ? "Generating next sprint..." : "Completing..."}
+              {completionResult?.nextSprintGenerated
+                ? "Generating next sprint..."
+                : "Completing..."}
             </div>
           ) : (
             <>

@@ -56,8 +56,7 @@ function SubscriptionTab() {
     );
   }
 
-  const isCurrentPlan = (planType: string) => 
-    currentSubscription?.plan.planType === planType;
+  const isCurrentPlan = (planType: string) => currentSubscription?.plan.planType === planType;
 
   return (
     <div className="space-y-8">
@@ -125,11 +124,12 @@ function SubscriptionTab() {
           {plans?.map((plan) => {
             const isCurrent = isCurrentPlan(plan.planType);
             return (
-              <Card 
+              <Card
                 key={plan.planType}
-                className={isCurrent 
-                  ? "border-2 border-primary shadow-lg relative overflow-hidden" 
-                  : "hover:shadow-md transition-shadow"
+                className={
+                  isCurrent
+                    ? "border-2 border-primary shadow-lg relative overflow-hidden"
+                    : "hover:shadow-md transition-shadow"
                 }
               >
                 {isCurrent && (
@@ -145,7 +145,7 @@ function SubscriptionTab() {
                   {/* Pricing */}
                   <div className="text-center py-4">
                     {plan.tiers
-                      .filter(tier => tier.billingCycle === "monthly")
+                      .filter((tier) => tier.billingCycle === "monthly")
                       .map((tier) => (
                         <div key={tier.id} className="flex items-baseline justify-center gap-1">
                           <span className="text-4xl font-bold">${tier.pricePerPeriod}</span>
@@ -187,7 +187,13 @@ function SubscriptionTab() {
 
 export default function SettingsPage() {
   const t = useTranslations("Settings");
-  type SettingsTab = "profile" | "password" | "language" | "subscription" | "linked_accounts" | "account";
+  type SettingsTab =
+    | "profile"
+    | "password"
+    | "language"
+    | "subscription"
+    | "linked_accounts"
+    | "account";
   const [activeTab, setActiveTab] = useState<SettingsTab>("profile");
 
   return (

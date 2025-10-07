@@ -28,16 +28,19 @@ export default function RoadmapPage() {
     );
   }
 
-  const activeObjectives = objectives.filter((obj) => obj.status === "active" || obj.status === "in_progress");
+  const activeObjectives = objectives.filter(
+    (obj) => obj.status === "active" || obj.status === "in_progress",
+  );
   const completedObjectives = objectives.filter((obj) => obj.status === "completed");
   const todoObjectives = objectives.filter((obj) => obj.status === "todo");
 
   const totalSprints = objectives.reduce((sum, obj) => sum + obj.totalSprints, 0);
   const completedSprints = objectives.reduce((sum, obj) => sum + obj.progress.sprintsDone, 0);
   const totalDays = objectives.reduce((sum, obj) => sum + obj.completedDays, 0);
-  const overallProgress = objectives.length > 0
-    ? objectives.reduce((sum, obj) => sum + obj.progressPercentage, 0) / objectives.length
-    : 0;
+  const overallProgress =
+    objectives.length > 0
+      ? objectives.reduce((sum, obj) => sum + obj.progressPercentage, 0) / objectives.length
+      : 0;
 
   return (
     <div className="space-y-6">
@@ -127,7 +130,7 @@ export default function RoadmapPage() {
                         {"⭐".repeat(objective.priority)}
                       </span>
                     </div>
-                    
+
                     {objective.description && (
                       <p className="text-sm text-muted-foreground line-clamp-2">
                         {objective.description}
@@ -166,7 +169,8 @@ export default function RoadmapPage() {
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Zap className="h-4 w-4" />
                         <span>
-                          Current Sprint: Day {objective.currentSprint.dayNumber} • {objective.currentSprint.lengthDays} days
+                          Current Sprint: Day {objective.currentSprint.dayNumber} •{" "}
+                          {objective.currentSprint.lengthDays} days
                         </span>
                       </div>
                     )}
@@ -197,7 +201,7 @@ export default function RoadmapPage() {
                     <h3 className="text-lg font-semibold">{objective.title}</h3>
                     <Badge className="bg-gray-100 text-gray-700">To Do</Badge>
                   </div>
-                  
+
                   {objective.description && (
                     <p className="text-sm text-muted-foreground line-clamp-2">
                       {objective.description}
@@ -229,9 +233,11 @@ export default function RoadmapPage() {
                     <h3 className="text-lg font-semibold">{objective.title}</h3>
                     <Badge className="bg-green-100 text-green-700">Completed</Badge>
                   </div>
-                  
+
                   <div className="text-sm text-muted-foreground">
-                    <p>{objective.totalSprints} sprints • {objective.completedDays} days</p>
+                    <p>
+                      {objective.totalSprints} sprints • {objective.completedDays} days
+                    </p>
                   </div>
 
                   <Link href={`/objectives/${objective.id}`}>

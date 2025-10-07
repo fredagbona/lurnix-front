@@ -83,16 +83,18 @@ export default function Sidebar() {
               href={item.href}
               className={cn(
                 "flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm transition-colors",
-                active 
-                  ? "bg-muted text-foreground" 
+                active
+                  ? "bg-muted text-foreground"
                   : "hover:bg-muted/50 text-muted-foreground hover:text-foreground",
               )}
               aria-current={active ? "page" : undefined}
             >
-              <IconComponent className={cn(
-                "h-5 w-5 transition-colors",
-                active ? "text-purple-600 dark:text-purple-400" : ""
-              )} />
+              <IconComponent
+                className={cn(
+                  "h-5 w-5 transition-colors",
+                  active ? "text-purple-600 dark:text-purple-400" : "",
+                )}
+              />
               <span className="font-medium">{item.label}</span>
             </Link>
           );

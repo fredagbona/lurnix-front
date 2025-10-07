@@ -7,7 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Loader } from "@/components/ui/loader";
-import { ArrowLeft, Plus, Target, TrendingUp, Calendar, RefreshCw, AlertCircle } from "lucide-react";
+import {
+  ArrowLeft,
+  Plus,
+  Target,
+  TrendingUp,
+  Calendar,
+  RefreshCw,
+  AlertCircle,
+} from "lucide-react";
 import { SprintCard } from "@/components/learning/SprintCard";
 import { toast } from "sonner";
 
@@ -15,9 +23,17 @@ export default function ObjectiveDetailsPage() {
   const params = useParams();
   const objectiveId = params.objectiveId as string;
 
-  const { data: objective, isLoading, error, refetch: refetchObjective } = useObjective(objectiveId);
+  const {
+    data: objective,
+    isLoading,
+    error,
+    refetch: refetchObjective,
+  } = useObjective(objectiveId);
   const generateSprint = useGenerateSprint();
-  const { data: generationStatus, refetch: refetchGenerationStatus } = useGenerationStatus(objectiveId, false);
+  const { data: generationStatus, refetch: refetchGenerationStatus } = useGenerationStatus(
+    objectiveId,
+    false,
+  );
 
   if (isLoading) {
     return (
@@ -81,9 +97,7 @@ export default function ObjectiveDetailsPage() {
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
             <Badge className={statusInfo.className}>{statusInfo.label}</Badge>
-            <span className="text-sm text-muted-foreground">
-              {"⭐".repeat(objective.priority)}
-            </span>
+            <span className="text-sm text-muted-foreground">{"⭐".repeat(objective.priority)}</span>
           </div>
           <h1 className="text-3xl font-bold tracking-tight">{objective.title}</h1>
           {objective.description && (
@@ -202,7 +216,7 @@ export default function ObjectiveDetailsPage() {
           <p className="text-sm text-muted-foreground mb-4">
             Generate your next learning sprint to continue your progress
           </p>
-          
+
           {/* Generation Status Indicator */}
           {generationStatus && (
             <div className="mb-4 p-3 rounded-lg bg-muted/50 text-sm">
@@ -215,7 +229,9 @@ export default function ObjectiveDetailsPage() {
                 ) : generationStatus.canGenerate ? (
                   <>
                     <RefreshCw className="h-4 w-4 text-blue-600" />
-                    <span className="text-blue-600">Ready to generate Day {generationStatus.nextSprintDay}</span>
+                    <span className="text-blue-600">
+                      Ready to generate Day {generationStatus.nextSprintDay}
+                    </span>
                   </>
                 ) : (
                   <>
@@ -226,7 +242,7 @@ export default function ObjectiveDetailsPage() {
               </div>
             </div>
           )}
-          
+
           <div className="flex gap-2 justify-center">
             <Button
               onClick={handleGenerateSprint}
@@ -261,7 +277,7 @@ export default function ObjectiveDetailsPage() {
           )}
         </Card>
       )}
-      
+
       {/* Objective Completed */}
       {objective.status === "completed" && (
         <Card className="p-6 text-center bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800">

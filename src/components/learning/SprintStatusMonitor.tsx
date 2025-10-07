@@ -57,9 +57,7 @@ export function SprintStatusMonitor({ objectiveId, onStatusChange }: SprintStatu
                 <p className="text-sm font-medium text-green-900 dark:text-green-100">
                   Objective Complete
                 </p>
-                <p className="text-xs text-green-700 dark:text-green-300">
-                  All sprints finished
-                </p>
+                <p className="text-xs text-green-700 dark:text-green-300">All sprints finished</p>
               </div>
             </>
           ) : status.canGenerate ? (

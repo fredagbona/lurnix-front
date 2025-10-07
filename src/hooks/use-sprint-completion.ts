@@ -31,7 +31,9 @@ export function useSprintCompletion({
   const { refetch: refetchGenerationStatus } = useGenerationStatus(objectiveId, false);
 
   const [isCompleting, setIsCompleting] = useState(false);
-  const [completionResult, setCompletionResult] = useState<CompleteSprintResponse["data"] | null>(null);
+  const [completionResult, setCompletionResult] = useState<CompleteSprintResponse["data"] | null>(
+    null,
+  );
 
   const complete = useCallback(
     async (data: CompleteSprintInput) => {
@@ -45,10 +47,10 @@ export function useSprintCompletion({
 
         // Step 2: Show detailed success message
         const messages: string[] = [];
-        
+
         if (response.data.nextSprintGenerated && response.data.nextSprint) {
           messages.push(
-            `Next sprint (Day ${response.data.nextSprint.dayNumber}) generated automatically!`
+            `Next sprint (Day ${response.data.nextSprint.dayNumber}) generated automatically!`,
           );
         }
 
@@ -95,7 +97,7 @@ export function useSprintCompletion({
         return response;
       } catch (error: any) {
         console.error("Sprint completion error:", error);
-        
+
         toast.error("Failed to complete sprint", {
           description: error.message || "Please try again or contact support.",
         });
@@ -118,7 +120,7 @@ export function useSprintCompletion({
       router,
       onSuccess,
       onError,
-    ]
+    ],
   );
 
   return {

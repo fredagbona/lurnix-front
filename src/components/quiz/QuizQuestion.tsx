@@ -64,9 +64,7 @@ export function QuizQuestion({
                   key={option.id}
                   className={cn(
                     "flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-colors",
-                    isSelected
-                      ? "border-primary bg-primary/5"
-                      : "border-border hover:bg-muted/50",
+                    isSelected ? "border-primary bg-primary/5" : "border-border hover:bg-muted/50",
                   )}
                 >
                   <input
@@ -201,9 +199,7 @@ export function QuizQuestion({
 
         {/* Helper Text */}
         {question.type === "multiple_select" && (
-          <p className="text-xs text-muted-foreground">
-            Select all that apply
-          </p>
+          <p className="text-xs text-muted-foreground">Select all that apply</p>
         )}
       </div>
     </Card>

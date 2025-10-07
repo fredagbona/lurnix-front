@@ -104,14 +104,18 @@ export const sprintsService = {
    * Check if user is ready to start a sprint (pre-sprint quiz check)
    */
   async getSprintReadiness(objectiveId: string, sprintId: string): Promise<ReadinessResponse> {
-    return apiClient.get<ReadinessResponse>(`/objectives/${objectiveId}/sprints/${sprintId}/readiness`);
+    return apiClient.get<ReadinessResponse>(
+      `/objectives/${objectiveId}/sprints/${sprintId}/readiness`,
+    );
   },
 
   /**
    * Check if user can progress after completing sprint (post-sprint quiz check)
    */
   async getSprintValidation(objectiveId: string, sprintId: string): Promise<ValidationResponse> {
-    return apiClient.get<ValidationResponse>(`/objectives/${objectiveId}/sprints/${sprintId}/validation`);
+    return apiClient.get<ValidationResponse>(
+      `/objectives/${objectiveId}/sprints/${sprintId}/validation`,
+    );
   },
 
   /**
@@ -122,7 +126,10 @@ export const sprintsService = {
     sprintId: string,
     data: { completedTasks: number; totalTasks: number },
   ): Promise<SprintResponse> {
-    return apiClient.patch<SprintResponse>(`/objectives/${objectiveId}/sprints/${sprintId}/progress`, data);
+    return apiClient.patch<SprintResponse>(
+      `/objectives/${objectiveId}/sprints/${sprintId}/progress`,
+      data,
+    );
   },
 
   /**

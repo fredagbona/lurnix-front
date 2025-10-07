@@ -4,7 +4,15 @@ import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Gauge, Calendar, FileQuestion, CheckCircle, Play, ArrowRight, RotateCw } from "lucide-react";
+import {
+  Gauge,
+  Calendar,
+  FileQuestion,
+  CheckCircle,
+  Play,
+  ArrowRight,
+  RotateCw,
+} from "lucide-react";
 import type { Sprint } from "@/models/learning";
 import { cn } from "@/lib/utils";
 
@@ -14,7 +22,10 @@ interface SprintCardProps {
   showActions?: boolean;
 }
 
-const difficultyConfig: Record<string, { label: string; color: string; bgColor: string; borderColor: string }> = {
+const difficultyConfig: Record<
+  string,
+  { label: string; color: string; bgColor: string; borderColor: string }
+> = {
   beginner: {
     label: "Beginner",
     color: "text-green-600",

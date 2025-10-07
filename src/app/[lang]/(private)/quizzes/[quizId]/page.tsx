@@ -16,7 +16,7 @@ export default function QuizPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const quizId = params.quizId as string;
-  
+
   // Get redirect URLs from query params
   const returnUrl = searchParams.get("returnUrl") || "/objectives";
   const sprintId = searchParams.get("sprintId");
@@ -111,11 +111,7 @@ export default function QuizPage() {
 
   return (
     <div className="py-8">
-      <QuizInterface
-        quiz={quiz}
-        onSubmit={handleSubmitQuiz}
-        isSubmitting={submitQuiz.isPending}
-      />
+      <QuizInterface quiz={quiz} onSubmit={handleSubmitQuiz} isSubmitting={submitQuiz.isPending} />
     </div>
   );
 }

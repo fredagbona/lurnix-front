@@ -3,7 +3,17 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, TrendingDown, Minus, Gauge, Zap, Calendar, Target, Trophy, AlertCircle } from "lucide-react";
+import {
+  TrendingUp,
+  TrendingDown,
+  Minus,
+  Gauge,
+  Zap,
+  Calendar,
+  Target,
+  Trophy,
+  AlertCircle,
+} from "lucide-react";
 import type { Performance } from "@/models/learning";
 import { cn } from "@/lib/utils";
 
@@ -90,11 +100,7 @@ export function PerformanceDashboard({ performance, onPracticeSkill }: Performan
                   <div
                     className={cn(
                       "w-full rounded-t-md transition-all duration-300",
-                      score >= 90
-                        ? "bg-green-500"
-                        : score >= 70
-                          ? "bg-blue-500"
-                          : "bg-yellow-500",
+                      score >= 90 ? "bg-green-500" : score >= 70 ? "bg-blue-500" : "bg-yellow-500",
                     )}
                     style={{ height: `${(score / 100) * 100}%` }}
                   />

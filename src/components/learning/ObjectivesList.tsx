@@ -17,7 +17,7 @@ export function ObjectivesList({ limit, onCreateClick }: ObjectivesListProps) {
   const { data, isLoading, error } = useObjectives();
   const [statusFilter, setStatusFilter] = useState<ObjectiveStatus | "all">("all");
   const [sortBy, setSortBy] = useState<"recent" | "progress" | "priority">("recent");
-  
+
   const objectives = data?.objectives || [];
 
   if (isLoading) {
@@ -98,11 +98,20 @@ export function ObjectivesList({ limit, onCreateClick }: ObjectivesListProps) {
                 All ({objectives.length})
               </Button>
               <Button
-                variant={statusFilter === "in_progress" || statusFilter === "active" ? "default" : "outline"}
+                variant={
+                  statusFilter === "in_progress" || statusFilter === "active"
+                    ? "default"
+                    : "outline"
+                }
                 size="sm"
                 onClick={() => setStatusFilter("in_progress")}
               >
-                Active ({objectives.filter((o) => o.status === "in_progress" || o.status === "active").length})
+                Active (
+                {
+                  objectives.filter((o) => o.status === "in_progress" || o.status === "active")
+                    .length
+                }
+                )
               </Button>
               <Button
                 variant={statusFilter === "todo" ? "default" : "outline"}
@@ -139,9 +148,7 @@ export function ObjectivesList({ limit, onCreateClick }: ObjectivesListProps) {
       {/* Objectives Grid */}
       {displayObjectives.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border bg-muted/30 p-8 text-center">
-          <p className="text-sm text-muted-foreground">
-            No objectives match the selected filter.
-          </p>
+          <p className="text-sm text-muted-foreground">No objectives match the selected filter.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -155,9 +162,7 @@ export function ObjectivesList({ limit, onCreateClick }: ObjectivesListProps) {
       {limit && sortedObjectives.length > limit && (
         <div className="text-center">
           <Button variant="outline" asChild>
-            <a href="/objectives">
-              View All {sortedObjectives.length} Objectives
-            </a>
+            <a href="/objectives">View All {sortedObjectives.length} Objectives</a>
           </Button>
         </div>
       )}

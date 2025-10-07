@@ -69,12 +69,9 @@ export function useCreateObjective() {
     onSuccess: (response) => {
       // Invalidate objectives list to refetch
       queryClient.invalidateQueries({ queryKey: objectivesKeys.lists() });
-      
+
       // Optionally set the new objective in cache
-      queryClient.setQueryData(
-        objectivesKeys.detail(response.data.objective.id),
-        response
-      );
+      queryClient.setQueryData(objectivesKeys.detail(response.data.objective.id), response);
     },
   });
 }
@@ -91,7 +88,7 @@ export function useUpdateObjective() {
     onSuccess: (response, variables) => {
       // Invalidate the specific objective
       queryClient.invalidateQueries({ queryKey: objectivesKeys.detail(variables.id) });
-      
+
       // Invalidate objectives list
       queryClient.invalidateQueries({ queryKey: objectivesKeys.lists() });
     },
@@ -109,7 +106,7 @@ export function useDeleteObjective() {
     onSuccess: (_, objectiveId) => {
       // Remove from cache
       queryClient.removeQueries({ queryKey: objectivesKeys.detail(objectiveId) });
-      
+
       // Invalidate objectives list
       queryClient.invalidateQueries({ queryKey: objectivesKeys.lists() });
     },
@@ -127,7 +124,7 @@ export function useGenerateSprint() {
     onSuccess: (response, objectiveId) => {
       // Invalidate the objective to refetch with new sprint
       queryClient.invalidateQueries({ queryKey: objectivesKeys.detail(objectiveId) });
-      
+
       // Invalidate objectives list
       queryClient.invalidateQueries({ queryKey: objectivesKeys.lists() });
     },

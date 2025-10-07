@@ -83,16 +83,16 @@ export default function Header() {
       <div className="flex items-center justify-between gap-4 px-4 py-3">
         {/* Logo and Brand */}
         <div className="flex items-center gap-2">
-          <Image 
-            src="/assets/logo/lurnix-favicon.svg" 
-            alt="Lurnix" 
-            width={24} 
+          <Image
+            src="/assets/logo/lurnix-favicon.svg"
+            alt="Lurnix"
+            width={24}
             height={24}
             className="md:hidden"
           />
           <span className="font-semibold text-lg">Lurnix</span>
         </div>
-        
+
         {/* User Menu */}
         <div className="flex items-center gap-2">
           <DropdownMenu>
@@ -101,9 +101,7 @@ export default function Header() {
                 <div className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">
                   {loading ? "..." : initials}
                 </div>
-                <span className="text-sm">
-                  {loading ? "Loading..." : displayName}
-                </span>
+                <span className="text-sm">{loading ? "Loading..." : displayName}</span>
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
@@ -114,7 +112,7 @@ export default function Header() {
                 Settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem 
+              <DropdownMenuItem
                 onClick={() => setShowLogoutModal(true)}
                 className="text-destructive focus:text-destructive"
               >

@@ -22,18 +22,18 @@ export function QuizTimer({ timeLimit, onTimeUp }: QuizTimerProps) {
     const interval = setInterval(() => {
       setTimeRemaining((prev) => {
         const newTime = prev - 1;
-        
+
         // Show warning when 2 minutes or less remaining
         if (newTime <= 120 && !isWarning) {
           setIsWarning(true);
         }
-        
+
         if (newTime <= 0) {
           clearInterval(interval);
           onTimeUp();
           return 0;
         }
-        
+
         return newTime;
       });
     }, 1000);

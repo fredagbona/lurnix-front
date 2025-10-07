@@ -72,7 +72,13 @@ export interface UpdateObjectiveInput {
 // ============================================================================
 
 export type SprintStatus = "not_started" | "planned" | "in_progress" | "completed";
-export type SprintDifficulty = "beginner" | "easy" | "intermediate" | "medium" | "advanced" | "hard";
+export type SprintDifficulty =
+  | "beginner"
+  | "easy"
+  | "intermediate"
+  | "medium"
+  | "advanced"
+  | "hard";
 
 export interface SprintProgress {
   completedTasks: number;
@@ -172,7 +178,13 @@ export interface CompleteSprintInput {
 // SKILL TYPES
 // ============================================================================
 
-export type SkillStatus = "not_started" | "struggling" | "learning" | "practicing" | "proficient" | "mastered";
+export type SkillStatus =
+  | "not_started"
+  | "struggling"
+  | "learning"
+  | "practicing"
+  | "proficient"
+  | "mastered";
 
 export interface SkillUpdate {
   skillId: string;
@@ -341,21 +353,21 @@ export interface CompleteSprintResponse {
   success: boolean;
   message: string;
   data: {
-  sprintCompleted: boolean;
-  dayCompleted: number;
-  nextSprintGenerated: boolean;
-  nextSprint: {
-    id: string;
-    dayNumber: number;
-    lengthDays: number;
-  } | null;
-  progress: {
-    currentDay: number;
-    totalDays: number;
-    progressPercentage: number;
-  };
-  brainAdaptive: BrainAdaptiveData;
-  notifications: Notification[];
+    sprintCompleted: boolean;
+    dayCompleted: number;
+    nextSprintGenerated: boolean;
+    nextSprint: {
+      id: string;
+      dayNumber: number;
+      lengthDays: number;
+    } | null;
+    progress: {
+      currentDay: number;
+      totalDays: number;
+      progressPercentage: number;
+    };
+    brainAdaptive: BrainAdaptiveData;
+    notifications: Notification[];
   };
 }
 

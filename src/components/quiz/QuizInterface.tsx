@@ -102,18 +102,16 @@ export function QuizInterface({ quiz, onSubmit, isSubmitting = false }: QuizInte
         question={currentQuestion}
         questionNumber={currentQuestionIndex + 1}
         totalQuestions={totalQuestions}
-        answer={answers.get(currentQuestion.id) || (currentQuestion.type === "multiple_select" ? [] : "")}
+        answer={
+          answers.get(currentQuestion.id) || (currentQuestion.type === "multiple_select" ? [] : "")
+        }
         onAnswerChange={(answer) => handleAnswerChange(currentQuestion.id, answer)}
       />
 
       {/* Question Navigation */}
       <Card className="p-4">
         <div className="flex items-center justify-between gap-4">
-          <Button
-            variant="outline"
-            onClick={handlePrevious}
-            disabled={currentQuestionIndex === 0}
-          >
+          <Button variant="outline" onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
             <ChevronLeft className="h-4 w-4 mr-2" />
             Previous
           </Button>

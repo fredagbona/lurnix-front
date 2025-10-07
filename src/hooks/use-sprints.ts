@@ -105,7 +105,7 @@ export function useStartSprint() {
     onSuccess: (response, variables) => {
       // Update sprint in cache
       queryClient.setQueryData(sprintsKeys.detail(variables.sprintId), response);
-      
+
       // Invalidate related objective
       queryClient.invalidateQueries({
         queryKey: objectivesKeys.detail(variables.objectiveId),
@@ -126,11 +126,11 @@ export function useCompleteSprint() {
     onSuccess: (response, variables) => {
       // Invalidate the completed sprint
       queryClient.invalidateQueries({ queryKey: sprintsKeys.detail(variables.sprintId) });
-      
+
       // Invalidate ALL objectives queries to force refetch
       queryClient.invalidateQueries({ queryKey: objectivesKeys.all });
       queryClient.invalidateQueries({ queryKey: objectivesKeys.lists() });
-      
+
       // Remove all objective detail caches to force fresh fetch
       queryClient.removeQueries({ queryKey: objectivesKeys.details() });
     },

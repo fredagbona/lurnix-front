@@ -12,7 +12,11 @@ export default function SkillsPage() {
   const searchParams = useSearchParams();
   const objectiveId = searchParams.get("objectiveId") || undefined;
 
-  const { data: skillMap, isLoading: skillsLoading, error: skillsError } = useUserSkills(objectiveId);
+  const {
+    data: skillMap,
+    isLoading: skillsLoading,
+    error: skillsError,
+  } = useUserSkills(objectiveId);
   const { data: performance, isLoading: perfLoading, error: perfError } = useUserPerformance();
 
   if (skillsLoading || perfLoading) {
