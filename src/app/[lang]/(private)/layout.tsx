@@ -1,25 +1,27 @@
 "use client";
 
-import { PropsWithChildren, useState } from "react";
-import { useTranslations } from "next-intl";
+import { PropsWithChildren } from "react";
 import Sidebar from "@/components/dashboard/sidebar";
+import MobileTabBar from "@/components/dashboard/mobile-tab-bar";
 import Header from "@/components/dashboard/header";
 
 export default function PrivateLayout({ children }: PropsWithChildren) {
-  const t = useTranslations("Dashboard.nav");
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const handleOpenMenu = () => setMobileOpen(true);
-  const handleCloseMenu = () => setMobileOpen(false);
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="flex h-screen">
-        <Sidebar mobileOpen={mobileOpen} onClose={handleCloseMenu} />
+        {/* Desktop Sidebar - hidden on mobile */}
+        <Sidebar />
+
         <div className="flex-1 min-w-0 flex flex-col">
-          <Header onMenuClick={handleOpenMenu} />
-          <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">{children}</main>
+          <Header />
+
+          {/* Main content with bottom padding on mobile for tab bar */}
+          <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 pb-20 md:pb-6">{children}</main>
         </div>
       </div>
+
+      {/* Mobile Bottom Tab Bar - hidden on desktop */}
+      <MobileTabBar />
     </div>
   );
 }
