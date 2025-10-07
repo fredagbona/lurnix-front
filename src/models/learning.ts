@@ -312,7 +312,7 @@ export interface ValidationCheck {
 // ============================================================================
 // Note: ApiResponse is imported from auth.ts
 
-export interface PlanLimits {
+export interface ObjectivePlanLimits {
   planType: string;
   objectiveLimit: number;
   objectiveCount: number;
@@ -328,7 +328,7 @@ export interface ObjectivesResponse {
   message: string;
   data: {
     objectives: Objective[];
-    planLimits: PlanLimits;
+    planLimits: ObjectivePlanLimits;
   };
   timestamp: string;
 }
@@ -338,7 +338,7 @@ export interface ObjectiveResponse {
   message: string;
   data: {
     objective: Objective;
-    planLimits?: PlanLimits;
+    planLimits?: ObjectivePlanLimits;
   };
   timestamp: string;
 }

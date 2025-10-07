@@ -31,9 +31,12 @@ const statusConfig: Record<string, { label: string; className: string }> = {
   },
 };
 
-const difficultyConfig = {
+const difficultyConfig: Record<string, { label: string; color: string }> = {
+  beginner: { label: "Beginner", color: "text-green-600" },
   easy: { label: "Easy", color: "text-green-600" },
+  intermediate: { label: "Intermediate", color: "text-yellow-600" },
   medium: { label: "Medium", color: "text-yellow-600" },
+  advanced: { label: "Advanced", color: "text-red-600" },
   hard: { label: "Hard", color: "text-red-600" },
 };
 

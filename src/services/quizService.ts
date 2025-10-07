@@ -20,6 +20,10 @@ export const quizService = {
   async submitQuiz(submission: QuizSubmission): Promise<QuizSubmissionResponse> {
     return apiClient.post<QuizSubmissionResponse>("/quiz/submit", submission);
   },
+
+  async getRoadmapProfile(): Promise<any> {
+    return apiClient.get("/users/roadmap-profile");
+  },
 };
 
 // ============================================================================
