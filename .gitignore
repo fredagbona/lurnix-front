@@ -37,4 +37,4 @@ next-env.d.ts
 .env
 
 #specs
-/agents-specs 
+/agent-specs
