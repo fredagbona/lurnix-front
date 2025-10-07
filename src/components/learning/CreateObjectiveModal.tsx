@@ -123,7 +123,7 @@ export function CreateObjectiveModal({ open, onOpenChange }: CreateObjectiveModa
         <DialogHeader>
           <DialogTitle>Create New Learning Objective</DialogTitle>
           <DialogDescription>
-            Define your learning goal and we'll help you create a personalized roadmap.
+            Define your learning goal and we&apos;ll help you create a personalized roadmap.
           </DialogDescription>
         </DialogHeader>
 

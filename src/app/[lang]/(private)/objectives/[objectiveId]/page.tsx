@@ -288,7 +288,7 @@ export default function ObjectiveDetailsPage() {
             </h3>
           </div>
           <p className="text-sm text-green-700 dark:text-green-300">
-            Congratulations! You've successfully completed this learning objective.
+            Congratulations! You&apos;ve successfully completed this learning objective.
           </p>
         </Card>
       )}
