@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
@@ -18,6 +18,11 @@ export function RegisterPage() {
   const router = useRouter();
   const params = useParams();
   const lang = params.lang as string;
+
+  // Feature flag to control signup availability (defaults to false if not set)
+  const isSignupEnabled = (process.env.NEXT_PUBLIC_SIGNUP_ENABLED ?? "false") === "true";
+
+  // All hooks must be called before any conditional returns
   const [formData, setFormData] = useState({
     username: "",
     fullname: "",
@@ -34,6 +39,37 @@ export function RegisterPage() {
   }>({});
 
   const registerMutation = useRegister();
+
+  // Redirect to login if signup is disabled (after all hooks)
+  useEffect(() => {
+    if (!isSignupEnabled) {
+      router.push("/auth/login");
+    }
+  }, [isSignupEnabled, router]);
+
+  // Show loading/closed message if signup is disabled
+  if (!isSignupEnabled) {
+    return (
+      <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 min-h-screen">
+        <div className="max-w-md w-full space-y-8">
+          <div className="text-center">
+            <div className="mx-auto h-12 w-12 flex items-center justify-center">
+              <Image src="/assets/logo/lurnix-favicon.svg" alt="Lurnix" width={40} height={40} />
+            </div>
+            <h2 className="mt-6 text-3xl font-bold text-gray-900">Registration Closed</h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Registration is temporarily unavailable. Please contact support for access.
+            </p>
+            <div className="mt-6">
+              <Link href="/auth/login">
+                <Button className="w-full">Go to Login</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
