@@ -4,15 +4,7 @@ import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Gauge,
-  Calendar,
-  FileQuestion,
-  CheckCircle,
-  Play,
-  ArrowRight,
-  RotateCw,
-} from "lucide-react";
+import { Gauge, Calendar, FileQuestion, CheckCircle, Play, ArrowRight, RotateCw, Link as LinkIcon } from "lucide-react";
 import type { Sprint } from "@/models/learning";
 import { cn } from "@/lib/utils";
 
@@ -64,7 +56,9 @@ const difficultyConfig: Record<
   },
 };
 
-const statusConfig: Record<string, { label: string; className: string }> = {
+type SprintVisualStatus = "not_started" | "planned" | "in_progress" | "completed";
+
+const statusConfig: Record<SprintVisualStatus, { label: string; className: string }> = {
   not_started: {
     label: "Not Started",
     className: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
@@ -84,10 +78,42 @@ const statusConfig: Record<string, { label: string; className: string }> = {
 };
 
 export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCardProps) {
+  const rawStatus = typeof sprint.status === "string" ? sprint.status.toLowerCase() : "not_started";
+  const rawCompletedAt = (sprint as any).completedAt ?? (sprint as any).completed_at ?? null;
+  const totalTasks = sprint.microTasks?.length ?? 0;
+  const completedTasks = sprint.progress?.completedTasks ?? 0;
+  const completionPercentage =
+    sprint.completionPercentage ?? sprint.progress?.completionPercentage ?? null;
+
+  const isCompleted =
+    Boolean(rawCompletedAt) ||
+    (typeof completionPercentage === "number" && completionPercentage >= 100) ||
+    rawStatus === "reviewed" ||
+    rawStatus === "completed";
+
+  const visualStatus: SprintVisualStatus = isCompleted
+    ? "completed"
+    : rawStatus === "in_progress" || rawStatus === "submitted"
+    ? "in_progress"
+    : rawStatus === "planned"
+    ? "planned"
+    : "not_started";
+
+  const canStart = visualStatus === "not_started" || visualStatus === "planned";
+  const canContinue = visualStatus === "in_progress";
+  const canViewDetails = visualStatus === "completed";
+
   const difficultyInfo = difficultyConfig[sprint.difficulty] || difficultyConfig.beginner;
-  const statusInfo = statusConfig[sprint.status] || statusConfig.not_started;
+  const statusInfo = statusConfig[visualStatus];
   const hasPreSprintQuiz = sprint.quizzes?.some((q) => q.type === "pre_sprint");
   const hasPostSprintQuiz = sprint.quizzes?.some((q) => q.type === "post_sprint");
+  const evidenceCount = sprint.evidence?.artifacts?.length ?? 0;
+  const progressValue =
+    typeof completionPercentage === "number"
+      ? Math.min(100, Math.max(0, Math.round(completionPercentage)))
+      : totalTasks > 0
+      ? Math.round((completedTasks / totalTasks) * 100)
+      : 0;
 
   return (
     <Card
@@ -113,6 +139,30 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
               <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
                 {sprint.description}
               </p>
+            )}
+            <div className="flex flex-wrap items-center gap-3 mt-3 text-xs text-muted-foreground">
+              <span className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-1">
+                <LinkIcon className="h-3 w-3" />
+                {evidenceCount > 0 ? `${evidenceCount} link${evidenceCount === 1 ? "" : "s"} added` : "No links yet"}
+              </span>
+              {isCompleted ? (
+                <span>
+                  {rawCompletedAt
+                    ? `Completed on ${new Date(rawCompletedAt).toLocaleDateString()}`
+                    : "Completed"}
+                </span>
+              ) : (
+                <span>Progress: {progressValue}%</span>
+              )}
+            </div>
+            {isCompleted && (
+              <div className="mt-3 text-xs text-muted-foreground space-y-1">
+                <p className="font-medium text-foreground">Next steps</p>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>Share your build or repo with the community for feedback.</li>
+                  <li>Capture blockers and lessons in your reflection before starting the next sprint.</li>
+                </ul>
+              </div>
             )}
           </div>
           <Badge className={statusInfo.className}>{statusInfo.label}</Badge>
@@ -171,7 +221,7 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
         )}
 
         {/* Progress (if in progress) */}
-        {sprint.status === "in_progress" && sprint.progress && (
+        {canContinue && sprint.progress && (
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">Progress</span>
@@ -187,14 +237,6 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
                 }}
               />
             </div>
-          </div>
-        )}
-
-        {/* Score (if completed) */}
-        {sprint.status === "completed" && sprint.score !== null && (
-          <div className="flex items-center gap-2 text-sm">
-            <span className="text-muted-foreground">Score:</span>
-            <span className="font-semibold text-green-600">{sprint.score}/100</span>
           </div>
         )}
 
@@ -214,7 +256,7 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
         {/* Actions */}
         {showActions && (
           <div className="flex gap-2 pt-2">
-            {(sprint.status === "not_started" || sprint.status === "planned") && (
+            {canStart && (
               <Link href={`/objectives/${objectiveId}/sprints/${sprint.id}`} className="flex-1">
                 <Button className="w-full" variant={hasPreSprintQuiz ? "outline" : "default"}>
                   {hasPreSprintQuiz ? (
@@ -232,7 +274,7 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
               </Link>
             )}
 
-            {sprint.status === "in_progress" && (
+            {canContinue && (
               <Link href={`/objectives/${objectiveId}/sprints/${sprint.id}`} className="flex-1">
                 <Button className="w-full">
                   <ArrowRight className="h-4 w-4 mr-2" />
@@ -241,7 +283,7 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
               </Link>
             )}
 
-            {sprint.status === "completed" && (
+            {canViewDetails && (
               <Link href={`/objectives/${objectiveId}/sprints/${sprint.id}`} className="flex-1">
                 <Button className="w-full" variant="outline">
                   <CheckCircle className="h-4 w-4 mr-2" />

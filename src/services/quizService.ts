@@ -13,8 +13,9 @@ import type {
 // PROFILE QUIZ SERVICE (Existing)
 // ============================================================================
 export const quizService = {
-  async getQuiz(): Promise<QuizResponse> {
-    return apiClient.get<QuizResponse>("/quiz");
+  async getQuiz(version?: number): Promise<QuizResponse> {
+    const query = typeof version === "number" ? `?version=${version}` : "";
+    return apiClient.get<QuizResponse>(`/quiz${query}`);
   },
 
   async submitQuiz(submission: QuizSubmission): Promise<QuizSubmissionResponse> {

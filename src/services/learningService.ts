@@ -133,6 +133,35 @@ export const sprintsService = {
   },
 
   /**
+   * Submit sprint evidence (links + self-evaluation)
+   */
+  async submitSprintEvidence(
+    objectiveId: string,
+    sprintId: string,
+    data: {
+      artifacts: {
+        artifactId?: string;
+        projectId?: string;
+        type: string;
+        title?: string;
+        url: string;
+        notes?: string;
+        status?: string;
+      }[];
+      selfEvaluation?: {
+        confidence?: number | null;
+        reflection?: string | null;
+      } | null;
+      markSubmitted?: boolean;
+    },
+  ): Promise<SprintResponse> {
+    return apiClient.post<SprintResponse>(
+      `/objectives/${objectiveId}/sprints/${sprintId}/evidence`,
+      data,
+    );
+  },
+
+  /**
    * Check sprint completion status
    */
   async getSprintCompletionStatus(sprintId: string): Promise<{

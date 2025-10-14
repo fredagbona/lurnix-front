@@ -17,7 +17,6 @@ export default function Sidebar() {
     () => [
       { href: "/dashboard", label: t("dashboard", { default: "Dashboard" }), icon: Home },
       { href: "/objectives", label: t("learning", { default: "Learning" }), icon: Target },
-      { href: "/skills", label: t("skills", { default: "Skills" }), icon: TrendingUp },
       { href: "/roadmap", label: t("roadmap", { default: "Roadmap" }), icon: BookOpen },
       { href: "/features", label: t("features", { default: "Features" }), icon: Zap },
       {

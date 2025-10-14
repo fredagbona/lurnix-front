@@ -19,6 +19,13 @@ import {
   Clock,
   Zap,
   AlertCircle,
+  Share2,
+  ListTodo,
+  Activity,
+  Layers,
+  Anchor,
+  Flame,
+  MessageSquare,
 } from "lucide-react";
 import { useLearnerProfile } from "@/hooks";
 import { ObjectivesList, CreateObjectiveModal } from "@/components/learning";
@@ -29,6 +36,20 @@ export default function DashboardPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   const hasCompletedProfileTest = !!learnerProfile?.data;
+  const snapshot = learnerProfile?.data?.rawSnapshot;
+  const availability = learnerProfile?.data?.availability;
+  const supportChannels: string[] = Array.isArray(availability?.supportChannels)
+    ? availability.supportChannels
+    : Array.isArray(snapshot?.supportChannels)
+    ? snapshot.supportChannels
+    : [];
+  const preferredStack = Array.isArray(snapshot?.preferredStack) ? snapshot.preferredStack : [];
+  const motivations = Array.isArray(snapshot?.motivations) ? snapshot.motivations : [];
+  const topTraits = Array.isArray(snapshot?.topTraits) ? snapshot.topTraits.slice(0, 4) : [];
+  const maxTraitScore = topTraits.reduce((max, trait) => {
+    const value = Number(trait?.score ?? 0);
+    return value > max ? value : max;
+  }, 0) || 1;
 
   return (
     <div className="space-y-6">
@@ -85,14 +106,14 @@ export default function DashboardPage() {
         </div>
       )}
       {/* Learner Profile Section */}
-      {hasCompletedProfileTest && learnerProfile?.data?.rawSnapshot && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Learning Profile Card */}
-          <Card className="p-6">
-            <div className="flex items-center justify-between mb-6">
+      {hasCompletedProfileTest && snapshot && (
+        <div className="grid grid-cols-1 2xl:grid-cols-3 gap-6">
+          {/* Overview */}
+          <Card className="p-6 space-y-5">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <User className="h-5 w-5 text-primary" />
-                <h2 className="text-xl font-semibold">Learning Profile</h2>
+                <h2 className="text-xl font-semibold">Your Learning Profile</h2>
               </div>
               <Link href="/profile-test">
                 <Button variant="outline" size="sm">
@@ -101,131 +122,200 @@ export default function DashboardPage() {
               </Link>
             </div>
 
-            <div className="space-y-4">
-              {/* Profile Type */}
-              <div>
-                <p className="text-sm text-muted-foreground mb-2">Profile Type</p>
-                <Badge className="text-base px-3 py-1">
-                  {learnerProfile.data.rawSnapshot.profileRecommendation?.key.replace(/_/g, " ")}
-                </Badge>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="rounded-lg border border-border/60 p-3 space-y-1">
+                <p className="text-xs text-muted-foreground">Profile Type</p>
+                <p className="text-base font-semibold capitalize">
+                  {snapshot.profileRecommendation?.key.replace(/_/g, " ")}
+                </p>
               </div>
-
-              {/* Basic Info */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm text-muted-foreground">Level</p>
-                  <p className="font-medium capitalize">{learnerProfile.data.rawSnapshot.level}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Style</p>
-                  <p className="font-medium capitalize">{learnerProfile.data.rawSnapshot.style}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Time / day</p>
-                  <p className="font-medium">{learnerProfile.data.rawSnapshot.timePerDay} mins</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Resilience</p>
-                  <p className="font-medium capitalize">
-                    {learnerProfile.data.rawSnapshot.resilience?.replace(/_/g, " ")}
-                  </p>
-                </div>
+              <div className="rounded-lg border border-border/60 p-3 space-y-1">
+                <p className="text-xs text-muted-foreground">Level</p>
+                <p className="text-base font-semibold capitalize">{snapshot.level}</p>
               </div>
+              <div className="rounded-lg border border-border/60 p-3 space-y-1">
+                <p className="text-xs text-muted-foreground">Style</p>
+                <p className="text-base font-semibold capitalize">{snapshot.style}</p>
+              </div>
+              <div className="rounded-lg border border-border/60 p-3 space-y-1">
+                <p className="text-xs text-muted-foreground">Daily Focus</p>
+                <p className="text-base font-semibold">{snapshot.timePerDay} mins</p>
+              </div>
+            </div>
 
-              {/* Learning Preferences */}
-              <div className="space-y-3">
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Activity className="h-4 w-4 text-primary" />
                 <p className="text-sm font-medium">Learning Preferences</p>
-                {[
-                  ["Visual", Math.round(learnerProfile.data.rawSnapshot.visual * 100)],
-                  ["Reading", Math.round(learnerProfile.data.rawSnapshot.reading * 100)],
-                  ["Hands-on", Math.round(learnerProfile.data.rawSnapshot.handsOn * 100)],
-                ].map(([label, value]) => (
-                  <div key={label as string} className="space-y-1">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground">{label}</span>
-                      <span className="font-medium">{value}%</span>
-                    </div>
-                    <div className="h-2 w-full rounded-full bg-muted">
-                      <div className="h-2 rounded-full bg-primary" style={{ width: `${value}%` }} />
-                    </div>
-                  </div>
-                ))}
               </div>
+              {[
+                ["Visual", Math.round(Number(snapshot.visual || 0) * 100)],
+                ["Reading", Math.round(Number(snapshot.reading || 0) * 100)],
+                ["Hands-on", Math.round(Number(snapshot.handsOn || 0) * 100)],
+              ].map(([label, value]) => (
+                <div key={label as string} className="space-y-1">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground">{label}</span>
+                    <span className="font-medium">{value}%</span>
+                  </div>
+                  <div className="h-2 w-full rounded-full bg-muted">
+                    <div className="h-2 rounded-full bg-primary" style={{ width: `${value}%` }} />
+                  </div>
+                </div>
+              ))}
             </div>
           </Card>
 
-          {/* Tech Interests & Traits */}
-          <Card className="p-6">
-            <div className="flex items-center gap-2 mb-6">
-              <Zap className="h-5 w-5 text-primary" />
-              <h2 className="text-xl font-semibold">Interests & Traits</h2>
+          {/* Availability & Cadence */}
+          <Card className="p-6 space-y-4">
+            <div className="flex items-center gap-2">
+              <Clock className="h-5 w-5 text-primary" />
+              <h2 className="text-xl font-semibold">Availability & Rhythm</h2>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4 text-sm">
+              <div className="flex items-start gap-3 rounded-lg border border-border/60 p-3">
+                <Gauge className="h-4 w-4 text-primary mt-1" />
+                <div>
+                  <p className="font-semibold">Weekly Hours</p>
+                  <p className="text-muted-foreground">
+                    {availability?.hoursPerWeek ?? "—"} hrs · {availability?.timePerDayMinutes ?? 0} mins/day
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 rounded-lg border border-border/60 p-3">
+                <Layers className="h-4 w-4 text-primary mt-1" />
+                <div>
+                  <p className="font-semibold">Weekly Rhythm</p>
+                  <p className="text-muted-foreground capitalize">
+                    {availability?.weeklyRhythm?.replace(/_/g, " ") || "Not set"}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 rounded-lg border border-border/60 p-3">
+                <Flame className="h-4 w-4 text-primary mt-1" />
+                <div>
+                  <p className="font-semibold">Energy Peak</p>
+                  <p className="text-muted-foreground capitalize">
+                    {availability?.energyPeak?.replace(/_/g, " ") || "Not set"}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 rounded-lg border border-border/60 p-3">
+                <ListTodo className="h-4 w-4 text-primary mt-1" />
+                <div>
+                  <p className="font-semibold">Focus Preference</p>
+                  <p className="text-muted-foreground capitalize">
+                    {availability?.focusPreference?.replace(/_/g, " ") || "Not set"}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 rounded-lg border border-border/60 p-3">
+                <Anchor className="h-4 w-4 text-primary mt-1" />
+                <div>
+                  <p className="font-semibold">Context Switching</p>
+                  <p className="text-muted-foreground capitalize">
+                    {availability?.contextSwitch?.replace(/_/g, " ") || "Not set"}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 rounded-lg border border-border/60 p-3">
+                <MessageSquare className="h-4 w-4 text-primary mt-1" />
+                <div>
+                  <p className="font-semibold">Note & Review</p>
+                  <p className="text-muted-foreground capitalize">
+                    {availability?.noteStyle?.replace(/_/g, " ") || "—"} ·
+                    {" "}
+                    {availability?.reviewCadence?.replace(/_/g, " ") || "—"}
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <div className="space-y-6">
-              {/* Tech Affinity */}
-              <div>
-                <p className="text-sm font-medium mb-3">Tech Interests</p>
+            {supportChannels.length ? (
+              <div className="rounded-lg border border-dashed border-primary/40 bg-primary/5 p-4 text-sm">
+                <div className="flex items-center gap-2 mb-2">
+                  <Share2 className="h-4 w-4 text-primary" />
+                  <p className="font-semibold">Support Channels</p>
+                </div>
+                <p className="text-muted-foreground">
+                  You prefer {supportChannels.map((channel) => channel.replace(/_/g, " ")).join(" • ")}. Share progress there to stay accountable.
+                </p>
+              </div>
+            ) : null}
+          </Card>
+
+          {/* Interests & Traits */}
+          <Card className="p-6 space-y-5">
+            <div className="flex items-center gap-2">
+              <Zap className="h-5 w-5 text-primary" />
+              <h2 className="text-xl font-semibold">Motivation & Stack</h2>
+            </div>
+
+            <div className="space-y-4 text-sm">
+              <div className="space-y-2">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Preferred Stack</p>
                 <div className="flex flex-wrap gap-2">
-                  {learnerProfile.data.rawSnapshot.preferredStack?.map(
-                    (tech: string, index: number) => (
-                      <Badge key={index} variant="secondary" className="capitalize">
-                        {tech.replace(/_/g, " ")}
-                      </Badge>
-                    ),
-                  )}
+                  {preferredStack.length
+                    ? preferredStack.map((tech: string) => (
+                        <Badge key={tech} variant="secondary" className="capitalize">
+                          {tech.replace(/_/g, " ")}
+                        </Badge>
+                      ))
+                    : <span className="text-muted-foreground">No stack preferences yet</span>}
                 </div>
               </div>
 
-              {/* Top Traits */}
-              <div>
-                <p className="text-sm font-medium mb-3">Top Traits</p>
+              {motivations.length ? (
                 <div className="space-y-2">
-                  {learnerProfile.data.rawSnapshot.topTraits
-                    ?.slice(0, 5)
-                    .map((trait: any, index: number) => (
-                      <div key={index} className="flex items-center justify-between">
-                        <span className="text-sm capitalize">{trait.trait.replace(/_/g, " ")}</span>
-                        <div className="flex items-center gap-2">
-                          <div className="h-2 w-24 rounded-full bg-muted">
-                            <div
-                              className="h-2 rounded-full bg-primary"
-                              style={{ width: `${(trait.score / 12) * 100}%` }}
-                            />
-                          </div>
-                          <span className="text-xs text-muted-foreground w-8 text-right">
-                            {trait.score}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                </div>
-              </div>
-
-              {/* Motivation */}
-              {learnerProfile.data.rawSnapshot.motivations && (
-                <div>
-                  <p className="text-sm font-medium mb-3">Motivation</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Top Motivators</p>
                   <div className="flex flex-wrap gap-2">
-                    {learnerProfile.data.rawSnapshot.motivations
-                      .filter((m: any) => m.score > 0)
-                      .map((motivation: any, index: number) => (
-                        <Badge
-                          key={index}
-                          className="bg-pink-100 text-pink-700 dark:bg-pink-900/20 capitalize"
-                        >
+                    {motivations
+                      .filter((item: any) => item.score > 0)
+                      .slice(0, 4)
+                      .map((motivation: any) => (
+                        <Badge key={motivation.trait} className="capitalize">
                           {motivation.trait.replace(/_/g, " ")}
                         </Badge>
                       ))}
                   </div>
                 </div>
-              )}
+              ) : null}
 
-              {/* Goal */}
-              {learnerProfile.data.rawSnapshot.goal && (
-                <div>
-                  <p className="text-sm font-medium mb-2">Primary Goal</p>
-                  <p className="text-sm capitalize">
-                    {learnerProfile.data.rawSnapshot.goal.replace(/_/g, " ")}
+              {topTraits.length ? (
+                <div className="space-y-2">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Signature Traits</p>
+                  <div className="space-y-2">
+                    {topTraits.map((trait: any) => {
+                      const progress = Math.min(
+                        100,
+                        Math.round((Number(trait?.score ?? 0) / maxTraitScore) * 100),
+                      );
+                      return (
+                        <div key={trait.trait} className="flex items-center gap-4">
+                          <span className="flex-1 capitalize">{trait.trait.replace(/_/g, " ")}</span>
+                          <div className="ml-auto flex min-w-[150px] items-center gap-3">
+                            <div className="relative h-2 flex-1 rounded-full bg-muted">
+                              <div
+                                className="absolute inset-y-0 left-0 rounded-full bg-primary"
+                                style={{ width: `${progress}%` }}
+                              />
+                            </div>
+                            <span className="w-8 text-right text-xs text-muted-foreground">
+                              {trait.score}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null}
+
+              {snapshot.goal && (
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Primary Goal</p>
+                  <p className="font-medium capitalize">
+                    {snapshot.goal.replace(/_/g, " ")}
                   </p>
                 </div>
               )}

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useSprint, useUpdateSprintProgress, useSprintCompletion } from "@/hooks";
 import { Button } from "@/components/ui/button";
@@ -9,36 +9,23 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader } from "@/components/ui/loader";
-import {
-  ArrowLeft,
-  CheckCircle,
-  Circle,
-  Gauge,
-  Calendar,
-  Target,
-  FileText,
-  Upload,
-} from "lucide-react";
+import { ArrowLeft, CheckCircle, Circle, Gauge, Calendar, Target } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
-export default function SprintDetailsPage() {
+function SprintDetailsPage() {
   const params = useParams();
-  const router = useRouter();
   const objectiveId = params.objectiveId as string;
   const sprintId = params.sprintId as string;
-
   const { data: sprint, isLoading, error } = useSprint(objectiveId, sprintId);
   const updateProgress = useUpdateSprintProgress();
-  const { complete, isCompleting, completionResult } = useSprintCompletion({
+  const { complete, isCompleting } = useSprintCompletion({
     objectiveId,
     sprintId,
   });
 
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set());
   const [reflection, setReflection] = useState("");
-  const [evidenceFiles, setEvidenceFiles] = useState<string[]>([]);
-
   // Sync completed tasks from sprint data - MUST be before early returns
   useEffect(() => {
     if (
@@ -54,7 +41,6 @@ export default function SprintDetailsPage() {
     }
   }, [sprint]);
 
-  // Early returns AFTER all hooks
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -76,11 +62,26 @@ export default function SprintDetailsPage() {
     );
   }
 
+  const rawStatus = typeof sprint.status === "string" ? sprint.status.toLowerCase() : "not_started";
+  const rawCompletedAt = sprint.completedAt ?? (sprint as any).completed_at ?? null;
   const totalTasks = sprint.microTasks.length;
   const completedCount = completedTasks.size;
-  const progressPercentage = totalTasks > 0 ? (completedCount / totalTasks) * 100 : 0;
+  const completionPercentage =
+    sprint.completionPercentage ?? sprint.progress?.completionPercentage ?? null;
+  const isCompleted =
+    Boolean(rawCompletedAt) ||
+    (typeof completionPercentage === "number" && completionPercentage >= 100) ||
+    rawStatus === "reviewed" ||
+    rawStatus === "completed";
+  const progressPercentage =
+    typeof completionPercentage === "number"
+      ? completionPercentage
+      : totalTasks > 0
+      ? (completedCount / totalTasks) * 100
+      : 0;
 
   const handleTaskToggle = (taskId: string) => {
+    if (isCompleted) return;
     const newCompleted = new Set(completedTasks);
     if (newCompleted.has(taskId)) {
       newCompleted.delete(taskId);
@@ -101,6 +102,7 @@ export default function SprintDetailsPage() {
   };
 
   const handleCompleteSprint = async () => {
+    if (isCompleted) return;
     if (completedCount < totalTasks) {
       toast.error("Please complete all tasks before finishing the sprint");
       return;
@@ -115,7 +117,7 @@ export default function SprintDetailsPage() {
       tasksCompleted: completedCount,
       totalTasks,
       hoursSpent: sprint.totalEstimatedHours,
-      evidenceSubmitted: evidenceFiles.length > 0,
+      evidenceSubmitted: false,
       reflection: reflection.trim(),
     });
   };
@@ -130,6 +132,7 @@ export default function SprintDetailsPage() {
   };
 
   const difficultyInfo = difficultyConfig[sprint.difficulty] || difficultyConfig.beginner;
+  const completionDate = rawCompletedAt ? new Date(rawCompletedAt) : null;
 
   return (
     <div className="space-y-6">
@@ -158,6 +161,15 @@ export default function SprintDetailsPage() {
               <Target className="h-4 w-4" />
               <span>{sprint.totalEstimatedHours}h estimated</span>
             </div>
+            {isCompleted && completionDate && (
+              <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
+                <CheckCircle className="h-4 w-4" />
+                <span>
+                  Completed on {completionDate.toLocaleDateString()} at {" "}
+                  {completionDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -203,6 +215,11 @@ export default function SprintDetailsPage() {
         <h2 className="text-lg font-semibold mb-4">
           Tasks ({completedCount}/{totalTasks})
         </h2>
+        {isCompleted && (
+          <p className="text-sm text-muted-foreground mb-4">
+            This sprint is completed. Task progress is now read-only.
+          </p>
+        )}
         <div className="space-y-4">
           {sprint.microTasks.map((task) => (
             <div
@@ -213,7 +230,12 @@ export default function SprintDetailsPage() {
               )}
             >
               <div className="flex items-start gap-3">
-                <button onClick={() => handleTaskToggle(task.id)} className="mt-1 flex-shrink-0">
+                <button
+                  onClick={() => handleTaskToggle(task.id)}
+                  className="mt-1 flex-shrink-0"
+                  disabled={isCompleted}
+                  aria-disabled={isCompleted}
+                >
                   {completedTasks.has(task.id) ? (
                     <CheckCircle className="h-5 w-5 text-primary" />
                   ) : (
@@ -355,19 +377,14 @@ export default function SprintDetailsPage() {
         </Card>
       )}
 
-      {/* Evidence Upload */}
+      {/* Tips */}
       <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <Upload className="h-5 w-5" />
-          Evidence (Optional)
-        </h2>
-        <p className="text-sm text-muted-foreground mb-4">
-          Upload screenshots, code snippets, or links to your work
-        </p>
-        <div className="border-2 border-dashed border-border rounded-lg p-8 text-center">
-          <FileText className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-          <p className="text-sm text-muted-foreground">File upload functionality coming soon</p>
-        </div>
+        <h2 className="text-lg font-semibold mb-3">Tips</h2>
+        <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
+          <li>Share your progress in Discord or the community to celebrate wins.</li>
+          <li>Post demos or repositories when you&apos;re ready for feedback.</li>
+          <li>Log blockers in your reflection so the next sprint can adapt.</li>
+        </ul>
       </Card>
 
       {/* Reflection */}
@@ -382,34 +399,47 @@ export default function SprintDetailsPage() {
           placeholder="Share your thoughts and learnings..."
           rows={6}
           className="resize-none"
+          disabled={isCompleted}
+          readOnly={isCompleted}
         />
+        {isCompleted ? (
+          <p className="text-xs text-muted-foreground mt-2">
+            Reflection is locked because this sprint has been completed.
+          </p>
+        ) : (
+          <p className="text-xs text-muted-foreground mt-2">
+            This reflection will be included when you complete the sprint.
+          </p>
+        )}
       </Card>
 
       {/* Complete Button */}
-      <div className="flex justify-end gap-3 pb-8">
-        <Link href={`/objectives/${objectiveId}`}>
-          <Button variant="outline">Cancel</Button>
-        </Link>
-        <Button
-          onClick={handleCompleteSprint}
-          disabled={isCompleting || completedCount < totalTasks || !reflection.trim()}
-          size="lg"
-        >
-          {isCompleting ? (
-            <div className="flex items-center">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-              {completionResult?.nextSprintGenerated
-                ? "Generating next sprint..."
-                : "Completing..."}
-            </div>
-          ) : (
-            <>
-              <CheckCircle className="h-5 w-5 mr-2" />
-              Complete Sprint
-            </>
-          )}
-        </Button>
-      </div>
+      {!isCompleted && (
+        <div className="flex justify-end gap-3 pb-8">
+          <Link href={`/objectives/${objectiveId}`}>
+            <Button variant="outline">Cancel</Button>
+          </Link>
+          <Button
+            onClick={handleCompleteSprint}
+            disabled={isCompleting || completedCount < totalTasks || !reflection.trim()}
+            size="lg"
+          >
+            {isCompleting ? (
+              <div className="flex items-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Completing...
+              </div>
+            ) : (
+              <>
+                <CheckCircle className="h-5 w-5 mr-2" />
+                Complete Sprint
+              </>
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
+
+export default SprintDetailsPage;

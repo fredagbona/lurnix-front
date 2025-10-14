@@ -3,6 +3,8 @@
 // ============================================================================
 // PROFILE QUIZ (Existing - for roadmap profile)
 // ============================================================================
+export type ProfileQuizQuestionType = "single" | "multi" | "rank" | "text" | "textarea";
+
 export interface QuizOption {
   id: string;
   label: string;
@@ -13,17 +15,24 @@ export interface QuizQuestion {
   id: string;
   key: string;
   title: string;
-  description: string;
-  type: "single" | "multi" | "rank" | "text" | "textarea";
+  titleKey?: string | null;
+  description?: string | null;
+  descriptionKey?: string | null;
+  type: ProfileQuizQuestionType;
   sortOrder: number;
-  options?: QuizOption[]; // Optional for text input questions
-  placeholder?: string; // For text input questions
+  weightCategory?: string | null;
+  sectionId?: string;
+  options?: QuizOption[];
+  placeholder?: string;
 }
 
 export interface QuizSection {
   id: string;
+  sortOrder: number;
   title: string;
-  description: string;
+  titleKey?: string | null;
+  description?: string | null;
+  descriptionKey?: string | null;
   questions: QuizQuestion[];
 }
 
@@ -32,7 +41,6 @@ export interface QuizResponse {
   data: {
     version: number;
     sections: QuizSection[];
-    questions: QuizQuestion[];
   };
   timestamp: string;
 }
@@ -44,11 +52,21 @@ export interface QuizSubmission {
   };
 }
 
+export interface ProfileAnswerValidationError {
+  missingAnswers?: string[];
+  message?: string;
+}
+
 export interface QuizSubmissionResponse {
   success: boolean;
   message: string;
-  data?: any;
+  data?: {
+    quizResultId: string;
+    learnerProfileSnapshotId: string;
+    profile: any;
+  };
   timestamp: string;
+  error?: ProfileAnswerValidationError;
 }
 
 // ============================================================================

@@ -8,6 +8,7 @@ import { sprintsService } from "@/services";
 import { objectivesKeys } from "./use-objectives";
 import type {
   CompleteSprintInput,
+  SprintEvidence,
   SprintResponse,
   CompleteSprintResponse,
 } from "@/models/learning";
@@ -37,6 +38,29 @@ export function useSprint(objectiveId: string | undefined, sprintId: string | un
     queryFn: () => sprintsService.getSprint(objectiveId!, sprintId!),
     enabled: !!objectiveId && !!sprintId,
     select: (data) => data.data,
+  });
+}
+
+/**
+ * Hook to submit sprint evidence (links + self-evaluation)
+ */
+export function useSubmitSprintEvidence() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      objectiveId,
+      sprintId,
+      data,
+    }: {
+      objectiveId: string;
+      sprintId: string;
+      data: SprintEvidence;
+    }) => sprintsService.submitSprintEvidence(objectiveId, sprintId, data),
+    onSuccess: (response, variables) => {
+      queryClient.setQueryData(sprintsKeys.detail(variables.sprintId), response.data);
+      queryClient.invalidateQueries({ queryKey: objectivesKeys.detail(variables.objectiveId) });
+    },
   });
 }
 
@@ -104,7 +128,7 @@ export function useStartSprint() {
       sprintsService.startSprint(objectiveId, sprintId),
     onSuccess: (response, variables) => {
       // Update sprint in cache
-      queryClient.setQueryData(sprintsKeys.detail(variables.sprintId), response);
+      queryClient.setQueryData(sprintsKeys.detail(variables.sprintId), response.data);
 
       // Invalidate related objective
       queryClient.invalidateQueries({
@@ -155,7 +179,7 @@ export function useUpdateSprintProgress() {
     }) => sprintsService.updateSprintProgress(objectiveId, sprintId, data),
     onSuccess: (response, variables) => {
       // Optimistically update sprint in cache
-      queryClient.setQueryData(sprintsKeys.detail(variables.sprintId), response);
+      queryClient.setQueryData(sprintsKeys.detail(variables.sprintId), response.data);
     },
   });
 }

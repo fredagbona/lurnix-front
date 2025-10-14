@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { SprintCard } from "@/components/learning/SprintCard";
 import { toast } from "sonner";
+import type { Sprint } from "@/models/learning";
 
 export default function ObjectiveDetailsPage() {
   const params = useParams();
@@ -54,6 +55,22 @@ export default function ObjectiveDetailsPage() {
         </Link>
       </div>
     );
+  }
+
+  const isSprintComplete = (sprint: Sprint | null | undefined) => {
+    if (!sprint) return false;
+    const status = typeof sprint.status === "string" ? sprint.status.toLowerCase() : "";
+    return Boolean(sprint.completedAt) || status === "reviewed" || status === "completed";
+  };
+
+  const currentSprint = isSprintComplete(objective.currentSprint) ? null : objective.currentSprint;
+
+  const pastSprints: Sprint[] = [...objective.pastSprints];
+  if (objective.currentSprint && isSprintComplete(objective.currentSprint)) {
+    const alreadyPresent = pastSprints.some((sprint) => sprint.id === objective.currentSprint?.id);
+    if (!alreadyPresent) {
+      pastSprints.unshift(objective.currentSprint);
+    }
   }
 
   const handleGenerateSprint = async () => {
@@ -200,17 +217,17 @@ export default function ObjectiveDetailsPage() {
       )}
 
       {/* Current Sprint */}
-      {objective.currentSprint && (
+      {currentSprint && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-semibold">Current Sprint</h2>
           </div>
-          <SprintCard sprint={objective.currentSprint} objectiveId={objectiveId} />
+          <SprintCard sprint={currentSprint} objectiveId={objectiveId} />
         </div>
       )}
 
       {/* Generate Next Sprint */}
-      {!objective.currentSprint && objective.status !== "completed" && (
+      {!currentSprint && objective.status !== "completed" && (
         <Card className="p-6 text-center">
           <h3 className="text-lg font-semibold mb-2">Ready for Your Next Sprint?</h3>
           <p className="text-sm text-muted-foreground mb-4">
@@ -294,11 +311,11 @@ export default function ObjectiveDetailsPage() {
       )}
 
       {/* Past Sprints */}
-      {objective.pastSprints.length > 0 && (
+      {pastSprints.length > 0 && (
         <div className="space-y-4">
           <h2 className="text-2xl font-semibold">Past Sprints</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {objective.pastSprints.map((sprint) => (
+            {pastSprints.map((sprint) => (
               <SprintCard key={sprint.id} sprint={sprint} objectiveId={objectiveId} />
             ))}
           </div>

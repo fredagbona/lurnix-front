@@ -71,7 +71,7 @@ export interface UpdateObjectiveInput {
 // SPRINT TYPES
 // ============================================================================
 
-export type SprintStatus = "not_started" | "planned" | "in_progress" | "completed";
+export type SprintStatus = "not_started" | "planned" | "in_progress" | "submitted" | "completed" | "reviewed";
 export type SprintDifficulty =
   | "beginner"
   | "easy"
@@ -84,18 +84,37 @@ export interface SprintProgress {
   completedTasks: number;
   completedDays: number;
   scoreEstimate: number | null;
+  totalTasks?: number | null;
+  completionPercentage?: number | null;
+}
+
+export interface SprintEvidenceArtifact {
+  artifactId?: string;
+  projectId?: string;
+  type: string;
+  title?: string;
+  url: string;
+  notes?: string;
+  status?: string;
+}
+
+export interface SprintSelfEvaluation {
+  confidence?: number | null;
+  reflection?: string | null;
 }
 
 export interface SprintEvidence {
-  artifacts: string[];
-  selfEvaluation: string | null;
+  artifacts: SprintEvidenceArtifact[];
+  selfEvaluation: SprintSelfEvaluation | null;
+  markSubmitted?: boolean;
+  submittedAt?: string | null;
 }
 
 export interface SprintReview {
   status: "not_requested" | "pending" | "completed";
   reviewedAt: string | null;
   score: number | null;
-  summary: string | null;
+  summary: string | Record<string, any> | null;
   projectSummaries: string[];
   metadata: Record<string, any> | null;
 }
@@ -148,6 +167,7 @@ export interface Sprint {
   progress: SprintProgress;
   startedAt: string | null;
   completedAt: string | null;
+  completionPercentage?: number | null;
   score: number | null;
   metadata: Record<string, any> | null;
   evidence: SprintEvidence;
