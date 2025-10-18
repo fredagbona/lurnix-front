@@ -34,9 +34,9 @@ export function useDashboardOnboarding(): DashboardOnboardingData {
   } = useObjectives();
 
   const learnerProfile = learnerProfileResponse?.data;
-  const objectives = objectivesData?.objectives ?? [];
 
   const steps = useMemo<DashboardOnboardingStep[]>(() => {
+    const objectives = objectivesData?.objectives ?? [];
     const hasProfile = Boolean(learnerProfile);
     const hasTechnical = Boolean(
       learnerProfile?.rawSnapshot?.technicalAssessment?.score ||
@@ -88,7 +88,7 @@ export function useDashboardOnboarding(): DashboardOnboardingData {
         required: true,
       },
     ];
-  }, [learnerProfile, objectives, t]);
+  }, [learnerProfile, objectivesData?.objectives, t]);
 
   const hasBlockingStep = steps.some((step) => step.required && !step.completed);
 

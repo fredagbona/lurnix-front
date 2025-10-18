@@ -71,7 +71,13 @@ export interface UpdateObjectiveInput {
 // SPRINT TYPES
 // ============================================================================
 
-export type SprintStatus = "not_started" | "planned" | "in_progress" | "submitted" | "completed" | "reviewed";
+export type SprintStatus =
+  | "not_started"
+  | "planned"
+  | "in_progress"
+  | "submitted"
+  | "completed"
+  | "reviewed";
 export type SprintDifficulty =
   | "beginner"
   | "easy"
