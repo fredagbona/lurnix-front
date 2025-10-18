@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useObjectives } from "@/hooks";
 import { ObjectiveCard } from "./ObjectiveCard";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ interface ObjectivesListProps {
 }
 
 export function ObjectivesList({ limit, onCreateClick }: ObjectivesListProps) {
+  const t = useTranslations("Objectives.list");
   const { data, isLoading, error } = useObjectives();
   const [statusFilter, setStatusFilter] = useState<ObjectiveStatus | "all">("all");
   const [sortBy, setSortBy] = useState<"recent" | "progress" | "priority">("recent");
@@ -31,7 +33,9 @@ export function ObjectivesList({ limit, onCreateClick }: ObjectivesListProps) {
   if (error) {
     return (
       <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-6 text-center">
-        <p className="text-sm text-destructive">Failed to load objectives. Please try again.</p>
+        <p className="text-sm text-destructive">
+          {t("error", { default: "Failed to load objectives. Please try again." })}
+        </p>
       </div>
     );
   }
@@ -40,14 +44,18 @@ export function ObjectivesList({ limit, onCreateClick }: ObjectivesListProps) {
     return (
       <div className="rounded-lg border border-dashed border-border bg-muted/30 p-12 text-center">
         <Target className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-        <h3 className="text-lg font-semibold mb-2">No Objectives Yet</h3>
+        <h3 className="text-lg font-semibold mb-2">
+          {t("empty.title", { default: "No Objectives Yet" })}
+        </h3>
         <p className="text-sm text-muted-foreground mb-6">
-          Create your first learning objective to get started on your journey.
+          {t("empty.description", {
+            default: "Create your first learning objective to get started on your journey.",
+          })}
         </p>
         {onCreateClick && (
           <Button onClick={onCreateClick}>
             <Plus className="h-4 w-4 mr-2" />
-            Create First Objective
+            {t("empty.createButton", { default: "Create First Objective" })}
           </Button>
         )}
       </div>
@@ -95,7 +103,7 @@ export function ObjectivesList({ limit, onCreateClick }: ObjectivesListProps) {
                 size="sm"
                 onClick={() => setStatusFilter("all")}
               >
-                All ({objectives.length})
+                {t("filters.all", { default: "All" })} ({objectives.length})
               </Button>
               <Button
                 variant={
@@ -106,7 +114,7 @@ export function ObjectivesList({ limit, onCreateClick }: ObjectivesListProps) {
                 size="sm"
                 onClick={() => setStatusFilter("in_progress")}
               >
-                Active (
+                {t("filters.active", { default: "Active" })} (
                 {
                   objectives.filter((o) => o.status === "in_progress" || o.status === "active")
                     .length
@@ -118,28 +126,32 @@ export function ObjectivesList({ limit, onCreateClick }: ObjectivesListProps) {
                 size="sm"
                 onClick={() => setStatusFilter("todo")}
               >
-                To Do ({objectives.filter((o) => o.status === "todo").length})
+                {t("filters.todo", { default: "To Do" })} (
+                {objectives.filter((o) => o.status === "todo").length})
               </Button>
               <Button
                 variant={statusFilter === "completed" ? "default" : "outline"}
                 size="sm"
                 onClick={() => setStatusFilter("completed")}
               >
-                Completed ({objectives.filter((o) => o.status === "completed").length})
+                {t("filters.completed", { default: "Completed" })} (
+                {objectives.filter((o) => o.status === "completed").length})
               </Button>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">Sort by:</span>
+            <span className="text-sm text-muted-foreground">
+              {t("sortBy", { default: "Sort by" })}:
+            </span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
               className="h-9 rounded-md border border-input bg-background px-3 text-sm"
             >
-              <option value="recent">Recent</option>
-              <option value="progress">Progress</option>
-              <option value="priority">Priority</option>
+              <option value="recent">{t("sort.recent", { default: "Recent" })}</option>
+              <option value="progress">{t("sort.progress", { default: "Progress" })}</option>
+              <option value="priority">{t("sort.priority", { default: "Priority" })}</option>
             </select>
           </div>
         </div>
@@ -148,7 +160,9 @@ export function ObjectivesList({ limit, onCreateClick }: ObjectivesListProps) {
       {/* Objectives Grid */}
       {displayObjectives.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border bg-muted/30 p-8 text-center">
-          <p className="text-sm text-muted-foreground">No objectives match the selected filter.</p>
+          <p className="text-sm text-muted-foreground">
+            {t("noMatch", { default: "No objectives match the selected filter." })}
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -162,7 +176,10 @@ export function ObjectivesList({ limit, onCreateClick }: ObjectivesListProps) {
       {limit && sortedObjectives.length > limit && (
         <div className="text-center">
           <Button variant="outline" asChild>
-            <a href="/objectives">View All {sortedObjectives.length} Objectives</a>
+            <a href="/objectives">
+              {t("viewAll", { default: "View All" })} {sortedObjectives.length}{" "}
+              {t("objectives", { default: "Objectives" })}
+            </a>
           </Button>
         </div>
       )}

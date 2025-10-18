@@ -28,6 +28,7 @@ import { LogOut, User, Settings } from "lucide-react";
 
 export default function Header() {
   const t = useTranslations("Dashboard.nav");
+  const tHeader = useTranslations("Header");
   const router = useRouter();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -105,11 +106,13 @@ export default function Header() {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>
+                {tHeader("myAccount", { default: "My Account" })}
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => router.push("/settings")}>
                 <Settings className="h-4 w-4 mr-2" />
-                Settings
+                {tHeader("settings", { default: "Settings" })}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -117,7 +120,7 @@ export default function Header() {
                 className="text-destructive focus:text-destructive"
               >
                 <LogOut className="h-4 w-4 mr-2" />
-                Logout
+                {tHeader("logout", { default: "Logout" })}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -128,8 +131,10 @@ export default function Header() {
       <Dialog open={showLogoutModal} onOpenChange={setShowLogoutModal}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Déconnexion</DialogTitle>
-            <DialogDescription>Êtes-vous sûr de vouloir vous déconnecter ?</DialogDescription>
+            <DialogTitle>{tHeader("logoutDialog.title", { default: "Logout" })}</DialogTitle>
+            <DialogDescription>
+              {tHeader("logoutDialog.description", { default: "Are you sure you want to logout?" })}
+            </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button
@@ -137,7 +142,7 @@ export default function Header() {
               onClick={() => setShowLogoutModal(false)}
               disabled={logoutMutation.isPending}
             >
-              Annuler
+              {tHeader("logoutDialog.cancel", { default: "Cancel" })}
             </Button>
             <Button
               variant="destructive"
@@ -147,10 +152,10 @@ export default function Header() {
               {logoutMutation.isPending ? (
                 <div className="flex items-center">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Déconnexion...
+                  {tHeader("logoutDialog.loggingOut", { default: "Logging out..." })}
                 </div>
               ) : (
-                "Se déconnecter"
+                tHeader("logoutDialog.confirm", { default: "Logout" })
               )}
             </Button>
           </DialogFooter>

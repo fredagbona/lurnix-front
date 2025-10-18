@@ -2,7 +2,7 @@
   "meta": {
     "login": {
       "title": "Se connecter à Lurnix",
-      "description": "Accédez à votre compte pour continuer"
+      "description": "Accède à ton compte pour continuer"
     }
   },
   "Subscription": {
@@ -25,6 +25,18 @@
     "description": "Créez et vendez vos produits numériques en toute simplicité.",
     "cta_button": "Rejoindre gratuitement"
   },
+  "Header": {
+    "myAccount": "Mon compte",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "logoutDialog": {
+      "title": "Déconnexion",
+      "description": "Es-tu sûr de vouloir te déconnecter ?",
+      "cancel": "Annuler",
+      "confirm": "Se déconnecter",
+      "loggingOut": "Déconnexion..."
+    }
+  },
   "Dashboard": {
     "nav": {
       "dashboard": "Tableau de bord",
@@ -38,6 +50,70 @@
       "settings": "Paramètres",
       "subscription": "Abonnement",
       "plans": "Plans"
+    },
+    "welcome": {
+      "onboarding": {
+        "title": "Bienvenue à bord, {name} !",
+        "subtitle": "Nous sommes ravis de t'accueillir. Commençons ton parcours d'apprentissage personnalisé."
+      },
+      "active": {
+        "title": "👋 Bonjour, {name} !",
+        "subtitle": "✨ Prêt à apprendre quelque chose de nouveau aujourd'hui ?"
+      }
+    },
+    "onboarding": {
+      "title": "Lancez votre parcours d'apprentissage",
+      "description": "Complète chaque étape pour débloquer ta feuille de route personnalisée.",
+      "continue": "Continuer",
+      "completed": "Terminé",
+      "steps": {
+        "profile": {
+          "title": "Complétez le test de profil d'apprenant",
+          "description": "Passe l'évaluation alimentée par l'IA pour débloquer des informations et recommandations personnalisées.",
+          "begin": "Commencer l'évaluation",
+          "retake": "Refaire le test"
+        },
+        "technical": {
+          "title": "Passez l'évaluation technique",
+          "description": "Partage ton expérience technique afin que nous puissions calibrer ta carte de compétences.",
+          "begin": "Commencer l'évaluation technique",
+          "retake": "Refaire le test"
+        },
+        "objectives": {
+          "title": "Créez vos objectifs",
+          "description": "Définis les résultats que tu souhaites afin que nous puissions recommander la bonne feuille de route.",
+          "create": "Créer des objectifs",
+          "view": "Voir les objectifs"
+        }
+      }
+    },
+    "profile": {
+      "title": "Aperçu du profil IA",
+      "profileType": "Type de profil",
+      "level": "Niveau",
+      "style": "Style",
+      "dailyFocus": "Focus quotidien",
+      "learningPreferences": "Préférences d'apprentissage",
+      "whatDrivesYou": "Ce qui te motive"
+    },
+    "availability": {
+      "title": "Disponibilité et rythme",
+      "timeCommitment": "Engagement temporel",
+      "weeklyHours": "Heures hebdomadaires",
+      "weeklyRhythm": "Rythme hebdomadaire",
+      "energyPeak": "Pic d'énergie",
+      "contextSwitching": "Changement de contexte",
+      "noteReview": "Notes et révision",
+      "supportChannels": "Canaux de support préférés"
+    },
+    "insights": {
+      "title": "Informations du profil IA",
+      "strengths": "Forces",
+      "gaps": "Lacunes",
+      "passions": "Passions",
+      "blockers": "Obstacles",
+      "preferredStack": "Stack préféré",
+      "topMotivators": "Principaux motivateurs"
     },
     "page": {
       "enrollment": "Inscriptions",
@@ -58,6 +134,121 @@
       }
     }
   },
+  "Objectives": {
+    "page": {
+      "title": "Objectifs d'apprentissage",
+      "description": "Gère tes objectifs d'apprentissage et suis tes progrès",
+      "newObjective": "Nouvel objectif"
+    },
+    "modal": {
+      "title": "Créer un nouvel objectif d'apprentissage",
+      "description": "Définis ton objectif d'apprentissage et nous t'aiderons à créer une feuille de route personnalisée.",
+      "fields": {
+        "title": {
+          "label": "Titre",
+          "placeholder": "ex: Maîtriser le développement backend Java"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Décris ce que tu veux apprendre et pourquoi..."
+        },
+        "priority": {
+          "label": "Niveau de priorité",
+          "low": "Faible",
+          "medium": "Moyen",
+          "high": "Élevé",
+          "urgent": "Urgent",
+          "critical": "Critique",
+          "hint": "Les objectifs de priorité plus élevée seront recommandés en premier dans ta feuille de route d'apprentissage"
+        },
+        "successCriteria": {
+          "label": "Critères de réussite",
+          "placeholder": "ex: Créer une API REST"
+        },
+        "requiredSkills": {
+          "label": "Compétences requises",
+          "placeholder": "ex: Java, Spring Boot"
+        }
+      },
+      "buttons": {
+        "cancel": "Annuler",
+        "create": "Créer l'objectif",
+        "creating": "Création..."
+      }
+    },
+    "card": {
+      "priority": "Priorité",
+      "progress": "Progrès",
+      "sprints": "sprints",
+      "daysCompleted": "jours terminés",
+      "currentSprint": "Sprint actuel",
+      "day": "Jour",
+      "estimated": "Est.",
+      "days": "jours",
+      "weeks": "semaines",
+      "viewDetails": "Voir les détails"
+    },
+    "list": {
+      "error": "Échec du chargement des objectifs. Veuillez réessayer.",
+      "empty": {
+        "title": "Aucun objectif pour le moment",
+        "description": "Crée ton premier objectif d'apprentissage pour commencer ton parcours.",
+        "createButton": "Créer le premier objectif"
+      },
+      "filters": {
+        "all": "Tous",
+        "active": "Actifs",
+        "todo": "À faire",
+        "completed": "Terminés"
+      },
+      "sortBy": "Trier par",
+      "sort": {
+        "recent": "Récents",
+        "progress": "Progrès",
+        "priority": "Priorité"
+      },
+      "noMatch": "Aucun objectif ne correspond au filtre sélectionné.",
+      "viewAll": "Voir tous les",
+      "objectives": "Objectifs"
+    }
+  },
+  "Roadmap": {
+    "title": "Feuille de route d'apprentissage",
+    "description": "Suis ton parcours d'apprentissage et tes progrès à travers tous les objectifs",
+    "error": "Échec du chargement de la feuille de route. Veuillez réessayer.",
+    "stats": {
+      "totalObjectives": "Total des objectifs",
+      "overallProgress": "Progrès global",
+      "sprints": "Sprints",
+      "daysCompleted": "Jours terminés"
+    },
+    "empty": {
+      "title": "Aucun objectif d'apprentissage pour le moment",
+      "description": "Crée ton premier objectif d'apprentissage pour commencer à construire ta feuille de route",
+      "createButton": "Créer un objectif"
+    },
+    "sections": {
+      "active": "Objectifs actifs",
+      "todo": "À faire",
+      "completed": "Terminés"
+    },
+    "status": {
+      "active": "Actif",
+      "todo": "À faire",
+      "completed": "Terminé"
+    },
+    "card": {
+      "progress": "Progrès",
+      "sprints": "Sprints",
+      "days": "Jours",
+      "currentSprint": "Sprint actuel",
+      "day": "Jour",
+      "daysUnit": "jours",
+      "sprintsUnit": "sprints",
+      "viewDetails": "Voir les détails",
+      "startLearning": "Commencer l'apprentissage"
+    }
+  },
   "Features": {
     "title": "Demandes de fonctionnalités",
     "subtitle": "Idées pour améliorer Lurnix",
@@ -68,6 +259,29 @@
     "filter": "Filtrer",
     "previous": "Précédent",
     "next": "Suivant",
+    "selectCategory": "Sélectionner une catégorie",
+    "allCategories": "Toutes les catégories",
+    "loading": "Chargement des fonctionnalités...",
+    "noFeatures": "Aucune fonctionnalité trouvée.",
+    "noFeaturesInCategory": "Aucune fonctionnalité trouvée dans la catégorie {category}.",
+    "voteError": "Échec du vote pour cette fonctionnalité",
+    "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+    "submitSuccess": "Demande de fonctionnalité soumise avec succès !",
+    "submitError": "Une erreur s'est produite lors de la soumission de la fonctionnalité",
+    "form": {
+      "title": "Titre",
+      "titlePlaceholder": "Entrez le titre de la fonctionnalité",
+      "description": "Description",
+      "descriptionPlaceholder": "Décris ton idée de fonctionnalité",
+      "category": "Catégorie",
+      "selectCategory": "Sélectionner une catégorie",
+      "tags": "Tags",
+      "tagPlaceholder": "Entrer un tag",
+      "addTag": "Ajouter",
+      "cancel": "Annuler",
+      "submit": "Soumettre la fonctionnalité",
+      "submitting": "Soumission..."
+    },
     "categories": {
       "Roadmaps": "Feuilles de route",
       "AI_Mentor": "Mentor IA",
@@ -128,17 +342,17 @@
       "password_placeholder": "Mot de passe",
       "confirm_password_placeholder": "Confirmer le mot de passe",
       "create_account_button": "Créer un compte",
-      "terms_text": "En créant un compte, vous acceptez nos Conditions d'utilisation et notre Politique de confidentialité",
-      "terms_text_prefix": "En créant un compte, vous acceptez",
+      "terms_text": "En créant un compte, tu acceptes nos Conditions d'utilisation et notre Politique de confidentialité",
+      "terms_text_prefix": "En créant un compte, tu acceptes",
       "terms_link": "les Conditions d'utilisation",
       "terms_text_middle": "et",
       "privacy_link": "la Politique de confidentialité",
       "have_account_cta": "Vous avez déjà un compte ?",
       "have_account_link": "Se connecter",
       "success_title": "Compte créé !",
-      "success_message": "Nous avons envoyé un lien de vérification à votre adresse email. Veuillez vérifier votre email et cliquer sur le lien pour vérifier votre compte avant de vous connecter.",
+      "success_message": "Nous avons envoyé un lien de vérification à ton adresse email. Vérifie ton email et clique sur le lien pour vérifier ton compte avant de te connecter.",
       "go_to_login": "Aller à la connexion",
-      "didnt_receive_email": "Vous n'avez pas reçu l'email ? Vérifiez votre dossier spam ou",
+      "didnt_receive_email": "Tu n'as pas reçu l'email ? Vérifie ton dossier spam ou",
       "try_again": "réessayez",
       "oauth": {
         "continue_with_google": "Continuer avec Google",
@@ -147,19 +361,19 @@
       }
     },
     "verifyEmail": {
-      "title": "Vérifiez votre email",
+      "title": "Vérifie ton email",
       "loading": "Vérification en cours...",
       "success": "Email vérifié !",
       "error": "Erreur de vérification",
-      "success_message": "Votre adresse email a été vérifiée avec succès. Vous pouvez maintenant vous connecter.",
-      "error_message": "Une erreur est survenue lors de la vérification de votre email.",
+      "success_message": "Ton adresse email a été vérifiée avec succès. Tu peux maintenant te connecter.",
+      "error_message": "Une erreur est survenue lors de la vérification de ton email.",
       "retry_button": "Réessayer",
       "sign_in_button": "Se connecter",
       "back_to_login": "Retour à la connexion"
     },
     "resendVerifyEmail": {
       "title": "Renvoyer l'email de vérification",
-      "subtitle": "Entrez votre adresse email pour recevoir un nouveau lien.",
+      "subtitle": "Entre ton adresse email pour recevoir un nouveau lien.",
       "email": "Email",
       "submit": "Renvoyer",
       "loading": "Envoi...",
@@ -168,8 +382,8 @@
     },
     "forgotPassword": {
       "title": "Mot de passe oublié",
-      "form_title": "Réinitialisez votre mot de passe",
-      "subtitle": "Entrez votre email pour recevoir un lien de réinitialisation.",
+      "form_title": "Réinitialise ton mot de passe",
+      "subtitle": "Entre ton email pour recevoir un lien de réinitialisation.",
       "email": "Email",
       "email_placeholder": "Email",
       "submit": "Envoyer le lien de réinitialisation",
@@ -182,16 +396,16 @@
       "try_different_email": "Essayer un autre email"
     },
     "resetPassword": {
-      "title": "Réinitialisez votre mot de passe",
-      "subtitle": "Entrez votre nouveau mot de passe ci-dessous",
+      "title": "Réinitialise ton mot de passe",
+      "subtitle": "Entre ton nouveau mot de passe ci-dessous",
       "new_password_label": "Nouveau mot de passe",
-      "new_password_placeholder": "Entrez votre nouveau mot de passe",
+      "new_password_placeholder": "Entre ton nouveau mot de passe",
       "confirm_password_label": "Confirmer le nouveau mot de passe",
-      "confirm_password_placeholder": "Confirmez votre nouveau mot de passe",
+      "confirm_password_placeholder": "Confirme ton nouveau mot de passe",
       "submit": "Mettre à jour le mot de passe",
       "loading": "Mise à jour du mot de passe...",
       "success_title": "Mot de passe réinitialisé avec succès",
-      "success_message": "Votre mot de passe a été mis à jour avec succès. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.",
+      "success_message": "Ton mot de passe a été mis à jour avec succès. Tu peux maintenant te connecter avec ton nouveau mot de passe.",
       "sign_in_button": "Se connecter",
       "back_to_sign_in": "Retour à la connexion",
       "password_mismatch": "Les mots de passe ne correspondent pas.",
@@ -210,7 +424,7 @@
     },
     "linked_accounts": {
       "title": "Comptes liés",
-      "description": "Gérez vos fournisseurs d'authentification connectés",
+      "description": "Gère tes fournisseurs d'authentification connectés",
       "loading": "Chargement des comptes liés...",
       "providers": {
         "email": "Email & Mot de passe",
@@ -224,8 +438,8 @@
       "connect": "Connecter",
       "unlink": "Dissocier",
       "unlink_confirm_title": "Dissocier le fournisseur",
-      "unlink_confirm_message": "Êtes-vous sûr de vouloir dissocier {provider} ?",
-      "password_required": "Entrez votre mot de passe pour dissocier ce fournisseur",
+      "unlink_confirm_message": "Es-tu sûr de vouloir dissocier {provider} ?",
+      "password_required": "Entre ton mot de passe pour dissocier ce fournisseur",
       "cancel": "Annuler",
       "confirm": "Dissocier",
       "unlinking": "Dissociation...",
@@ -237,7 +451,7 @@
       "username": "Nom d'utilisateur",
       "fullname": "Nom complet",
       "email": "Email",
-      "submit": "Mettre à jour le profil",
+      "submit": "Mettre à jour mon profil",
       "loading": "Mise à jour...",
       "success": "Profil mis à jour avec succès !",
       "error": "Échec de la mise à jour du profil. Veuillez réessayer."
@@ -253,7 +467,7 @@
     },
     "language": {
       "title": "Changer la langue",
-      "select": "Sélectionnez votre langue",
+      "select": "Sélectionne ta langue",
       "submit": "Mettre à jour la langue",
       "loading": "Mise à jour...",
       "success": "Langue mise à jour avec succès !",
@@ -261,7 +475,7 @@
     },
     "account": {
       "title": "Supprimer le compte",
-      "warning": "Cette action ne peut pas être annulée. Toutes vos données seront définitivement supprimées.",
+      "warning": "Cette action ne peut pas être annulée. Toutes tes données seront définitivement supprimées.",
       "password": "Confirmer le mot de passe",
       "submit": "Supprimer le compte",
       "loading": "Suppression...",
@@ -271,7 +485,7 @@
   },
   "ProfileTest": {
     "title": "Test de profil",
-    "subtitle": "Aidez-nous à comprendre votre style d'apprentissage et vos préférences",
+    "subtitle": "Aide-nous à comprendre ton style d'apprentissage et tes préférences",
     "section_progress": "Section {current} sur {total}",
     "question_progress": "Question {current} sur {total}",
     "previous": "Précédent",
@@ -282,5 +496,171 @@
     "error": "Échec du chargement des questions du quiz",
     "submit_error": "Échec de la soumission du quiz. Veuillez réessayer.",
     "try_again": "Réessayer"
+  },
+  "TechnicalAssessment": {
+    "title": "Évaluation technique",
+    "loading": "Chargement de l'évaluation technique...",
+    "loadErrorTitle": "Évaluation indisponible",
+    "loadError": "Nous n'avons pas pu charger ton évaluation.",
+    "reload": "Réessayer",
+    "required": "Requis",
+    "requiredError": "Cette question est requise.",
+    "missingRequired": "Réponds à toutes les questions requises.",
+    "numericPlaceholder": "Entre un nombre",
+    "textPlaceholder": "Tape ta réponse",
+    "submit": "Soumettre l'évaluation",
+    "submitting": "Soumission...",
+    "submitted": "Évaluation technique soumise",
+    "submitError": "Échec de la soumission de l'évaluation. Réessaye."
+  },
+  "ProfileTestSuccess": {
+    "title": "🎉 Félicitations !",
+    "subtitle": "Tu as terminé l'étape 1 de ton intégration",
+    "achievement": "Test de profil terminé",
+    "message": "Excellent travail ! Tu as réussi ton évaluation de profil d'apprenant. Nous comprenons maintenant mieux ton style d'apprentissage et tes préférences.",
+    "nextStep": "Prêt pour la prochaine étape ?",
+    "continueButton": "Continuer vers l'évaluation technique",
+    "dashboardButton": "Retour au tableau de bord",
+    "step1": "Test de profil",
+    "step2": "Évaluation technique",
+    "step3": "Définir les objectifs"
+  },
+  "SprintCard": {
+    "difficulty": {
+      "beginner": "Débutant",
+      "easy": "Facile",
+      "intermediate": "Intermédiaire",
+      "medium": "Moyen",
+      "advanced": "Avancé",
+      "hard": "Difficile"
+    },
+    "status": {
+      "notStarted": "Pas commencé",
+      "planned": "Planifié",
+      "inProgress": "En cours",
+      "completed": "Terminé"
+    },
+    "day": "Jour {number}",
+    "linksAdded": "{count, plural, one {# lien ajouté} other {# liens ajoutés}}",
+    "noLinks": "Aucun lien pour le moment",
+    "completedOn": "Terminé le {date}",
+    "completed": "Terminé",
+    "progress": "Progrès : {value}%",
+    "nextSteps": {
+      "title": "Prochaines étapes",
+      "share": "Partage ton projet ou repo avec la communauté pour obtenir des retours.",
+      "reflect": "Note les obstacles et leçons dans ta réflexion avant de commencer le prochain sprint."
+    },
+    "duration": "{days, plural, one {# jour} other {# jours}} • {hours}h",
+    "moreSkills": "+{count} de plus",
+    "readinessQuiz": "Quiz de préparation requis",
+    "validationQuiz": "Quiz de validation disponible",
+    "progressLabel": "Progrès",
+    "tasksCompleted": "{completed} / {total} tâches",
+    "reviewSprint": "Sprint de révision",
+    "reviewSprintDesc": "Renforce les compétences apprises précédemment",
+    "takeQuizFirst": "Passe d'abord le quiz",
+    "startSprint": "Commencer le sprint",
+    "continueSprint": "Continuer le sprint",
+    "viewDetails": "Voir les détails"
+  },
+  "SprintDetails": {
+    "loadError": "Échec du chargement du sprint. Réessaye.",
+    "backButton": "Retour à l'objectif",
+    "completeAllTasks": "Termine toutes les tâches avant de finir le sprint",
+    "addReflection": "Ajoute une réflexion avant de terminer le sprint",
+    "difficulty": {
+      "beginner": "Débutant",
+      "easy": "Facile",
+      "intermediate": "Intermédiaire",
+      "medium": "Moyen",
+      "advanced": "Avancé",
+      "hard": "Difficile"
+    },
+    "days": "{count, plural, one {# jour} other {# jours}}",
+    "hoursEstimated": "{hours}h estimées",
+    "completedOn": "Terminé le {date} à {time}",
+    "personalizedTitle": "Personnalisé pour toi",
+    "progress": "Progrès",
+    "tasksCompleted": "{completed} sur {total} tâches terminées",
+    "tasksTitle": "Tâches ({completed}/{total})",
+    "sprintCompletedReadonly": "Ce sprint est terminé. La progression des tâches est maintenant en lecture seule.",
+    "acceptanceCriteria": "Critères d'acceptation",
+    "resources": "Ressources",
+    "projects": "Projets",
+    "requirements": "Exigences",
+    "deliverables": "Livrables",
+    "gradingRubric": "Grille d'évaluation",
+    "passThreshold": "Seuil de réussite : {threshold}%",
+    "tips": {
+      "title": "Conseils",
+      "shareProgress": "Partage ta progression sur Discord ou dans la communauté pour célébrer tes victoires.",
+      "postDemos": "Publie des démos ou des dépôts quand tu es prêt pour des retours.",
+      "logBlockers": "Note les obstacles dans ta réflexion pour que le prochain sprint puisse s'adapter."
+    },
+    "reflection": {
+      "title": "Réflexion (Requis)",
+      "prompt": "Qu'as-tu appris ? Quels défis as-tu rencontrés ? Comment vas-tu appliquer ces connaissances ?",
+      "placeholder": "Partage tes pensées et apprentissages...",
+      "locked": "La réflexion est verrouillée car ce sprint a été terminé.",
+      "willBeIncluded": "Cette réflexion sera incluse lorsque tu termineras le sprint."
+    },
+    "cancelButton": "Annuler",
+    "completing": "Finalisation...",
+    "completeSprint": "Terminer le sprint"
+  },
+  "CompleteObjectiveDialog": {
+    "title": "Marquer l'objectif comme terminé",
+    "description": "Tu es sur le point de marquer \"{objective}\" comme terminé. Cette action fermera l'objectif et enregistrera ta réussite.",
+    "notesLabel": "Notes de complétion (Optionnel)",
+    "notesPlaceholder": "Partage ce que tu as appris, les défis que tu as surmontés, ou comment tu vas appliquer ces connaissances...",
+    "notesHint": "Ces notes t'aideront à réfléchir sur ton parcours d'apprentissage.",
+    "whatHappens": "Que se passe-t-il lorsque tu termines cet objectif ?",
+    "effect1": "Le statut de l'objectif sera défini sur \"Terminé\"",
+    "effect2": "Ta progression et tes réalisations seront enregistrées",
+    "effect3": "Tu ne pourras plus générer de nouveaux sprints pour cet objectif",
+    "cancelButton": "Annuler",
+    "completing": "Finalisation...",
+    "confirmButton": "Marquer comme terminé"
+  },
+  "ObjectiveDetails": {
+    "loadError": "Échec du chargement de l'objectif. Réessaye.",
+    "backButton": "Retour aux objectifs",
+    "markAsComplete": "Marquer comme terminé",
+    "completeSuccess": "Objectif terminé !",
+    "completeSuccessDesc": "Félicitations pour avoir terminé cet objectif d'apprentissage !",
+    "completeFailed": "Échec de la finalisation de l'objectif",
+    "generateError": "Impossible de générer le sprint",
+    "limitReached": "Limite de génération de sprint atteinte",
+    "generateSuccess": "Sprint généré avec succès !",
+    "sprintReady": "Ton prochain sprint d'apprentissage est prêt.",
+    "generateFailed": "Échec de la génération du sprint",
+    "tryAgain": "Réessaye.",
+    "status": {
+      "todo": "À faire",
+      "inProgress": "En cours",
+      "active": "Actif",
+      "completed": "Terminé"
+    },
+    "stats": {
+      "progress": "Progrès",
+      "sprints": "Sprints",
+      "days": "Jours",
+      "currentDay": "Jour actuel"
+    },
+    "overallProgress": "Progrès global",
+    "sprintsCompleted": "{done} sur {total} sprints terminés",
+    "successCriteria": "Critères de réussite",
+    "requiredSkills": "Compétences requises",
+    "currentSprint": "Sprint actuel",
+    "readyForNext": "Prêt pour ton prochain sprint ?",
+    "generateDescription": "Génère ton prochain sprint d'apprentissage pour continuer ta progression",
+    "objectiveCompleted": "Objectif terminé !",
+    "readyToGenerate": "Prêt à générer le jour {day}",
+    "generating": "Génération...",
+    "generateButton": "Générer le prochain sprint",
+    "completedTitle": "Objectif terminé !",
+    "completedMessage": "Félicitations ! Tu as réussi cet objectif d'apprentissage.",
+    "pastSprints": "Sprints passés"
   }
 }

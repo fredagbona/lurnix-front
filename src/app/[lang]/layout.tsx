@@ -1,15 +1,17 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { locales } from "@/i18n/routing";
 import type { ReactNode } from "react";
+import { locales } from "@/i18n/routing";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { LanguageProvider } from "@/components/providers/language-provider";
+import type { SupportedLocale } from "@/components/providers/language-provider";
 import { Toaster } from "sonner";
 
-function Providers({ children }: { children: ReactNode }) {
+function Providers({ children, locale }: { children: ReactNode; locale: SupportedLocale }) {
   return (
     <QueryProvider>
-      {children}
+      <LanguageProvider initialLocale={locale}>{children}</LanguageProvider>
       <Toaster position="top-right" />
     </QueryProvider>
   );
@@ -27,10 +29,11 @@ export default async function LocaleLayout({
   }
 
   const messages = await getMessages();
+  const supportedLocale = lang as SupportedLocale;
 
   return (
     <NextIntlClientProvider locale={lang} messages={messages} timeZone="UTC">
-      <Providers>{children}</Providers>
+      <Providers locale={supportedLocale}>{children}</Providers>
     </NextIntlClientProvider>
   );
 }

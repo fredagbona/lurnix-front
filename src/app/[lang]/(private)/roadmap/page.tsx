@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useObjectives } from "@/hooks";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +10,7 @@ import { Target, TrendingUp, Calendar, ArrowRight, Zap } from "lucide-react";
 import Link from "next/link";
 
 export default function RoadmapPage() {
+  const t = useTranslations("Roadmap");
   const { data, isLoading, error } = useObjectives();
   const objectives = data?.objectives || [];
 
@@ -23,7 +25,9 @@ export default function RoadmapPage() {
   if (error) {
     return (
       <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-6 text-center">
-        <p className="text-sm text-destructive">Failed to load roadmap. Please try again.</p>
+        <p className="text-sm text-destructive">
+          {t("error", { default: "Failed to load roadmap. Please try again." })}
+        </p>
       </div>
     );
   }
@@ -43,55 +47,67 @@ export default function RoadmapPage() {
       : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 px-3 sm:px-0">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Learning Roadmap</h1>
-        <p className="text-muted-foreground mt-2">
-          Track your learning journey and progress across all objectives
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+          {t("title", { default: "Learning Roadmap" })}
+        </h1>
+        <p className="text-sm sm:text-base text-muted-foreground mt-1 sm:mt-2">
+          {t("description", {
+            default: "Track your learning journey and progress across all objectives",
+          })}
         </p>
       </div>
 
       {/* Overview Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="p-4">
-          <div className="flex items-center gap-3">
-            <Target className="h-5 w-5 text-primary" />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+        <Card className="p-3 sm:p-4">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Target className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
             <div>
-              <p className="text-sm text-muted-foreground">Total Objectives</p>
-              <p className="text-2xl font-bold">{objectives.length}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                {t("stats.totalObjectives", { default: "Total Objectives" })}
+              </p>
+              <p className="text-lg sm:text-2xl font-bold">{objectives.length}</p>
             </div>
           </div>
         </Card>
 
-        <Card className="p-4">
-          <div className="flex items-center gap-3">
-            <TrendingUp className="h-5 w-5 text-primary" />
+        <Card className="p-3 sm:p-4">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
             <div>
-              <p className="text-sm text-muted-foreground">Overall Progress</p>
-              <p className="text-2xl font-bold">{Math.round(overallProgress)}%</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                {t("stats.overallProgress", { default: "Overall Progress" })}
+              </p>
+              <p className="text-lg sm:text-2xl font-bold">{Math.round(overallProgress)}%</p>
             </div>
           </div>
         </Card>
 
-        <Card className="p-4">
-          <div className="flex items-center gap-3">
-            <Zap className="h-5 w-5 text-primary" />
+        <Card className="p-3 sm:p-4">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
             <div>
-              <p className="text-sm text-muted-foreground">Sprints</p>
-              <p className="text-2xl font-bold">
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                {t("stats.sprints", { default: "Sprints" })}
+              </p>
+              <p className="text-lg sm:text-2xl font-bold">
                 {completedSprints} / {totalSprints}
               </p>
             </div>
           </div>
         </Card>
 
-        <Card className="p-4">
-          <div className="flex items-center gap-3">
-            <Calendar className="h-5 w-5 text-primary" />
+        <Card className="p-3 sm:p-4">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
             <div>
-              <p className="text-sm text-muted-foreground">Days Completed</p>
-              <p className="text-2xl font-bold">{totalDays}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                {t("stats.daysCompleted", { default: "Days Completed" })}
+              </p>
+              <p className="text-lg sm:text-2xl font-bold">{totalDays}</p>
             </div>
           </div>
         </Card>
@@ -99,16 +115,20 @@ export default function RoadmapPage() {
 
       {/* Empty State */}
       {objectives.length === 0 && (
-        <Card className="p-12 text-center">
-          <Target className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-          <h3 className="text-lg font-semibold mb-2">No Learning Objectives Yet</h3>
+        <Card className="p-6 sm:p-12 text-center">
+          <Target className="h-10 w-10 sm:h-12 sm:w-12 mx-auto text-muted-foreground mb-4" />
+          <h3 className="text-base sm:text-lg font-semibold mb-2">
+            {t("empty.title", { default: "No Learning Objectives Yet" })}
+          </h3>
           <p className="text-sm text-muted-foreground mb-6">
-            Create your first learning objective to start building your roadmap
+            {t("empty.description", {
+              default: "Create your first learning objective to start building your roadmap",
+            })}
           </p>
           <Link href="/objectives">
-            <Button>
+            <Button className="w-full sm:w-auto">
               <Target className="h-4 w-4 mr-2" />
-              Create Objective
+              {t("empty.createButton", { default: "Create Objective" })}
             </Button>
           </Link>
         </Card>
@@ -116,16 +136,20 @@ export default function RoadmapPage() {
 
       {/* Active Objectives */}
       {activeObjectives.length > 0 && (
-        <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">Active Objectives</h2>
-          <div className="grid grid-cols-1 gap-4">
+        <div className="space-y-3 sm:space-y-4">
+          <h2 className="text-xl sm:text-2xl font-semibold">
+            {t("sections.active", { default: "Active Objectives" })}
+          </h2>
+          <div className="grid grid-cols-1 gap-3 sm:gap-4">
             {activeObjectives.map((objective) => (
-              <Card key={objective.id} className="p-6 hover:shadow-lg transition-shadow">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1 space-y-3">
-                    <div className="flex items-center gap-3">
-                      <h3 className="text-xl font-semibold">{objective.title}</h3>
-                      <Badge className="bg-blue-100 text-blue-700">Active</Badge>
+              <Card key={objective.id} className="p-4 sm:p-6 hover:shadow-lg transition-shadow">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                  <div className="flex-1 space-y-2 sm:space-y-3">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                      <h3 className="text-lg sm:text-xl font-semibold">{objective.title}</h3>
+                      <Badge className="bg-blue-100 text-blue-700">
+                        {t("status.active", { default: "Active" })}
+                      </Badge>
                       <span className="text-sm text-muted-foreground">
                         {"⭐".repeat(objective.priority)}
                       </span>
@@ -137,19 +161,25 @@ export default function RoadmapPage() {
                       </p>
                     )}
 
-                    <div className="grid grid-cols-3 gap-4 text-sm">
+                    <div className="grid grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm">
                       <div>
-                        <p className="text-muted-foreground">Progress</p>
+                        <p className="text-muted-foreground">
+                          {t("card.progress", { default: "Progress" })}
+                        </p>
                         <p className="font-medium">{Math.round(objective.progressPercentage)}%</p>
                       </div>
                       <div>
-                        <p className="text-muted-foreground">Sprints</p>
+                        <p className="text-muted-foreground">
+                          {t("card.sprints", { default: "Sprints" })}
+                        </p>
                         <p className="font-medium">
                           {objective.progress.sprintsDone} / {objective.totalSprints}
                         </p>
                       </div>
                       <div>
-                        <p className="text-muted-foreground">Days</p>
+                        <p className="text-muted-foreground">
+                          {t("card.days", { default: "Days" })}
+                        </p>
                         <p className="font-medium">{objective.completedDays}</p>
                       </div>
                     </div>
@@ -169,16 +199,18 @@ export default function RoadmapPage() {
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Zap className="h-4 w-4" />
                         <span>
-                          Current Sprint: Day {objective.currentSprint.dayNumber} •{" "}
-                          {objective.currentSprint.lengthDays} days
+                          {t("card.currentSprint", { default: "Current Sprint" })}:{" "}
+                          {t("card.day", { default: "Day" })} {objective.currentSprint.dayNumber} •{" "}
+                          {objective.currentSprint.lengthDays}{" "}
+                          {t("card.daysUnit", { default: "days" })}
                         </span>
                       </div>
                     )}
                   </div>
 
-                  <Link href={`/objectives/${objective.id}`}>
-                    <Button>
-                      View Details
+                  <Link href={`/objectives/${objective.id}`} className="w-full sm:w-auto">
+                    <Button className="w-full sm:w-auto">
+                      {t("card.viewDetails", { default: "View Details" })}
                       <ArrowRight className="h-4 w-4 ml-2" />
                     </Button>
                   </Link>
@@ -191,15 +223,19 @@ export default function RoadmapPage() {
 
       {/* To Do Objectives */}
       {todoObjectives.length > 0 && (
-        <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">To Do</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-3 sm:space-y-4">
+          <h2 className="text-xl sm:text-2xl font-semibold">
+            {t("sections.todo", { default: "To Do" })}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             {todoObjectives.map((objective) => (
-              <Card key={objective.id} className="p-6 hover:shadow-lg transition-shadow">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold">{objective.title}</h3>
-                    <Badge className="bg-gray-100 text-gray-700">To Do</Badge>
+              <Card key={objective.id} className="p-4 sm:p-6 hover:shadow-lg transition-shadow">
+                <div className="space-y-2 sm:space-y-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="text-base sm:text-lg font-semibold">{objective.title}</h3>
+                    <Badge className="bg-gray-100 text-gray-700">
+                      {t("status.todo", { default: "To Do" })}
+                    </Badge>
                   </div>
 
                   {objective.description && (
@@ -210,7 +246,7 @@ export default function RoadmapPage() {
 
                   <Link href={`/objectives/${objective.id}`}>
                     <Button variant="outline" className="w-full">
-                      Start Learning
+                      {t("card.startLearning", { default: "Start Learning" })}
                       <ArrowRight className="h-4 w-4 ml-2" />
                     </Button>
                   </Link>
@@ -223,26 +259,31 @@ export default function RoadmapPage() {
 
       {/* Completed Objectives */}
       {completedObjectives.length > 0 && (
-        <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">Completed</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="space-y-3 sm:space-y-4">
+          <h2 className="text-xl sm:text-2xl font-semibold">
+            {t("sections.completed", { default: "Completed" })}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {completedObjectives.map((objective) => (
-              <Card key={objective.id} className="p-6 hover:shadow-lg transition-shadow">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold">{objective.title}</h3>
-                    <Badge className="bg-green-100 text-green-700">Completed</Badge>
+              <Card key={objective.id} className="p-4 sm:p-6 hover:shadow-lg transition-shadow">
+                <div className="space-y-2 sm:space-y-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="text-base sm:text-lg font-semibold">{objective.title}</h3>
+                    <Badge className="bg-green-100 text-green-700">
+                      {t("status.completed", { default: "Completed" })}
+                    </Badge>
                   </div>
 
                   <div className="text-sm text-muted-foreground">
                     <p>
-                      {objective.totalSprints} sprints • {objective.completedDays} days
+                      {objective.totalSprints} {t("card.sprintsUnit", { default: "sprints" })} •{" "}
+                      {objective.completedDays} {t("card.daysUnit", { default: "days" })}
                     </p>
                   </div>
 
                   <Link href={`/objectives/${objective.id}`}>
                     <Button variant="outline" size="sm" className="w-full">
-                      View Details
+                      {t("card.viewDetails", { default: "View Details" })}
                     </Button>
                   </Link>
                 </div>

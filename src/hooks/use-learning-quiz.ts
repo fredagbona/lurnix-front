@@ -1,3 +1,24 @@
+export function useProfileQuizList() {
+  return useQuery({
+    queryKey: learningQuizKeys.profileList(),
+    queryFn: () =>
+      learningQuizService.listQuizzes({
+        type: "profile",
+        includeQuestions: false,
+      }),
+    select: (response: ProfileQuizListResponse) => response.data.quizzes,
+  });
+}
+
+export function useProfileQuiz(quizId: string | undefined) {
+  return useQuery({
+    queryKey: learningQuizKeys.profileDetail(quizId ?? ""),
+    queryFn: () => learningQuizService.getAdaptiveQuiz(quizId!),
+    enabled: !!quizId,
+    select: (response: ProfileQuizResponse): AdaptiveQuiz => response.data.quiz,
+  });
+}
+
 /**
  * Learning Quiz Hooks
  * React Query hooks for managing learning quizzes
@@ -5,7 +26,12 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { learningQuizService } from "@/services/quizService";
-import type { SubmitQuizInput } from "@/models/quiz";
+import type {
+  SubmitQuizInput,
+  ProfileQuizListResponse,
+  ProfileQuizResponse,
+  AdaptiveQuiz,
+} from "@/models/quiz";
 
 // ============================================================================
 // QUERY KEYS
@@ -18,6 +44,8 @@ export const learningQuizKeys = {
   attempts: (id: string) => [...learningQuizKeys.detail(id), "attempts"] as const,
   attempt: (quizId: string, attemptId: string) =>
     [...learningQuizKeys.attempts(quizId), attemptId] as const,
+  profileList: () => [...learningQuizKeys.all, "profile", "list"] as const,
+  profileDetail: (id: string) => [...learningQuizKeys.all, "profile", id] as const,
 };
 
 // ============================================================================

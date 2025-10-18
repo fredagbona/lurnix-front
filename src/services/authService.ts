@@ -12,6 +12,7 @@ import {
   LinkedAccountsResponse,
   UnlinkProviderRequest,
 } from "@/models";
+import type { ProfileResponse } from "@/models/user";
 
 // Service d'authentification
 export const authService = {
@@ -44,8 +45,8 @@ export const authService = {
     if (!token) return null;
 
     try {
-      const response = await apiClient.get<{ success: boolean; data: User }>("/auth/me");
-      return response.data;
+      const response = await apiClient.get<ProfileResponse>("/users/profile");
+      return response.data.user as User;
     } catch (error) {
       return null;
     }

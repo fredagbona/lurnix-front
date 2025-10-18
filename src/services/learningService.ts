@@ -69,6 +69,27 @@ export const objectivesService = {
   async generateSprint(objectiveId: string): Promise<SprintResponse> {
     return apiClient.post<SprintResponse>(`/objectives/${objectiveId}/sprints/generate`);
   },
+
+  /**
+   * Mark an objective as completed
+   */
+  async completeObjective(
+    objectiveId: string,
+    data?: { completionNotes?: string },
+  ): Promise<{
+    success: boolean;
+    message: string;
+    data: {
+      objectiveId: string;
+      status: string;
+      completedAt: string;
+      totalDays: number;
+      totalHours: number;
+    };
+    timestamp: string;
+  }> {
+    return apiClient.patch(`/objectives/${objectiveId}/complete`, data);
+  },
 };
 
 // ============================================================================
@@ -128,6 +149,35 @@ export const sprintsService = {
   ): Promise<SprintResponse> {
     return apiClient.patch<SprintResponse>(
       `/objectives/${objectiveId}/sprints/${sprintId}/progress`,
+      data,
+    );
+  },
+
+  /**
+   * Submit sprint evidence (links + self-evaluation)
+   */
+  async submitSprintEvidence(
+    objectiveId: string,
+    sprintId: string,
+    data: {
+      artifacts: {
+        artifactId?: string;
+        projectId?: string;
+        type: string;
+        title?: string;
+        url: string;
+        notes?: string;
+        status?: string;
+      }[];
+      selfEvaluation?: {
+        confidence?: number | null;
+        reflection?: string | null;
+      } | null;
+      markSubmitted?: boolean;
+    },
+  ): Promise<SprintResponse> {
+    return apiClient.post<SprintResponse>(
+      `/objectives/${objectiveId}/sprints/${sprintId}/evidence`,
       data,
     );
   },
