@@ -105,6 +105,25 @@ export default function ObjectiveDetailsPage() {
     }
   };
 
+  const handleCompleteObjective = async (completionNotes?: string) => {
+    try {
+      await completeObjective.mutateAsync({
+        objectiveId,
+        completionNotes,
+      });
+      toast.success(t("completeSuccess"), {
+        description: t("completeSuccessDesc"),
+      });
+      setShowCompleteDialog(false);
+      refetchObjective();
+    } catch (error: any) {
+      toast.error(t("completeFailed"), {
+        description: error.message || t("tryAgain"),
+      });
+      throw error;
+    }
+  };
+
   const statusConfig: Record<string, { label: string; className: string }> = {
     todo: { label: t("status.todo"), className: "bg-gray-100 text-gray-700" },
     in_progress: { label: t("status.inProgress"), className: "bg-blue-100 text-blue-700" },
@@ -362,8 +381,9 @@ export default function ObjectiveDetailsPage() {
       <CompleteObjectiveDialog
         open={showCompleteDialog}
         onOpenChange={setShowCompleteDialog}
-        objectiveId={objectiveId}
+        onConfirm={handleCompleteObjective}
         objectiveTitle={objective.title}
+        isLoading={completeObjective.isPending}
       />
     </div>
   );
