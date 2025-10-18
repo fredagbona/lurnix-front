@@ -38,10 +38,10 @@ export default function QuizPage() {
 
   if (error || !quiz) {
     return (
-      <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-6 text-center max-w-2xl mx-auto mt-8">
+      <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 sm:p-6 text-center max-w-2xl mx-auto mt-4 sm:mt-8  sm:mx-auto">
         <p className="text-sm text-destructive mb-4">Failed to load quiz. Please try again.</p>
         <Link href={returnUrl}>
-          <Button variant="outline">
+          <Button variant="outline" className="w-full sm:w-auto">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Go Back
           </Button>
@@ -97,7 +97,7 @@ export default function QuizPage() {
 
   if (showResults && quizResult) {
     return (
-      <div className="py-8">
+      <div className="py-4 sm:py-8 px-3 sm:px-0">
         <QuizResults
           attempt={quizResult}
           passingScore={quiz.passingScore}
@@ -110,7 +110,7 @@ export default function QuizPage() {
   }
 
   return (
-    <div className="py-8">
+    <div className="py-4 sm:py-8 px-3 sm:px-0">
       <QuizInterface quiz={quiz} onSubmit={handleSubmitQuiz} isSubmitting={submitQuiz.isPending} />
     </div>
   );

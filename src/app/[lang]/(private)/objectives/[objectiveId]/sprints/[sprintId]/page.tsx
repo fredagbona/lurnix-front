@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useSprint, useUpdateSprintProgress, useSprintCompletion } from "@/hooks";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -14,6 +15,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 function SprintDetailsPage() {
+  const t = useTranslations("SprintDetails");
   const params = useParams();
   const objectiveId = params.objectiveId as string;
   const sprintId = params.sprintId as string;
@@ -52,10 +54,10 @@ function SprintDetailsPage() {
   if (error || !sprint) {
     return (
       <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-6 text-center">
-        <p className="text-sm text-destructive">Failed to load sprint. Please try again.</p>
+        <p className="text-sm text-destructive">{t("loadError")}</p>
         <Link href={`/objectives/${objectiveId}`}>
           <Button variant="outline" className="mt-4">
-            Back to Objective
+            {t("backButton")}
           </Button>
         </Link>
       </div>
@@ -77,8 +79,8 @@ function SprintDetailsPage() {
     typeof completionPercentage === "number"
       ? completionPercentage
       : totalTasks > 0
-      ? (completedCount / totalTasks) * 100
-      : 0;
+        ? (completedCount / totalTasks) * 100
+        : 0;
 
   const handleTaskToggle = (taskId: string) => {
     if (isCompleted) return;
@@ -104,12 +106,12 @@ function SprintDetailsPage() {
   const handleCompleteSprint = async () => {
     if (isCompleted) return;
     if (completedCount < totalTasks) {
-      toast.error("Please complete all tasks before finishing the sprint");
+      toast.error(t("completeAllTasks"));
       return;
     }
 
     if (!reflection.trim()) {
-      toast.error("Please add a reflection before completing the sprint");
+      toast.error(t("addReflection"));
       return;
     }
 
@@ -123,12 +125,12 @@ function SprintDetailsPage() {
   };
 
   const difficultyConfig: Record<string, { label: string; color: string }> = {
-    beginner: { label: "Beginner", color: "text-green-600" },
-    easy: { label: "Easy", color: "text-green-600" },
-    intermediate: { label: "Intermediate", color: "text-yellow-600" },
-    medium: { label: "Medium", color: "text-yellow-600" },
-    advanced: { label: "Advanced", color: "text-red-600" },
-    hard: { label: "Hard", color: "text-red-600" },
+    beginner: { label: t("difficulty.beginner"), color: "text-green-600" },
+    easy: { label: t("difficulty.easy"), color: "text-green-600" },
+    intermediate: { label: t("difficulty.intermediate"), color: "text-yellow-600" },
+    medium: { label: t("difficulty.medium"), color: "text-yellow-600" },
+    advanced: { label: t("difficulty.advanced"), color: "text-red-600" },
+    hard: { label: t("difficulty.hard"), color: "text-red-600" },
   };
 
   const difficultyInfo = difficultyConfig[sprint.difficulty] || difficultyConfig.beginner;
@@ -153,20 +155,23 @@ function SprintDetailsPage() {
             </div>
             <div className="flex items-center gap-2 text-muted-foreground">
               <Calendar className="h-4 w-4" />
-              <span>
-                {sprint.lengthDays} {sprint.lengthDays === 1 ? "day" : "days"}
-              </span>
+              <span>{t("days", { count: sprint.lengthDays })}</span>
             </div>
             <div className="flex items-center gap-2 text-muted-foreground">
               <Target className="h-4 w-4" />
-              <span>{sprint.totalEstimatedHours}h estimated</span>
+              <span>{t("hoursEstimated", { hours: sprint.totalEstimatedHours })}</span>
             </div>
             {isCompleted && completionDate && (
               <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
                 <CheckCircle className="h-4 w-4" />
                 <span>
-                  Completed on {completionDate.toLocaleDateString()} at {" "}
-                  {completionDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  {t("completedOn", {
+                    date: completionDate.toLocaleDateString(),
+                    time: completionDate.toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }),
+                  })}
                 </span>
               </div>
             )}
@@ -183,7 +188,7 @@ function SprintDetailsPage() {
             </div>
             <div className="flex-1">
               <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-1">
-                Personalized for You
+                {t("personalizedTitle")}
               </h3>
               <p className="text-sm text-blue-700 dark:text-blue-300">{sprint.adaptationNotes}</p>
             </div>
@@ -195,7 +200,7 @@ function SprintDetailsPage() {
       <Card className="p-6">
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Progress</h2>
+            <h2 className="text-lg font-semibold">{t("progress")}</h2>
             <span className="text-2xl font-bold">{Math.round(progressPercentage)}%</span>
           </div>
           <div className="h-3 w-full rounded-full bg-muted overflow-hidden">
@@ -205,7 +210,7 @@ function SprintDetailsPage() {
             />
           </div>
           <p className="text-sm text-muted-foreground">
-            {completedCount} of {totalTasks} tasks completed
+            {t("tasksCompleted", { completed: completedCount, total: totalTasks })}
           </p>
         </div>
       </Card>
@@ -213,12 +218,10 @@ function SprintDetailsPage() {
       {/* Tasks */}
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4">
-          Tasks ({completedCount}/{totalTasks})
+          {t("tasksTitle", { completed: completedCount, total: totalTasks })}
         </h2>
         {isCompleted && (
-          <p className="text-sm text-muted-foreground mb-4">
-            This sprint is completed. Task progress is now read-only.
-          </p>
+          <p className="text-sm text-muted-foreground mb-4">{t("sprintCompletedReadonly")}</p>
         )}
         <div className="space-y-4">
           {sprint.microTasks.map((task) => (
@@ -262,7 +265,7 @@ function SprintDetailsPage() {
                   {task.acceptanceTest && task.acceptanceTest.spec && (
                     <div className="mt-2 space-y-1">
                       <p className="text-xs font-medium text-muted-foreground">
-                        Acceptance Criteria:
+                        {t("acceptanceCriteria")}:
                       </p>
                       <ul className="list-disc list-inside text-xs text-muted-foreground space-y-0.5">
                         {task.acceptanceTest.spec.map((criterion: string, index: number) => (
@@ -275,7 +278,7 @@ function SprintDetailsPage() {
                   {/* Resources */}
                   {task.resources && task.resources.length > 0 && (
                     <div className="mt-2 space-y-1">
-                      <p className="text-xs font-medium text-muted-foreground">Resources:</p>
+                      <p className="text-xs font-medium text-muted-foreground">{t("resources")}:</p>
                       <ul className="space-y-1">
                         {task.resources.map((resource: string, index: number) => (
                           <li key={index}>
@@ -302,7 +305,7 @@ function SprintDetailsPage() {
       {/* Projects */}
       {sprint.projects && sprint.projects.length > 0 && (
         <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Projects</h2>
+          <h2 className="text-lg font-semibold mb-4">{t("projects")}</h2>
           <div className="space-y-4">
             {sprint.projects.map((project: any) => (
               <div key={project.id} className="border rounded-lg p-4 space-y-3">
@@ -314,7 +317,7 @@ function SprintDetailsPage() {
                 {/* Requirements */}
                 {project.requirements && project.requirements.length > 0 && (
                   <div className="space-y-1">
-                    <p className="text-sm font-medium">Requirements:</p>
+                    <p className="text-sm font-medium">{t("requirements")}:</p>
                     <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
                       {project.requirements.map((req: string, index: number) => (
                         <li key={index}>{req}</li>
@@ -326,7 +329,7 @@ function SprintDetailsPage() {
                 {/* Acceptance Criteria */}
                 {project.acceptanceCriteria && project.acceptanceCriteria.length > 0 && (
                   <div className="space-y-1">
-                    <p className="text-sm font-medium">Acceptance Criteria:</p>
+                    <p className="text-sm font-medium">{t("acceptanceCriteria")}:</p>
                     <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
                       {project.acceptanceCriteria.map((criteria: string, index: number) => (
                         <li key={index}>{criteria}</li>
@@ -338,7 +341,7 @@ function SprintDetailsPage() {
                 {/* Deliverables */}
                 {project.deliverables && project.deliverables.length > 0 && (
                   <div className="space-y-1">
-                    <p className="text-sm font-medium">Deliverables:</p>
+                    <p className="text-sm font-medium">{t("deliverables")}:</p>
                     <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
                       {project.deliverables.map((deliverable: any, index: number) => (
                         <li key={index}>
@@ -355,7 +358,7 @@ function SprintDetailsPage() {
                 {/* Evidence Rubric */}
                 {project.evidenceRubric && (
                   <div className="mt-3 p-3 bg-muted/50 rounded-lg space-y-2">
-                    <p className="text-sm font-medium">Grading Rubric:</p>
+                    <p className="text-sm font-medium">{t("gradingRubric")}:</p>
                     <div className="space-y-1">
                       {project.evidenceRubric.dimensions.map((dimension: any, index: number) => (
                         <div key={index} className="flex justify-between text-xs">
@@ -367,7 +370,9 @@ function SprintDetailsPage() {
                       ))}
                     </div>
                     <p className="text-xs text-muted-foreground mt-2">
-                      Pass threshold: {(project.evidenceRubric.passThreshold * 100).toFixed(0)}%
+                      {t("passThreshold", {
+                        threshold: (project.evidenceRubric.passThreshold * 100).toFixed(0),
+                      })}
                     </p>
                   </div>
                 )}
@@ -379,37 +384,31 @@ function SprintDetailsPage() {
 
       {/* Tips */}
       <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-3">Tips</h2>
+        <h2 className="text-lg font-semibold mb-3">{t("tips.title")}</h2>
         <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
-          <li>Share your progress in Discord or the community to celebrate wins.</li>
-          <li>Post demos or repositories when you&apos;re ready for feedback.</li>
-          <li>Log blockers in your reflection so the next sprint can adapt.</li>
+          <li>{t("tips.shareProgress")}</li>
+          <li>{t("tips.postDemos")}</li>
+          <li>{t("tips.logBlockers")}</li>
         </ul>
       </Card>
 
       {/* Reflection */}
       <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4">Reflection (Required)</h2>
-        <p className="text-sm text-muted-foreground mb-4">
-          What did you learn? What challenges did you face? How will you apply this knowledge?
-        </p>
+        <h2 className="text-lg font-semibold mb-4">{t("reflection.title")}</h2>
+        <p className="text-sm text-muted-foreground mb-4">{t("reflection.prompt")}</p>
         <Textarea
           value={reflection}
           onChange={(e) => setReflection(e.target.value)}
-          placeholder="Share your thoughts and learnings..."
+          placeholder={t("reflection.placeholder")}
           rows={6}
           className="resize-none"
           disabled={isCompleted}
           readOnly={isCompleted}
         />
         {isCompleted ? (
-          <p className="text-xs text-muted-foreground mt-2">
-            Reflection is locked because this sprint has been completed.
-          </p>
+          <p className="text-xs text-muted-foreground mt-2">{t("reflection.locked")}</p>
         ) : (
-          <p className="text-xs text-muted-foreground mt-2">
-            This reflection will be included when you complete the sprint.
-          </p>
+          <p className="text-xs text-muted-foreground mt-2">{t("reflection.willBeIncluded")}</p>
         )}
       </Card>
 
@@ -417,7 +416,7 @@ function SprintDetailsPage() {
       {!isCompleted && (
         <div className="flex justify-end gap-3 pb-8">
           <Link href={`/objectives/${objectiveId}`}>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">{t("cancelButton")}</Button>
           </Link>
           <Button
             onClick={handleCompleteSprint}
@@ -427,12 +426,12 @@ function SprintDetailsPage() {
             {isCompleting ? (
               <div className="flex items-center">
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                Completing...
+                {t("completing")}
               </div>
             ) : (
               <>
                 <CheckCircle className="h-5 w-5 mr-2" />
-                Complete Sprint
+                {t("completeSprint")}
               </>
             )}
           </Button>

@@ -15,12 +15,13 @@ export default function OAuthSuccessPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const handleOAuthCallback = () => {
+    const handleOAuthCallback = async () => {
       try {
         // Extract query parameters
         const token = searchParams.get("token");
         const newUser = searchParams.get("newUser");
         const requiresPassword = searchParams.get("requiresPassword");
+        const userLanguage = searchParams.get("language");
 
         if (!token) {
           setError("No authentication token received");
@@ -30,7 +31,8 @@ export default function OAuthSuccessPage() {
         // Store token in cookies
         authCookies.setToken(token);
 
-        // Determine redirect path
+        // Determine redirect path with user's preferred language
+        const locale = userLanguage === "fr" ? "fr" : "en";
         let redirectPath = "/dashboard";
 
         // If new user, could redirect to onboarding
@@ -45,9 +47,9 @@ export default function OAuthSuccessPage() {
           // In future: redirectPath = "/auth/set-password";
         }
 
-        // Small delay to show success message
+        // Small delay to show success message, then redirect with locale
         setTimeout(() => {
-          router.replace(redirectPath);
+          router.replace(redirectPath, { locale });
         }, 1500);
       } catch (err) {
         console.error("OAuth callback error:", err);

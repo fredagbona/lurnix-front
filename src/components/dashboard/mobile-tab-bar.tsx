@@ -35,12 +35,6 @@ export default function MobileTabBar() {
         shortLabel: "Learn",
       },
       {
-        href: "/skills",
-        label: t("skills", { default: "Skills" }),
-        icon: TrendingUp,
-        shortLabel: "Skills",
-      },
-      {
         href: "/roadmap",
         label: t("roadmap", { default: "Roadmap" }),
         icon: BookOpen,

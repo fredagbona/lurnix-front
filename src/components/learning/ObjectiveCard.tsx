@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -41,6 +42,7 @@ const difficultyConfig: Record<string, { label: string; color: string }> = {
 };
 
 export function ObjectiveCard({ objective }: ObjectiveCardProps) {
+  const t = useTranslations("Objectives.card");
   const statusInfo = statusConfig[objective.status] || statusConfig.todo;
   const priorityStars = "⭐".repeat(objective.priority);
 
@@ -62,14 +64,14 @@ export function ObjectiveCard({ objective }: ObjectiveCardProps) {
 
         {/* Priority */}
         <div className="flex items-center gap-2 text-sm">
-          <span className="text-muted-foreground">Priority:</span>
+          <span className="text-muted-foreground">{t("priority", { default: "Priority" })}:</span>
           <span>{priorityStars}</span>
         </div>
 
         {/* Progress Bar */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Progress</span>
+            <span className="text-muted-foreground">{t("progress", { default: "Progress" })}</span>
             <span className="font-medium">{Math.round(objective.progressPercentage)}%</span>
           </div>
           <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
@@ -80,9 +82,12 @@ export function ObjectiveCard({ objective }: ObjectiveCardProps) {
           </div>
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <span>
-              {objective.progress.sprintsDone} / {objective.totalSprints} sprints
+              {objective.progress.sprintsDone} / {objective.totalSprints}{" "}
+              {t("sprints", { default: "sprints" })}
             </span>
-            <span>{objective.completedDays} days completed</span>
+            <span>
+              {objective.completedDays} {t("daysCompleted", { default: "days completed" })}
+            </span>
           </div>
         </div>
 
@@ -91,7 +96,7 @@ export function ObjectiveCard({ objective }: ObjectiveCardProps) {
           <div className="rounded-lg border border-border bg-card/50 p-3 space-y-2">
             <div className="flex items-center gap-2 text-sm font-medium">
               <Gauge className="h-4 w-4 text-primary" />
-              <span>Current Sprint</span>
+              <span>{t("currentSprint", { default: "Current Sprint" })}</span>
             </div>
             <div className="space-y-1">
               <p className="text-sm font-medium">{objective.currentSprint.title}</p>
@@ -108,7 +113,9 @@ export function ObjectiveCard({ objective }: ObjectiveCardProps) {
                   )}
                 </span>
                 <span>•</span>
-                <span>Day {objective.currentDay}</span>
+                <span>
+                  {t("day", { default: "Day" })} {objective.currentDay}
+                </span>
               </div>
             </div>
           </div>
@@ -119,11 +126,13 @@ export function ObjectiveCard({ objective }: ObjectiveCardProps) {
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Calendar className="h-4 w-4" />
             <span>
-              Est. {objective.estimatedTotalDays} days
+              {t("estimated", { default: "Est." })} {objective.estimatedTotalDays}{" "}
+              {t("days", { default: "days" })}
               {objective.estimatedTotalWeeks.min && objective.estimatedTotalWeeks.max && (
                 <span>
                   {" "}
-                  ({objective.estimatedTotalWeeks.min}-{objective.estimatedTotalWeeks.max} weeks)
+                  ({objective.estimatedTotalWeeks.min}-{objective.estimatedTotalWeeks.max}{" "}
+                  {t("weeks", { default: "weeks" })})
                 </span>
               )}
             </span>
@@ -149,7 +158,7 @@ export function ObjectiveCard({ objective }: ObjectiveCardProps) {
         {/* Action Button */}
         <Link href={`/objectives/${objective.id}`} className="block">
           <Button className="w-full" variant="outline">
-            View Details
+            {t("viewDetails", { default: "View Details" })}
             <ArrowRight className="h-4 w-4 ml-2" />
           </Button>
         </Link>

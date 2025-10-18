@@ -130,3 +130,31 @@ export function useGenerateSprint() {
     },
   });
 }
+
+/**
+ * Hook to mark an objective as completed
+ */
+export function useCompleteObjective() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      objectiveId,
+      completionNotes,
+    }: {
+      objectiveId: string;
+      completionNotes?: string;
+    }) =>
+      objectivesService.completeObjective(
+        objectiveId,
+        completionNotes ? { completionNotes } : undefined,
+      ),
+    onSuccess: (response, variables) => {
+      // Invalidate the specific objective
+      queryClient.invalidateQueries({ queryKey: objectivesKeys.detail(variables.objectiveId) });
+
+      // Invalidate objectives list
+      queryClient.invalidateQueries({ queryKey: objectivesKeys.lists() });
+    },
+  });
+}

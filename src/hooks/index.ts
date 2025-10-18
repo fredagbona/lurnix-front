@@ -8,5 +8,8 @@ export * from "./use-sprints";
 export * from "./use-sprint-completion";
 export * from "./use-skills";
 export * from "./use-learning-quiz";
+export * from "./use-technical-assessment";
 export * from "./use-verify-email";
 export * from "./use-linked-accounts";
+export * from "./use-dashboard-onboarding";
+export * from "./use-language-preference";

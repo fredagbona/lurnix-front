@@ -73,9 +73,11 @@ export default function FeaturesPage() {
         toast.error(error.response.data.error.message);
       } else if (error.response?.data?.error) {
         // Fallback si pas de message
-        toast.error("Failed to vote on this feature");
+        toast.error(t("voteError", { default: "Failed to vote on this feature" }));
       } else {
-        toast.error("An unexpected error occurred. Please try again.");
+        toast.error(
+          t("unexpectedError", { default: "An unexpected error occurred. Please try again." }),
+        );
       }
     }
   };
@@ -85,11 +87,13 @@ export default function FeaturesPage() {
   };
 
   return (
-    <div className="mx-auto">
-      <div className="mb-8">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div className="mx-auto px-3 sm:px-0">
+      <div className="mb-6 sm:mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
           <div className="flex-1">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{t("title")}</h1>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
+              {t("title")}
+            </h1>
             <p className="text-gray-600 text-sm sm:text-base">{t("subtitle")}</p>
           </div>
           <div className="flex-shrink-0">
@@ -97,13 +101,15 @@ export default function FeaturesPage() {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
           <Select value={selectedCategory} onValueChange={setSelectedCategory} disabled={loading}>
             <SelectTrigger className="w-full sm:w-48">
-              <SelectValue placeholder="Select category" />
+              <SelectValue placeholder={t("selectCategory", { default: "Select category" })} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="all">
+                {t("allCategories", { default: "All Categories" })}
+              </SelectItem>
               {categories.map((category) => (
                 <SelectItem key={category.value} value={category.value}>
                   {t(`categories.${category.value}`)}
@@ -114,48 +120,51 @@ export default function FeaturesPage() {
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {loading ? (
-          <div className="flex justify-center py-8">
-            <div className="text-gray-500">Loading features...</div>
+          <div className="flex justify-center py-6 sm:py-8">
+            <div className="text-gray-500">{t("loading", { default: "Loading features..." })}</div>
           </div>
         ) : filteredFeatures.length === 0 ? (
-          <div className="flex justify-center py-8">
+          <div className="flex justify-center py-6 sm:py-8">
             <div className="text-gray-500">
               {selectedCategory === "all"
-                ? "No features found."
-                : `No features found in ${t(`categories.${selectedCategory}`)} category.`}
+                ? t("noFeatures", { default: "No features found." })
+                : t("noFeaturesInCategory", {
+                    default: "No features found in this category.",
+                    category: t(`categories.${selectedCategory}`),
+                  })}
             </div>
           </div>
         ) : (
           filteredFeatures.map((feature) => (
             <Card key={feature.id}>
-              <CardContent className="p-4 sm:p-6">
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="flex flex-row sm:flex-col items-center gap-2 sm:gap-2 flex-shrink-0">
+              <CardContent className="p-3 sm:p-4 md:p-6">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                  <div className="flex flex-row sm:flex-col items-center gap-2 flex-shrink-0">
                     <button
                       onClick={() => handleVote(feature.id)}
-                      className={`p-2 rounded-lg border-2 transition-colors ${
+                      className={`p-1.5 sm:p-2 rounded-lg border-2 transition-colors ${
                         feature.userVoted
                           ? "border-primary bg-primary/10 text-primary"
                           : "border-gray-200 hover:border-gray-300 text-gray-400 hover:text-gray-600"
                       }`}
                     >
-                      <ChevronUp className="h-4 w-4" />
+                      <ChevronUp className="h-4 w-4 sm:h-5 sm:w-5" />
                     </button>
-                    <span className="text-sm font-semibold text-gray-700">
+                    <span className="text-xs sm:text-sm font-semibold text-gray-700">
                       {feature.votesCount}
                     </span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1.5 sm:mb-2 line-clamp-2">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-600 mb-4 line-clamp-2 text-sm sm:text-base">
+                    <p className="text-gray-600 mb-3 sm:mb-4 line-clamp-2 text-sm sm:text-base">
                       {feature.excerpt}
                     </p>
 
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500 mb-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-4 text-xs sm:text-sm text-gray-500 mb-2 sm:mb-3">
                       <div className="flex items-center gap-2">
                         <span>{new Date(feature.createdAt).toLocaleDateString()}</span>
                         <span className="hidden sm:inline">•</span>
@@ -172,7 +181,7 @@ export default function FeaturesPage() {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
                       <div className="flex items-center gap-2">
                         <Badge
                           className={`${

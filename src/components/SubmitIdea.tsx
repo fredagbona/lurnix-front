@@ -50,7 +50,7 @@ export default function SubmitIdea({ categories, onFeatureSubmitted }: SubmitIde
       onFeatureSubmitted(response.data);
 
       // Afficher message de succès
-      toast.success("Feature request submitted successfully!");
+      toast.success(t("submitSuccess", { default: "Feature request submitted successfully!" }));
 
       // Réinitialiser le formulaire
       setFormData({
@@ -70,9 +70,13 @@ export default function SubmitIdea({ categories, onFeatureSubmitted }: SubmitIde
         toast.error(error.response.data.error.message);
       } else if (error.response?.data?.error) {
         // Fallback si pas de message
-        toast.error("An error occurred while submitting the feature");
+        toast.error(
+          t("submitError", { default: "An error occurred while submitting the feature" }),
+        );
       } else {
-        toast.error("An unexpected error occurred. Please try again.");
+        toast.error(
+          t("unexpectedError", { default: "An unexpected error occurred. Please try again." }),
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -110,26 +114,28 @@ export default function SubmitIdea({ categories, onFeatureSubmitted }: SubmitIde
         <form onSubmit={handleFormSubmit} className="space-y-4">
           <div>
             <label htmlFor="title" className="block text-sm font-medium mb-2">
-              Title *
+              {t("form.title", { default: "Title" })} *
             </label>
             <Input
               id="title"
               value={formData.title}
               onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
-              placeholder="Enter feature title"
+              placeholder={t("form.titlePlaceholder", { default: "Enter feature title" })}
               required
             />
           </div>
 
           <div>
             <label htmlFor="description" className="block text-sm font-medium mb-2">
-              Description *
+              {t("form.description", { default: "Description" })} *
             </label>
             <Textarea
               id="description"
               value={formData.description}
               onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
-              placeholder="Describe your feature idea"
+              placeholder={t("form.descriptionPlaceholder", {
+                default: "Describe your feature idea",
+              })}
               rows={4}
               required
             />
@@ -137,7 +143,7 @@ export default function SubmitIdea({ categories, onFeatureSubmitted }: SubmitIde
 
           <div>
             <label htmlFor="category" className="block text-sm font-medium mb-2">
-              Category *
+              {t("form.category", { default: "Category" })} *
             </label>
             <Select
               value={formData.category}
@@ -145,7 +151,9 @@ export default function SubmitIdea({ categories, onFeatureSubmitted }: SubmitIde
               required
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select a category" />
+                <SelectValue
+                  placeholder={t("form.selectCategory", { default: "Select a category" })}
+                />
               </SelectTrigger>
               <SelectContent>
                 {categories.map((category) => (
@@ -159,13 +167,13 @@ export default function SubmitIdea({ categories, onFeatureSubmitted }: SubmitIde
 
           <div>
             <label htmlFor="tags" className="block text-sm font-medium mb-2">
-              Tags
+              {t("form.tags", { default: "Tags" })}
             </label>
             <div className="flex flex-col sm:flex-row gap-2 mb-2">
               <Input
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
-                placeholder="Enter a tag"
+                placeholder={t("form.tagPlaceholder", { default: "Enter a tag" })}
                 onKeyPress={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
@@ -180,7 +188,7 @@ export default function SubmitIdea({ categories, onFeatureSubmitted }: SubmitIde
                 variant="outline"
                 className="w-full sm:w-auto"
               >
-                Add
+                {t("form.addTag", { default: "Add" })}
               </Button>
             </div>
             {formData.tags.length > 0 && (
@@ -208,10 +216,12 @@ export default function SubmitIdea({ categories, onFeatureSubmitted }: SubmitIde
               onClick={() => setIsModalOpen(false)}
               className="w-full sm:w-auto"
             >
-              Cancel
+              {t("form.cancel", { default: "Cancel" })}
             </Button>
             <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
-              {isSubmitting ? "Submitting..." : "Submit Feature"}
+              {isSubmitting
+                ? t("form.submitting", { default: "Submitting..." })
+                : t("form.submit", { default: "Submit Feature" })}
             </Button>
           </div>
         </form>

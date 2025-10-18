@@ -8,6 +8,7 @@ export interface User {
   createdAt: string;
   updatedAt?: string;
   avatar?: string;
+  language?: string | null;
   // OAuth fields
   googleId?: string;
   githubId?: string;

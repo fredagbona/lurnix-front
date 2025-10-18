@@ -1,10 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Gauge, Calendar, FileQuestion, CheckCircle, Play, ArrowRight, RotateCw, Link as LinkIcon } from "lucide-react";
+import {
+  Gauge,
+  Calendar,
+  FileQuestion,
+  CheckCircle,
+  Play,
+  ArrowRight,
+  RotateCw,
+  Link as LinkIcon,
+} from "lucide-react";
 import type { Sprint } from "@/models/learning";
 import { cn } from "@/lib/utils";
 
@@ -14,70 +24,72 @@ interface SprintCardProps {
   showActions?: boolean;
 }
 
-const difficultyConfig: Record<
-  string,
-  { label: string; color: string; bgColor: string; borderColor: string }
-> = {
-  beginner: {
-    label: "Beginner",
-    color: "text-green-600",
-    bgColor: "bg-green-50 dark:bg-green-900/20",
-    borderColor: "border-green-200 dark:border-green-800",
-  },
-  easy: {
-    label: "Easy",
-    color: "text-green-600",
-    bgColor: "bg-green-50 dark:bg-green-900/20",
-    borderColor: "border-green-200 dark:border-green-800",
-  },
-  intermediate: {
-    label: "Intermediate",
-    color: "text-yellow-600",
-    bgColor: "bg-yellow-50 dark:bg-yellow-900/20",
-    borderColor: "border-yellow-200 dark:border-yellow-800",
-  },
-  medium: {
-    label: "Medium",
-    color: "text-yellow-600",
-    bgColor: "bg-yellow-50 dark:bg-yellow-900/20",
-    borderColor: "border-yellow-200 dark:border-yellow-800",
-  },
-  advanced: {
-    label: "Advanced",
-    color: "text-red-600",
-    bgColor: "bg-red-50 dark:bg-red-900/20",
-    borderColor: "border-red-200 dark:border-red-800",
-  },
-  hard: {
-    label: "Hard",
-    color: "text-red-600",
-    bgColor: "bg-red-50 dark:bg-red-900/20",
-    borderColor: "border-red-200 dark:border-red-800",
-  },
-};
-
-type SprintVisualStatus = "not_started" | "planned" | "in_progress" | "completed";
-
-const statusConfig: Record<SprintVisualStatus, { label: string; className: string }> = {
-  not_started: {
-    label: "Not Started",
-    className: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
-  },
-  planned: {
-    label: "Planned",
-    className: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
-  },
-  in_progress: {
-    label: "In Progress",
-    className: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
-  },
-  completed: {
-    label: "Completed",
-    className: "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
-  },
-};
-
 export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCardProps) {
+  const t = useTranslations("SprintCard");
+
+  const difficultyConfig: Record<
+    string,
+    { label: string; color: string; bgColor: string; borderColor: string }
+  > = {
+    beginner: {
+      label: t("difficulty.beginner"),
+      color: "text-green-600",
+      bgColor: "bg-green-50 dark:bg-green-900/20",
+      borderColor: "border-green-200 dark:border-green-800",
+    },
+    easy: {
+      label: t("difficulty.easy"),
+      color: "text-green-600",
+      bgColor: "bg-green-50 dark:bg-green-900/20",
+      borderColor: "border-green-200 dark:border-green-800",
+    },
+    intermediate: {
+      label: t("difficulty.intermediate"),
+      color: "text-yellow-600",
+      bgColor: "bg-yellow-50 dark:bg-yellow-900/20",
+      borderColor: "border-yellow-200 dark:border-yellow-800",
+    },
+    medium: {
+      label: t("difficulty.medium"),
+      color: "text-yellow-600",
+      bgColor: "bg-yellow-50 dark:bg-yellow-900/20",
+      borderColor: "border-yellow-200 dark:border-yellow-800",
+    },
+    advanced: {
+      label: t("difficulty.advanced"),
+      color: "text-red-600",
+      bgColor: "bg-red-50 dark:bg-red-900/20",
+      borderColor: "border-red-200 dark:border-red-800",
+    },
+    hard: {
+      label: t("difficulty.hard"),
+      color: "text-red-600",
+      bgColor: "bg-red-50 dark:bg-red-900/20",
+      borderColor: "border-red-200 dark:border-red-800",
+    },
+  };
+
+  type SprintVisualStatus = "not_started" | "planned" | "in_progress" | "completed";
+
+  const statusConfig: Record<SprintVisualStatus, { label: string; className: string }> = {
+    not_started: {
+      label: t("status.notStarted"),
+      className: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
+    },
+    planned: {
+      label: t("status.planned"),
+      className: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
+    },
+    in_progress: {
+      label: t("status.inProgress"),
+      className: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
+    },
+    completed: {
+      label: t("status.completed"),
+      className: "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
+    },
+  };
+
   const rawStatus = typeof sprint.status === "string" ? sprint.status.toLowerCase() : "not_started";
   const rawCompletedAt = (sprint as any).completedAt ?? (sprint as any).completed_at ?? null;
   const totalTasks = sprint.microTasks?.length ?? 0;
@@ -94,10 +106,10 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
   const visualStatus: SprintVisualStatus = isCompleted
     ? "completed"
     : rawStatus === "in_progress" || rawStatus === "submitted"
-    ? "in_progress"
-    : rawStatus === "planned"
-    ? "planned"
-    : "not_started";
+      ? "in_progress"
+      : rawStatus === "planned"
+        ? "planned"
+        : "not_started";
 
   const canStart = visualStatus === "not_started" || visualStatus === "planned";
   const canContinue = visualStatus === "in_progress";
@@ -112,8 +124,8 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
     typeof completionPercentage === "number"
       ? Math.min(100, Math.max(0, Math.round(completionPercentage)))
       : totalTasks > 0
-      ? Math.round((completedTasks / totalTasks) * 100)
-      : 0;
+        ? Math.round((completedTasks / totalTasks) * 100)
+        : 0;
 
   return (
     <Card
@@ -130,7 +142,7 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
               {sprint.isReviewSprint && <RotateCw className="h-4 w-4 text-blue-600" />}
               {sprint.dayNumber && (
                 <span className="text-sm font-medium text-muted-foreground">
-                  Day {sprint.dayNumber}
+                  {t("day", { number: sprint.dayNumber })}
                 </span>
               )}
             </div>
@@ -143,24 +155,24 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
             <div className="flex flex-wrap items-center gap-3 mt-3 text-xs text-muted-foreground">
               <span className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-1">
                 <LinkIcon className="h-3 w-3" />
-                {evidenceCount > 0 ? `${evidenceCount} link${evidenceCount === 1 ? "" : "s"} added` : "No links yet"}
+                {evidenceCount > 0 ? t("linksAdded", { count: evidenceCount }) : t("noLinks")}
               </span>
               {isCompleted ? (
                 <span>
                   {rawCompletedAt
-                    ? `Completed on ${new Date(rawCompletedAt).toLocaleDateString()}`
-                    : "Completed"}
+                    ? t("completedOn", { date: new Date(rawCompletedAt).toLocaleDateString() })
+                    : t("completed")}
                 </span>
               ) : (
-                <span>Progress: {progressValue}%</span>
+                <span>{t("progress", { value: progressValue })}</span>
               )}
             </div>
             {isCompleted && (
               <div className="mt-3 text-xs text-muted-foreground space-y-1">
-                <p className="font-medium text-foreground">Next steps</p>
+                <p className="font-medium text-foreground">{t("nextSteps.title")}</p>
                 <ul className="list-disc list-inside space-y-1">
-                  <li>Share your build or repo with the community for feedback.</li>
-                  <li>Capture blockers and lessons in your reflection before starting the next sprint.</li>
+                  <li>{t("nextSteps.share")}</li>
+                  <li>{t("nextSteps.reflect")}</li>
                 </ul>
               </div>
             )}
@@ -180,8 +192,7 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
           <div className="flex items-center gap-2 text-muted-foreground">
             <Calendar className="h-4 w-4" />
             <span>
-              {sprint.lengthDays} {sprint.lengthDays === 1 ? "day" : "days"} •{" "}
-              {sprint.totalEstimatedHours}h
+              {t("duration", { days: sprint.lengthDays, hours: sprint.totalEstimatedHours })}
             </span>
           </div>
         </div>
@@ -196,7 +207,7 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
             ))}
             {sprint.targetSkills.length > 4 && (
               <Badge variant="outline" className="text-xs">
-                +{sprint.targetSkills.length - 4} more
+                {t("moreSkills", { count: sprint.targetSkills.length - 4 })}
               </Badge>
             )}
           </div>
@@ -208,13 +219,13 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
             {hasPreSprintQuiz && (
               <div className="flex items-center gap-2 text-sm text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 rounded-md px-3 py-2">
                 <FileQuestion className="h-4 w-4" />
-                <span>Readiness Quiz Required</span>
+                <span>{t("readinessQuiz")}</span>
               </div>
             )}
             {hasPostSprintQuiz && (
               <div className="flex items-center gap-2 text-sm text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-md px-3 py-2">
                 <CheckCircle className="h-4 w-4" />
-                <span>Validation Quiz Available</span>
+                <span>{t("validationQuiz")}</span>
               </div>
             )}
           </div>
@@ -224,9 +235,12 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
         {canContinue && sprint.progress && (
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Progress</span>
+              <span className="text-muted-foreground">{t("progressLabel")}</span>
               <span className="font-medium">
-                {sprint.progress.completedTasks} / {sprint.microTasks.length} tasks
+                {t("tasksCompleted", {
+                  completed: sprint.progress.completedTasks,
+                  total: sprint.microTasks.length,
+                })}
               </span>
             </div>
             <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
@@ -245,11 +259,9 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
           <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-3">
             <div className="flex items-center gap-2 text-sm text-blue-700 dark:text-blue-300">
               <RotateCw className="h-4 w-4" />
-              <span className="font-medium">Review Sprint</span>
+              <span className="font-medium">{t("reviewSprint")}</span>
             </div>
-            <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-              Reinforce previously learned skills
-            </p>
+            <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">{t("reviewSprintDesc")}</p>
           </div>
         )}
 
@@ -262,12 +274,12 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
                   {hasPreSprintQuiz ? (
                     <>
                       <FileQuestion className="h-4 w-4 mr-2" />
-                      Take Quiz First
+                      {t("takeQuizFirst")}
                     </>
                   ) : (
                     <>
                       <Play className="h-4 w-4 mr-2" />
-                      Start Sprint
+                      {t("startSprint")}
                     </>
                   )}
                 </Button>
@@ -278,7 +290,7 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
               <Link href={`/objectives/${objectiveId}/sprints/${sprint.id}`} className="flex-1">
                 <Button className="w-full">
                   <ArrowRight className="h-4 w-4 mr-2" />
-                  Continue Sprint
+                  {t("continueSprint")}
                 </Button>
               </Link>
             )}
@@ -287,7 +299,7 @@ export function SprintCard({ sprint, objectiveId, showActions = true }: SprintCa
               <Link href={`/objectives/${objectiveId}/sprints/${sprint.id}`} className="flex-1">
                 <Button className="w-full" variant="outline">
                   <CheckCircle className="h-4 w-4 mr-2" />
-                  View Details
+                  {t("viewDetails")}
                 </Button>
               </Link>
             )}

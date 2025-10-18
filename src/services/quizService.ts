@@ -7,6 +7,10 @@ import type {
   QuizSubmitResponse,
   QuizAttemptsResponse,
   SubmitQuizInput,
+  ProfileQuizListResponse,
+  ProfileQuizResponse,
+  AdaptiveQuizSubmission,
+  AdaptiveQuizSubmitResponse,
 } from "@/models/quiz";
 
 // ============================================================================
@@ -32,6 +36,28 @@ export const quizService = {
 // ============================================================================
 export const learningQuizService = {
   /**
+   * Discover quizzes based on filters (e.g. type=profile)
+   */
+  async listQuizzes(params?: {
+    type?: string;
+    includeQuestions?: boolean;
+  }): Promise<ProfileQuizListResponse> {
+    return apiClient.get<ProfileQuizListResponse>("/quizzes", {
+      params: {
+        type: params?.type,
+        includeQuestions: params?.includeQuestions,
+      },
+    });
+  },
+
+  /**
+   * Fetch a quiz definition by ID
+   */
+  async getAdaptiveQuiz(quizId: string): Promise<ProfileQuizResponse> {
+    return apiClient.get<ProfileQuizResponse>(`/quizzes/${quizId}`);
+  },
+
+  /**
    * Get a learning quiz by ID
    */
   async getQuiz(quizId: string): Promise<LearningQuizResponse> {
@@ -43,6 +69,16 @@ export const learningQuizService = {
    */
   async submitQuiz(quizId: string, submission: SubmitQuizInput): Promise<QuizSubmitResponse> {
     return apiClient.post<QuizSubmitResponse>(`/quizzes/${quizId}/submit`, submission);
+  },
+
+  /**
+   * Submit adaptive quiz answers (profile onboarding)
+   */
+  async submitAdaptiveQuiz(
+    quizId: string,
+    submission: AdaptiveQuizSubmission,
+  ): Promise<AdaptiveQuizSubmitResponse> {
+    return apiClient.post<AdaptiveQuizSubmitResponse>(`/quizzes/${quizId}/submit`, submission);
   },
 
   /**

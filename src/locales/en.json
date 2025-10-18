@@ -21,9 +21,21 @@
     }
   },
   "Home": {
-    "main_title": "The All-in-One Platform",
+    "main_title": "The all-in-one platform",
     "description": "Create and sell your digital products with ease.",
     "cta_button": "Join for Free"
+  },
+  "Header": {
+    "myAccount": "My Account",
+    "settings": "Settings",
+    "logout": "Logout",
+    "logoutDialog": {
+      "title": "Logout",
+      "description": "Are you sure you want to logout?",
+      "cancel": "Cancel",
+      "confirm": "Logout",
+      "loggingOut": "Logging out..."
+    }
   },
   "Dashboard": {
     "nav": {
@@ -38,6 +50,70 @@
       "settings": "Settings",
       "subscription": "Subscription",
       "plans": "Plans"
+    },
+    "welcome": {
+      "onboarding": {
+        "title": "Welcome aboard, {name}!",
+        "subtitle": "We're excited to have you here. Let's get you started on your personalized learning journey."
+      },
+      "active": {
+        "title": "👋 Hello, {name}!",
+        "subtitle": "✨ Ready to learn something new today?"
+      }
+    },
+    "onboarding": {
+      "title": "Kickstart your learning journey",
+      "description": "Complete each step to unlock your personalized roadmap.",
+      "continue": "Continue",
+      "completed": "Completed",
+      "steps": {
+        "profile": {
+          "title": "Complete the learner profile test",
+          "description": "Take the AI-powered assessment to unlock tailored insights and recommendations.",
+          "begin": "Begin assessment",
+          "retake": "Retake test"
+        },
+        "technical": {
+          "title": "Take the technical assessment",
+          "description": "Share your technical experience so we can calibrate your skill map.",
+          "begin": "Begin technical assessment",
+          "retake": "Retake test"
+        },
+        "objectives": {
+          "title": "Create your objectives",
+          "description": "Define the outcomes you want so we can recommend the right roadmap.",
+          "create": "Create objectives",
+          "view": "View objectives"
+        }
+      }
+    },
+    "profile": {
+      "title": "AI Profile Overview",
+      "profileType": "Profile Type",
+      "level": "Level",
+      "style": "Style",
+      "dailyFocus": "Daily Focus",
+      "learningPreferences": "Learning Preferences",
+      "whatDrivesYou": "What Drives You"
+    },
+    "availability": {
+      "title": "Availability & Rhythm",
+      "timeCommitment": "Time Commitment",
+      "weeklyHours": "Weekly Hours",
+      "weeklyRhythm": "Weekly Rhythm",
+      "energyPeak": "Energy Peak",
+      "contextSwitching": "Context Switching",
+      "noteReview": "Note & Review",
+      "supportChannels": "Preferred Support Channels"
+    },
+    "insights": {
+      "title": "AI Profile Insights",
+      "strengths": "Strengths",
+      "gaps": "Gaps",
+      "passions": "Passions",
+      "blockers": "Blockers",
+      "preferredStack": "Preferred Stack",
+      "topMotivators": "Top Motivators"
     },
     "page": {
       "enrollment": "Enrollment",
@@ -58,6 +134,121 @@
       }
     }
   },
+  "Objectives": {
+    "page": {
+      "title": "Learning Objectives",
+      "description": "Manage your learning goals and track your progress",
+      "newObjective": "New Objective"
+    },
+    "modal": {
+      "title": "Create New Learning Objective",
+      "description": "Define your learning goal and we'll help you create a personalized roadmap.",
+      "fields": {
+        "title": {
+          "label": "Title",
+          "placeholder": "e.g., Master Java Backend Development"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Describe what you want to learn and why..."
+        },
+        "priority": {
+          "label": "Priority Level",
+          "low": "Low",
+          "medium": "Medium",
+          "high": "High",
+          "urgent": "Urgent",
+          "critical": "Critical",
+          "hint": "Higher priority objectives will be recommended first in your learning roadmap"
+        },
+        "successCriteria": {
+          "label": "Success Criteria",
+          "placeholder": "e.g., Build a REST API"
+        },
+        "requiredSkills": {
+          "label": "Required Skills",
+          "placeholder": "e.g., Java, Spring Boot"
+        }
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "create": "Create Objective",
+        "creating": "Creating..."
+      }
+    },
+    "card": {
+      "priority": "Priority",
+      "progress": "Progress",
+      "sprints": "sprints",
+      "daysCompleted": "days completed",
+      "currentSprint": "Current Sprint",
+      "day": "Day",
+      "estimated": "Est.",
+      "days": "days",
+      "weeks": "weeks",
+      "viewDetails": "View Details"
+    },
+    "list": {
+      "error": "Failed to load objectives. Please try again.",
+      "empty": {
+        "title": "No Objectives Yet",
+        "description": "Create your first learning objective to get started on your journey.",
+        "createButton": "Create First Objective"
+      },
+      "filters": {
+        "all": "All",
+        "active": "Active",
+        "todo": "To Do",
+        "completed": "Completed"
+      },
+      "sortBy": "Sort by",
+      "sort": {
+        "recent": "Recent",
+        "progress": "Progress",
+        "priority": "Priority"
+      },
+      "noMatch": "No objectives match the selected filter.",
+      "viewAll": "View All",
+      "objectives": "Objectives"
+    }
+  },
+  "Roadmap": {
+    "title": "Learning Roadmap",
+    "description": "Track your learning journey and progress across all objectives",
+    "error": "Failed to load roadmap. Please try again.",
+    "stats": {
+      "totalObjectives": "Total Objectives",
+      "overallProgress": "Overall Progress",
+      "sprints": "Sprints",
+      "daysCompleted": "Days Completed"
+    },
+    "empty": {
+      "title": "No Learning Objectives Yet",
+      "description": "Create your first learning objective to start building your roadmap",
+      "createButton": "Create Objective"
+    },
+    "sections": {
+      "active": "Active Objectives",
+      "todo": "To Do",
+      "completed": "Completed"
+    },
+    "status": {
+      "active": "Active",
+      "todo": "To Do",
+      "completed": "Completed"
+    },
+    "card": {
+      "progress": "Progress",
+      "sprints": "Sprints",
+      "days": "Days",
+      "currentSprint": "Current Sprint",
+      "day": "Day",
+      "daysUnit": "days",
+      "sprintsUnit": "sprints",
+      "viewDetails": "View Details",
+      "startLearning": "Start Learning"
+    }
+  },
   "Features": {
     "title": "Feature requests",
     "subtitle": "Ideas to help improve Lurnix",
@@ -68,6 +259,29 @@
     "filter": "Filter",
     "previous": "Previous",
     "next": "Next",
+    "selectCategory": "Select category",
+    "allCategories": "All Categories",
+    "loading": "Loading features...",
+    "noFeatures": "No features found.",
+    "noFeaturesInCategory": "No features found in {category} category.",
+    "voteError": "Failed to vote on this feature",
+    "unexpectedError": "An unexpected error occurred. Please try again.",
+    "submitSuccess": "Feature request submitted successfully!",
+    "submitError": "An error occurred while submitting the feature",
+    "form": {
+      "title": "Title",
+      "titlePlaceholder": "Enter feature title",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your feature idea",
+      "category": "Category",
+      "selectCategory": "Select a category",
+      "tags": "Tags",
+      "tagPlaceholder": "Enter a tag",
+      "addTag": "Add",
+      "cancel": "Cancel",
+      "submit": "Submit Feature",
+      "submitting": "Submitting..."
+    },
     "categories": {
       "Roadmaps": "Roadmaps",
       "AI_Mentor": "AI Mentor",
@@ -197,6 +411,23 @@
       "password_mismatch": "Passwords do not match.",
       "invalid_token": "Invalid or missing reset token."
     }
+  },
+  "TechnicalAssessment": {
+    "title": "Technical Assessment",
+    "description": "Share your current experience so we can personalize your roadmap.",
+    "submit": "Submit assessment",
+    "submitting": "Submitting...",
+    "missingRequired": "Please answer all required questions.",
+    "required": "Required",
+    "requiredError": "This question is required.",
+    "numericPlaceholder": "Enter a number",
+    "textPlaceholder": "Type your response",
+    "loading": "Loading technical assessment...",
+    "loadErrorTitle": "Assessment unavailable",
+    "loadError": "We couldn't load your assessment.",
+    "reload": "Try again",
+    "submitted": "Technical assessment submitted",
+    "submitError": "Failed to submit assessment. Please try again."
   },
   "Settings": {
     "title": "Settings",
@@ -483,5 +714,171 @@
     "speed_up": "You're doing great! We recommend increasing the difficulty to challenge you more.",
     "maintain": "Keep up the good work! Your current pace is optimal.",
     "slow_down": "Let's focus on mastering the fundamentals before moving forward."
+  },
+  "TechnicalAssessment": {
+    "title": "Technical Assessment",
+    "loading": "Loading technical assessment...",
+    "loadErrorTitle": "Assessment unavailable",
+    "loadError": "We couldn't load your assessment.",
+    "reload": "Try again",
+    "required": "Required",
+    "requiredError": "This question is required.",
+    "missingRequired": "Please answer all required questions.",
+    "numericPlaceholder": "Enter a number",
+    "textPlaceholder": "Type your response",
+    "submit": "Submit assessment",
+    "submitting": "Submitting...",
+    "submitted": "Technical assessment submitted",
+    "submitError": "Failed to submit assessment. Please try again."
+  },
+  "ProfileTestSuccess": {
+    "title": "🎉 Congratulations!",
+    "subtitle": "You've completed Step 1 of your onboarding",
+    "achievement": "Profile Test Completed",
+    "message": "Great job! You've successfully completed your learner profile assessment. We now have a better understanding of your learning style and preferences.",
+    "nextStep": "Ready for the next step?",
+    "continueButton": "Continue to Technical Assessment",
+    "dashboardButton": "Return to Dashboard",
+    "step1": "Profile Test",
+    "step2": "Technical Assessment",
+    "step3": "Set Objectives"
+  },
+  "SprintCard": {
+    "difficulty": {
+      "beginner": "Beginner",
+      "easy": "Easy",
+      "intermediate": "Intermediate",
+      "medium": "Medium",
+      "advanced": "Advanced",
+      "hard": "Hard"
+    },
+    "status": {
+      "notStarted": "Not Started",
+      "planned": "Planned",
+      "inProgress": "In Progress",
+      "completed": "Completed"
+    },
+    "day": "Day {number}",
+    "linksAdded": "{count, plural, one {# link added} other {# links added}}",
+    "noLinks": "No links yet",
+    "completedOn": "Completed on {date}",
+    "completed": "Completed",
+    "progress": "Progress: {value}%",
+    "nextSteps": {
+      "title": "Next steps",
+      "share": "Share your build or repo with the community for feedback.",
+      "reflect": "Capture blockers and lessons in your reflection before starting the next sprint."
+    },
+    "duration": "{days, plural, one {# day} other {# days}} • {hours}h",
+    "moreSkills": "+{count} more",
+    "readinessQuiz": "Readiness Quiz Required",
+    "validationQuiz": "Validation Quiz Available",
+    "progressLabel": "Progress",
+    "tasksCompleted": "{completed} / {total} tasks",
+    "reviewSprint": "Review Sprint",
+    "reviewSprintDesc": "Reinforce previously learned skills",
+    "takeQuizFirst": "Take Quiz First",
+    "startSprint": "Start Sprint",
+    "continueSprint": "Continue Sprint",
+    "viewDetails": "View Details"
+  },
+  "SprintDetails": {
+    "loadError": "Failed to load sprint. Please try again.",
+    "backButton": "Back to Objective",
+    "completeAllTasks": "Please complete all tasks before finishing the sprint",
+    "addReflection": "Please add a reflection before completing the sprint",
+    "difficulty": {
+      "beginner": "Beginner",
+      "easy": "Easy",
+      "intermediate": "Intermediate",
+      "medium": "Medium",
+      "advanced": "Advanced",
+      "hard": "Hard"
+    },
+    "days": "{count, plural, one {# day} other {# days}}",
+    "hoursEstimated": "{hours}h estimated",
+    "completedOn": "Completed on {date} at {time}",
+    "personalizedTitle": "Personalized for You",
+    "progress": "Progress",
+    "tasksCompleted": "{completed} of {total} tasks completed",
+    "tasksTitle": "Tasks ({completed}/{total})",
+    "sprintCompletedReadonly": "This sprint is completed. Task progress is now read-only.",
+    "acceptanceCriteria": "Acceptance Criteria",
+    "resources": "Resources",
+    "projects": "Projects",
+    "requirements": "Requirements",
+    "deliverables": "Deliverables",
+    "gradingRubric": "Grading Rubric",
+    "passThreshold": "Pass threshold: {threshold}%",
+    "tips": {
+      "title": "Tips",
+      "shareProgress": "Share your progress in Discord or the community to celebrate wins.",
+      "postDemos": "Post demos or repositories when you're ready for feedback.",
+      "logBlockers": "Log blockers in your reflection so the next sprint can adapt."
+    },
+    "reflection": {
+      "title": "Reflection (Required)",
+      "prompt": "What did you learn? What challenges did you face? How will you apply this knowledge?",
+      "placeholder": "Share your thoughts and learnings...",
+      "locked": "Reflection is locked because this sprint has been completed.",
+      "willBeIncluded": "This reflection will be included when you complete the sprint."
+    },
+    "cancelButton": "Cancel",
+    "completing": "Completing...",
+    "completeSprint": "Complete Sprint"
+  },
+  "CompleteObjectiveDialog": {
+    "title": "Mark Objective as Completed",
+    "description": "You're about to mark \"{objective}\" as completed. This action will close the objective and record your achievement.",
+    "notesLabel": "Completion Notes (Optional)",
+    "notesPlaceholder": "Share what you learned, challenges you overcame, or how you'll apply this knowledge...",
+    "notesHint": "These notes will help you reflect on your learning journey.",
+    "whatHappens": "What happens when you complete this objective?",
+    "effect1": "The objective status will be set to \"Completed\"",
+    "effect2": "Your progress and achievements will be recorded",
+    "effect3": "You won't be able to generate new sprints for this objective",
+    "cancelButton": "Cancel",
+    "completing": "Completing...",
+    "confirmButton": "Mark as Completed"
+  },
+  "ObjectiveDetails": {
+    "loadError": "Failed to load objective. Please try again.",
+    "backButton": "Back to Objectives",
+    "markAsComplete": "Mark as Complete",
+    "completeSuccess": "Objective completed!",
+    "completeSuccessDesc": "Congratulations on completing this learning objective!",
+    "completeFailed": "Failed to complete objective",
+    "generateError": "Cannot generate sprint",
+    "limitReached": "Sprint generation limit reached",
+    "generateSuccess": "Sprint generated successfully!",
+    "sprintReady": "Your next learning sprint is ready.",
+    "generateFailed": "Failed to generate sprint",
+    "tryAgain": "Please try again.",
+    "status": {
+      "todo": "To Do",
+      "inProgress": "In Progress",
+      "active": "Active",
+      "completed": "Completed"
+    },
+    "stats": {
+      "progress": "Progress",
+      "sprints": "Sprints",
+      "days": "Days",
+      "currentDay": "Current Day"
+    },
+    "overallProgress": "Overall Progress",
+    "sprintsCompleted": "{done} of {total} sprints completed",
+    "successCriteria": "Success Criteria",
+    "requiredSkills": "Required Skills",
+    "currentSprint": "Current Sprint",
+    "readyForNext": "Ready for Your Next Sprint?",
+    "generateDescription": "Generate your next learning sprint to continue your progress",
+    "objectiveCompleted": "Objective Completed!",
+    "readyToGenerate": "Ready to generate Day {day}",
+    "generating": "Generating...",
+    "generateButton": "Generate Next Sprint",
+    "completedTitle": "Objective Completed!",
+    "completedMessage": "Congratulations! You've successfully completed this learning objective.",
+    "pastSprints": "Past Sprints"
   }
 }

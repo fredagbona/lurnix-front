@@ -6,3 +6,4 @@ export * from "./quizService";
 export * from "./subscriptionService";
 export * from "./featuresService";
 export * from "./learningService";
+export * from "./technicalAssessmentService";
